@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
+import { APP_NAME } from "@/constants/config";
 import { StoreProvider } from "@/store/components/provider";
 import { ThemeProvider } from "@/theme/components/provider";
 import { cn } from "@/ui/lib";
@@ -14,7 +15,7 @@ import "./globals.css";
 const inter = Inter({ weight: ["400", "500", "600", "700"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SingleStore | GenAI eStore",
+  title: `SingleStore | ${APP_NAME}`,
   description: "",
 };
 

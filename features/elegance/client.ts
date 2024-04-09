@@ -2,7 +2,7 @@ import { createEleganceServerClient } from "@singlestore/elegance-sdk/server";
 
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USER, OPENAI_API_KEY } from "@/constants/env";
 
-export const eleganceServerClient = createEleganceServerClient("mysql", {
+export const eleganceClient = createEleganceServerClient("mysql", {
   connection: {
     host: DB_HOST,
     user: DB_USER,

@@ -4,6 +4,7 @@ import { ComponentProps } from "@/types";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardProps } from "@/components/ui/card";
+import { APP_NAME } from "@/constants/config";
 import { ThemeToggle } from "@/theme/components/toggle";
 import { cn } from "@/ui/lib";
 
@@ -20,7 +21,7 @@ export function Header({ className, ...props }: HeaderProps) {
         <Logo className="w-40 flex-shrink-0" />
         <h1 className="inline-flex flex-wrap items-center gap-1 pt-0.5 text-xl">
           <span className="text-sm">|</span>
-          <span>GenUI RAG</span>
+          <span>{APP_NAME}</span>
         </h1>
       </div>
 
