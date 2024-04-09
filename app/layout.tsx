@@ -30,10 +30,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             enableSystem
             disableTransitionOnChange
           >
-            <div className="mx-auto flex min-h-screen w-full min-w-80 max-w-screen-lg flex-col overflow-y-auto overflow-x-hidden p-4">
+            <div className="mx-auto flex min-h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto overflow-x-hidden">
               <Header />
-              <main className="mt-4 flex flex-1 flex-col">{children}</main>
-              <Footer className="pb-0" />
+              <main className="flex flex-1 flex-col px-4">{children}</main>
+              <Footer />
               <Toaster position="bottom-center" />
             </div>
           </ThemeProvider>

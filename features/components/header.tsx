@@ -3,19 +3,17 @@ import Link from "next/link";
 import { ComponentProps } from "@/types";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
-import { Card, CardProps } from "@/components/ui/card";
 import { APP_NAME } from "@/constants/config";
 import { ThemeToggle } from "@/theme/components/toggle";
 import { cn } from "@/ui/lib";
 
-export type HeaderProps = ComponentProps<CardProps>;
+export type HeaderProps = ComponentProps<"header">;
 
 export function Header({ className, ...props }: HeaderProps) {
   return (
-    <Card
+    <header
       {...props}
-      as="header"
-      className={cn("flex flex-wrap items-center justify-between gap-4 p-4 pl-5", className)}
+      className={cn("flex flex-wrap items-center justify-between gap-4 border-b p-4", className)}
     >
       <div className="flex items-center gap-2">
         <Logo className="w-40 flex-shrink-0" />
@@ -37,6 +35,6 @@ export function Header({ className, ...props }: HeaderProps) {
           </Link>
         </Button>
       </div>
-    </Card>
+    </header>
   );
 }
