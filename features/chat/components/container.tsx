@@ -12,7 +12,7 @@ export function ChatContainer({ className, ...props }: ChatContainerProps) {
     <div
       {...props}
       className={cn(
-        "relative mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center gap-4",
+        "relative mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center gap-8",
         className,
       )}
     >

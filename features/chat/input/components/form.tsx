@@ -68,7 +68,11 @@ export function ChatInputForm({
   return (
     <Card
       {...props}
-      className={cn("relative w-full max-w-full overflow-hidden", isFocused && "border-primary", className)}
+      className={cn(
+        "relative w-full max-w-full overflow-hidden",
+        isFocused && "outline-none ring-2 ring-ring ring-offset-2 ring-offset-background",
+        className,
+      )}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>

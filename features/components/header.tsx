@@ -13,7 +13,7 @@ export function Header({ className, ...props }: HeaderProps) {
   return (
     <header
       {...props}
-      className={cn("flex flex-wrap items-center justify-between gap-4 border-b p-4", className)}
+      className={cn("flex flex-wrap items-center justify-between gap-4 p-4", className)}
     >
       <div className="flex items-center gap-2">
         <Logo className="w-40 flex-shrink-0" />
