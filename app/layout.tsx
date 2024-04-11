@@ -19,7 +19,13 @@ export const metadata: Metadata = {
   description: "",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+  product,
+}: {
+  children: React.ReactNode;
+  product: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className={cn(inter.className)}>
@@ -32,7 +38,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             <div className="mx-auto flex min-h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto">
               <Header />
-              <main className="flex flex-1 flex-col px-4">{children}</main>
+              <main className="flex flex-1 flex-col px-4">
+                {children}
+                {product}
+              </main>
               <Footer />
               <Toaster position="bottom-center" />
             </div>
