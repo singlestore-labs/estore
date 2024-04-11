@@ -2,6 +2,7 @@ import { VariantProps, cva } from "class-variance-authority";
 import Markdown from "react-markdown";
 
 import { ComponentProps } from "@/types";
+import { Content } from "@/components/content";
 import { Card, CardProps } from "@/components/ui/card";
 import { ChatMessage } from "@/chat/message/types";
 import { cn } from "@/ui/lib";
@@ -44,9 +45,7 @@ export function ChatMessageCard({
         {withAuthor && <h4 className="font-medium first-letter:uppercase">{role}</h4>}
         <p className="ml-auto text-right text-xs text-muted-foreground">{_createdAt}</p>
       </div>
-      <div className="w-full max-w-full [&_pre]:overflow-auto">
-        <Markdown>{content}</Markdown>
-      </div>
+      <Content>{content}</Content>
     </Card>
   );
 }
