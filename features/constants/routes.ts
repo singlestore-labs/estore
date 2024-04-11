@@ -1,12 +1,12 @@
 const ROOT = "/";
 const withRoot = (path: string) => `${ROOT}${path}`;
 
-const PRODUCTS = withRoot("products");
-const PRODUCT_BY_ID = (id: string) => `${PRODUCTS}/${id}`;
+const PRODUCT = withRoot("product");
+const PRODUCT_BY_ID = (id: string) => `${PRODUCT}/${id}`;
 
 export const ROUTES = {
   ROOT,
-  PRODUCTS,
+  PRODUCT,
   PRODUCT_BY_ID,
   withRoot,
 } as const;
