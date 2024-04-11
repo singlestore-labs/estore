@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             enableSystem
             disableTransitionOnChange
           >
-            <div className="mx-auto flex min-h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto overflow-x-hidden">
+            <div className="mx-auto flex min-h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto">
               <Header />
               <main className="flex flex-1 flex-col px-4">{children}</main>
               <Footer />

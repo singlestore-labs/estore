@@ -1,5 +1,3 @@
-"use client";
-
 import { ComponentProps } from "@/types";
 import { ChatInputCard } from "@/chat/input/components/card";
 import { ChatMessageList } from "@/chat/messages/components/list";
@@ -12,12 +10,12 @@ export function ChatContainer({ className, ...props }: ChatContainerProps) {
     <div
       {...props}
       className={cn(
-        "relative mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center gap-8",
+        "relative mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center pt-4",
         className,
       )}
     >
-      <ChatMessageList />
-      <ChatInputCard />
+      <ChatMessageList listProps={{ className: "pb-8 pt-4" }} />
+      <ChatInputCard className="z-[3]" />
     </div>
   );
 }

@@ -2,21 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ComponentProps } from "@/types";
-import { Button } from "@/components/ui/button";
 import { Card, CardProps } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
 import { ProductInfoContainer } from "@/product/components/info/container";
+import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
 
-export type ProductCardProps = ComponentProps<CardProps>;
+export type ProductCardProps = ComponentProps<CardProps, Product>;
 
-const image = "https://cdn-images.farfetch-contents.com/14/11/79/76/14117976_18684183_300.jpg";
-
-export function ProductCard({ className, ...props }: ProductCardProps) {
-  const id = "1";
-  const title = "Air Vapormax 2019 CPFM sneakers";
-  const price = 992;
-
+export function ProductCard({ className, id, description, price, image, ...props }: ProductCardProps) {
   return (
     <Card
       {...props}
@@ -41,7 +35,7 @@ export function ProductCard({ className, ...props }: ProductCardProps) {
             href={ROUTES.PRODUCT_BY_ID(id)}
             className="transition-colors hover:text-primary"
           >
-            <h4 className="line-clamp-2 text-base font-semibold capitalize">{title}</h4>
+            <h4 className="line-clamp-2 text-base font-semibold capitalize">{description}</h4>
           </Link>
 
           <p className="text-end text-base font-semibold">${price}</p>

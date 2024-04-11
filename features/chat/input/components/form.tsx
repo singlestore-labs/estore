@@ -69,7 +69,7 @@ export function ChatInputForm({
     <Card
       {...props}
       className={cn(
-        "relative w-full max-w-full overflow-hidden",
+        "relative w-full max-w-full",
         isFocused && "outline-none ring-2 ring-ring ring-offset-2 ring-offset-background",
         className,
       )}
