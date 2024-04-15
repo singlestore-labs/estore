@@ -1,7 +1,7 @@
 "use client";
 
 import { VariantProps, cva } from "class-variance-authority";
-import { useId } from "react";
+import { useId, useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -97,7 +97,12 @@ export function ProductActionSizeSelect({
           <div key={size}>
             <TooltipProvider delayDuration={400}>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger
+                  asChild
+                  onFocus={(e) => {
+                    e.preventDefault();
+                  }}
+                >
                   <div>
                     <RadioGroupItem
                       id={_id}
