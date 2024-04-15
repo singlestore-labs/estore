@@ -19,7 +19,7 @@ export const selectTriggerVariants = cva(
     variants: {
       size: {
         default: "h-10",
-        sm: "h-9 rounded-md",
+        sm: "h-9 rounded-md px-3",
       },
     },
   },

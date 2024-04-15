@@ -11,7 +11,7 @@ export const chatMessageCardVariants = cva("p-4 py-2", {
   variants: {
     variant: {
       default: "",
-      secondary: "bg-zinc-50",
+      secondary: "bg-zinc-50 dark:bg-card",
     },
   },
 });

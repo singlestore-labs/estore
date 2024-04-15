@@ -4,7 +4,9 @@ import Link from "next/link";
 import { ComponentProps } from "@/types";
 import { Card, CardProps } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
-import { ProductInfoContainer } from "@/product/components/info/container";
+import { ProductInfoLikes } from "@/product/components/info/likes";
+import { ProductInfoSales } from "@/product/components/info/sales";
+import { ProductInfoSizes } from "@/product/components/info/sizes";
 import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
 
@@ -41,7 +43,11 @@ export function ProductCard({ className, id, description, price, image, ...props
           <p className="text-end text-base font-semibold">${price}</p>
         </div>
 
-        <ProductInfoContainer />
+        <div className="flex flex-wrap items-center gap-2">
+          <ProductInfoSizes />
+          <ProductInfoSales className="ml-auto" />
+          <ProductInfoLikes />
+        </div>
       </div>
     </Card>
   );

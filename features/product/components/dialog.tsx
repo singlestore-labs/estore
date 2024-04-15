@@ -6,18 +6,21 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { ComponentProps } from "@/types";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ProductInfoContainer } from "@/product/components/info/container";
+import { ProductInfoLikes } from "@/product/components/info/likes";
+import { ProductInfoSales } from "@/product/components/info/sales";
+import { ProductSizeSelect } from "@/product/components/size-select";
 import { Product } from "@/product/types";
 
 export type ProductDialogProps = ComponentProps<DialogProps, Product>;
 
-export function ProductDialog({ description, price, image, ...props }: ProductDialogProps) {
+export function ProductDialog({ id, description, price, image, sizes, ...props }: ProductDialogProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
   const unmountTimeoutRef = useRef<NodeJS.Timeout>();
+  const [sizeValue, setSizeValue] = useState<keyof typeof sizes>(Object.keys(sizes)[0]);
 
   const handleToggle: DialogProps["onOpenChange"] = (isOpen) => {
     if (!isOpen) {
@@ -26,6 +29,10 @@ export function ProductDialog({ description, price, image, ...props }: ProductDi
         router.back();
       }, 200);
     }
+  };
+
+  const handleBuyClick: ButtonProps["onClick"] = async () => {
+    console.log({ id, sizeValue });
   };
 
   useEffect(
@@ -54,15 +61,28 @@ export function ProductDialog({ description, price, image, ...props }: ProductDi
             />
           </Card>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-4">
             <div className="flex items-start justify-between gap-4">
               <h4 className="text-2xl font-semibold capitalize">{description}</h4>
               <p className="text-2xl font-semibold">${price}</p>
             </div>
 
-            <ProductInfoContainer className="mt-2 gap-4" />
+            <div className="flex flex-wrap items-center gap-4">
+              <ProductSizeSelect
+                sizes={sizes}
+                value={sizeValue}
+                onChange={setSizeValue}
+              />
+              <ProductInfoSales className="ml-auto" />
+              <ProductInfoLikes />
+            </div>
 
-            <Button className="mt-4">Buy</Button>
+            <Button
+              className="mt-2"
+              onClick={handleBuyClick}
+            >
+              Buy
+            </Button>
           </div>
         </div>
       </DialogContent>
