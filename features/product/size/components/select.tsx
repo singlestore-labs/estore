@@ -1,7 +1,7 @@
 "use client";
 
 import { VariantProps, cva } from "class-variance-authority";
-import { useId, useState } from "react";
+import { useId } from "react";
 
 import { ComponentProps } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
 
-export const productActionSizeSelectVariants = cva("flex items-center", {
+export const productSizeSelectVariants = cva("flex items-center", {
   variants: {
     variant: {
       default: "",
@@ -35,7 +35,7 @@ export const productActionSizeSelectVariants = cva("flex items-center", {
   ],
 });
 
-export const productActionSizeSelectButtonVariants = cva("border p-0 uppercase text-xs", {
+export const productSizeSelectButtonVariants = cva("border p-0 uppercase text-xs", {
   variants: {
     variant: {
       default: "peer-disabled:hover:cursor-not-allowed",
@@ -59,16 +59,16 @@ export const productActionSizeSelectButtonVariants = cva("border p-0 uppercase t
   ],
 });
 
-export type ProductActionSizeSelectProps = ComponentProps<
+export type ProductSizeSelectProps = ComponentProps<
   RadioGroupProps,
   {
     sizes: Product["sizes"];
     value?: keyof Product["sizes"];
     onChange?: (value: keyof Product["sizes"]) => Promise<void> | void;
-  } & VariantProps<typeof productActionSizeSelectVariants>
+  } & VariantProps<typeof productSizeSelectVariants>
 >;
 
-export function ProductActionSizeSelect({
+export function ProductSizeSelect({
   className,
   variant,
   size: rootSize,
@@ -77,7 +77,7 @@ export function ProductActionSizeSelect({
   disabled,
   onChange,
   ...props
-}: ProductActionSizeSelectProps) {
+}: ProductSizeSelectProps) {
   const id = useId();
   const isDisabled = disabled || variant === "read";
   const entries = Object.entries(sizes);
@@ -85,7 +85,7 @@ export function ProductActionSizeSelect({
   return (
     <RadioGroup
       {...props}
-      className={cn(productActionSizeSelectVariants({ variant, size: rootSize }), className)}
+      className={cn(productSizeSelectVariants({ variant, size: rootSize }), className)}
       defaultValue={value}
       disabled={isDisabled}
       onValueChange={onChange}
@@ -113,7 +113,7 @@ export function ProductActionSizeSelect({
                       asChild
                       variant={size !== value || variant === "read" ? "outline" : "default"}
                       className={cn(
-                        productActionSizeSelectButtonVariants({ variant, size: rootSize }),
+                        productSizeSelectButtonVariants({ variant, size: rootSize }),
                         size !== value && "hover:cursor-pointer",
                       )}
                     >

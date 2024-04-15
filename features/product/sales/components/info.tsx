@@ -1,12 +1,12 @@
 import { TrendingUp } from "lucide-react";
 
 import { ComponentProps } from "@/types";
-import { ProductInfoItem, ProductInfoItemProps } from "@/product/components/info/item";
+import { ProductInfoItem, ProductInfoItemProps } from "@/product/components/info-item";
 import { cn } from "@/ui/lib";
 
-export type ProductInfoSalesProps = ComponentProps<ProductInfoItemProps>;
+export type ProductSalesInfoProps = ComponentProps<ProductInfoItemProps>;
 
-export function ProductInfoSales({ className, value, ...props }: ProductInfoSalesProps) {
+export function ProductSalesInfo({ className, value, ...props }: ProductSalesInfoProps) {
   return (
     <ProductInfoItem
       {...props}

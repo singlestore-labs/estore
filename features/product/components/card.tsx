@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ComponentProps } from "@/types";
 import { Card, CardProps } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
-import { ProductInfoLikes } from "@/product/components/info/likes";
-import { ProductInfoSales } from "@/product/components/info/sales";
-import { ProductInfoSizes } from "@/product/components/info/sizes";
+import { ProductLikesInfo } from "@/product/likes/components/info";
+import { ProductSalesInfo } from "@/product/sales/components/info";
+import { ProductSizesInfo } from "@/product/size/components/info";
 import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
 
@@ -54,9 +54,9 @@ export function ProductCard({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <ProductInfoSizes sizes={sizes} />
-          <ProductInfoSales className="ml-auto">{sales}</ProductInfoSales>
-          <ProductInfoLikes>{likes}</ProductInfoLikes>
+          <ProductSizesInfo sizes={sizes} />
+          <ProductSalesInfo className="ml-auto">{sales}</ProductSalesInfo>
+          <ProductLikesInfo>{likes}</ProductLikesInfo>
         </div>
       </div>
     </Card>

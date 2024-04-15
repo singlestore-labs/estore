@@ -6,9 +6,9 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/ui/lib";
 
-export type ProductActionLikeProps = ComponentProps<ButtonProps>;
+export type ProductLikesActionProps = ComponentProps<ButtonProps>;
 
-export function ProductActionLike({ className, ...props }: ProductActionLikeProps) {
+export function ProductLikesAction({ className, ...props }: ProductLikesActionProps) {
   const [isLiked, setIsLiked] = useState(false);
 
   const handleClick: ButtonProps["onClick"] = async () => {

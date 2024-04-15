@@ -9,8 +9,8 @@ import { ComponentProps } from "@/types";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ProductActionLike } from "@/product/components/action/like";
-import { ProductActionSizeSelect } from "@/product/components/action/size-select";
+import { ProductLikesAction } from "@/product/likes/components/action";
+import { ProductSizeSelect } from "@/product/size/components/select";
 import { Product } from "@/product/types";
 
 export type ProductDialogProps = ComponentProps<DialogProps, Product>;
@@ -67,12 +67,12 @@ export function ProductDialog({ id, description, price, image, sizes, ...props }
             </div>
 
             <div className="flex flex-wrap items-center gap-4">
-              <ProductActionSizeSelect
+              <ProductSizeSelect
                 sizes={sizes}
                 value={sizeValue}
                 onChange={setSizeValue}
               />
-              <ProductActionLike className="ml-auto" />
+              <ProductLikesAction className="ml-auto" />
             </div>
 
             <Button
