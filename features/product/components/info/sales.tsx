@@ -6,15 +6,13 @@ import { cn } from "@/ui/lib";
 
 export type ProductInfoSalesProps = ComponentProps<ProductInfoItemProps>;
 
-export function ProductInfoSales({ className, ...props }: ProductInfoSalesProps) {
+export function ProductInfoSales({ className, value, ...props }: ProductInfoSalesProps) {
   return (
     <ProductInfoItem
       {...props}
       className={cn("", className)}
       icon={TrendingUp}
       label="Sales for the last 3 days"
-    >
-      1139
-    </ProductInfoItem>
+    />
   );
 }

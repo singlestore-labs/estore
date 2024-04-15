@@ -12,7 +12,17 @@ import { cn } from "@/ui/lib";
 
 export type ProductCardProps = ComponentProps<CardProps, Product>;
 
-export function ProductCard({ className, id, description, price, image, ...props }: ProductCardProps) {
+export function ProductCard({
+  className,
+  id,
+  description,
+  price,
+  image,
+  sizes,
+  likes,
+  sales,
+  ...props
+}: ProductCardProps) {
   return (
     <Card
       {...props}
@@ -44,9 +54,9 @@ export function ProductCard({ className, id, description, price, image, ...props
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <ProductInfoSizes />
-          <ProductInfoSales className="ml-auto" />
-          <ProductInfoLikes />
+          <ProductInfoSizes sizes={sizes} />
+          <ProductInfoSales className="ml-auto">{sales}</ProductInfoSales>
+          <ProductInfoLikes>{likes}</ProductInfoLikes>
         </div>
       </div>
     </Card>

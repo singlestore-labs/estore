@@ -1,9 +1,9 @@
-export type ProductSizes = Record<string, number>;
-
 export type Product = {
   id: string;
   description: string;
   price: number;
   image: string;
-  sizes: ProductSizes;
+  sizes: Record<string, number>;
+  likes: number;
+  sales: number;
 };

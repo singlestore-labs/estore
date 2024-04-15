@@ -8,7 +8,7 @@ import { cn } from "@/ui/lib";
 export type ProductInfoItemProps = ComponentProps<
   ButtonProps,
   {
-    children?: string;
+    children?: string | number;
     label?: ReactNode;
     icon?: ElementType;
   }
