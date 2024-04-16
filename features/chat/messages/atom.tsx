@@ -3,14 +3,14 @@ import { atom } from "jotai";
 import { createChatMessage } from "@/chat/message/lib/create";
 import { ChatMessage } from "@/chat/message/types";
 import { ProductCard } from "@/product/components/card";
-import { ProductsRecommendedList } from "@/products/recommended/components/list";
+import { ProductsRecommendedMessage } from "@/products/recommended/components/message";
 
 import { products } from "../../../data/products";
 
 export const chatMessagesAtom = atom<ChatMessage[]>([
   createChatMessage({
     role: "function",
-    node: <ProductsRecommendedList products={products} />,
+    node: <ProductsRecommendedMessage products={products} />,
   }),
 
   createChatMessage({
