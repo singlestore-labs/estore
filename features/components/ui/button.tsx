@@ -49,6 +49,7 @@ const loaderVariants = cva("", {
       sm: "w-5",
       lg: "",
       icon: "",
+      link: "",
     },
   },
   defaultVariants: {
