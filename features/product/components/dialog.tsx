@@ -51,7 +51,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
       {...props}
       onOpenChange={handleToggle}
     >
-      <DialogContent className="bg-card">
+      <DialogContent className="max-w-xl bg-card">
         <div className="flex w-full flex-col items-center gap-4">
           <Card className="relative size-64 overflow-hidden">
             <Image
@@ -62,7 +62,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
             />
           </Card>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex w-full max-w-full flex-col gap-4">
             <div className="flex items-start justify-between gap-4">
               <h2 className="text-2xl font-semibold capitalize">{description}</h2>
               <p className="text-2xl font-semibold">${price}</p>
