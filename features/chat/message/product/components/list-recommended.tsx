@@ -1,19 +1,19 @@
 import { ComponentProps } from "@/types";
 import { ChatMessageCard, ChatMessageCardProps } from "@/chat/message/components/card";
-import { ProductsCarousel, ProductsCarouselProps } from "@/products/components/carousel";
+import { ProductListCarousel, ProductListCarouselProps } from "@/product/components/list-carousel";
 import { cn } from "@/ui/lib";
 
-export type ChatMessageProductsRecommendedProps = ComponentProps<
+export type ChatMessageProductListRecommendedProps = ComponentProps<
   ChatMessageCardProps,
-  { products: ProductsCarouselProps["products"] }
+  { products: ProductListCarouselProps["products"] }
 >;
 
-export function ChatMessageProductsRecommended({
+export function ChatMessageProductListRecommended({
   children,
   className,
   products,
   ...props
-}: ChatMessageProductsRecommendedProps) {
+}: ChatMessageProductListRecommendedProps) {
   const _children = children || <p>Here are the recommended products based on your request:</p>;
 
   return (
@@ -23,7 +23,7 @@ export function ChatMessageProductsRecommended({
       className={cn("gap-4 pb-2 pt-4", className)}
     >
       {_children}
-      <ProductsCarousel
+      <ProductListCarousel
         products={products}
         className="-mx-4 w-[calc(100%+theme(spacing.8))]"
         itemProps={{

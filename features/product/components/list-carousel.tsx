@@ -13,7 +13,7 @@ import { ProductCard } from "@/product/components/card";
 import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
 
-export type ProductsCarouselProps = ComponentProps<
+export type ProductListCarouselProps = ComponentProps<
   CarouselProps,
   {
     products: Product[];
@@ -23,14 +23,14 @@ export type ProductsCarouselProps = ComponentProps<
   }
 >;
 
-export function ProductsCarousel({
+export function ProductListCarousel({
   className,
   products,
   contentProps,
   itemProps,
   controllersProps,
   ...props
-}: ProductsCarouselProps) {
+}: ProductListCarouselProps) {
   return (
     <Carousel
       {...props}

@@ -1,6 +1,6 @@
 import { ComponentProps } from "@/types";
 import { ChatInputCard } from "@/chat/input/components/card";
-import { ChatMessageList } from "@/chat/messages/components/list";
+import { ChatMessageList } from "@/chat/message/components/list";
 import { cn } from "@/ui/lib";
 
 export type ChatContainerProps = ComponentProps<"div">;

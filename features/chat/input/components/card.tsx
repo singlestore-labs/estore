@@ -5,8 +5,8 @@ import { useCallback } from "react";
 
 import { ComponentProps, Defined } from "@/types";
 import { ChatInputForm, ChatInputFormProps } from "@/chat/input/components/form";
+import { chatMessagesAtom, hasMessagesAtom } from "@/chat/message/atoms/messages";
 import { createChatMessage } from "@/chat/message/lib/create";
-import { chatMessagesAtom, hasMessagesAtom } from "@/chat/messages/atom";
 import { cn } from "@/ui/lib";
 
 export type ChatInputCardProps = ComponentProps<"div">;

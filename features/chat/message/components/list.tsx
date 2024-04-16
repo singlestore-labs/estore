@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { ComponentProps } from "@/types";
 import { useSetScrollbarWidth } from "@/hooks/use-set-scrollbar-width";
 import { Fade } from "@/components/fade";
-import { chatMessagesAtom } from "@/chat/messages/atom";
+import { chatMessagesAtom } from "@/chat/message/atoms/messages";
 import { cn } from "@/ui/lib";
 
 export type ChatMessageListProps = ComponentProps<"div", { listProps?: ComponentProps<"ul"> }>;
