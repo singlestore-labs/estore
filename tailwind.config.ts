@@ -1,3 +1,5 @@
+import plugin from "tailwindcss/plugin";
+
 import type { Config } from "tailwindcss";
 
 const config = {
@@ -75,7 +77,52 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("tailwind-gradient-mask-image")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwind-gradient-mask-image"),
+
+    plugin(
+      ({ matchUtilities, theme }) => {
+        matchUtilities(
+          {
+            "grid-auto-fill": (value) => {
+              const [min, max = "1fr"] = value.split(",");
+              return { gridTemplateColumns: `repeat(auto-fill, minmax(${min}, ${max}))` };
+            },
+          },
+          { values: theme("gridAutoFill") },
+        );
+      },
+      {
+        theme: {
+          gridAutoFit: {
+            DEFAULT: "[16rem,1fr]",
+          },
+        },
+      },
+    ),
+
+    plugin(
+      ({ matchUtilities, theme }) => {
+        matchUtilities(
+          {
+            "grid-auto-fit": (value) => {
+              const [min, max = "1fr"] = value.split(",");
+              return { gridTemplateColumns: `repeat(auto-fit, minmax(${min}, ${max}))` };
+            },
+          },
+          { values: theme("gridAutoFit") },
+        );
+      },
+      {
+        theme: {
+          gridAutoFit: {
+            DEFAULT: "[16rem,1fr]",
+          },
+        },
+      },
+    ),
+  ],
 } satisfies Config;
 
 export default config;

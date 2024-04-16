@@ -30,22 +30,28 @@ export function ChatMessageList({ className, listProps, ...props }: ChatMessageL
         <ul
           {...listProps}
           className={cn(
-            `relative left-1/2 flex w-full max-w-full -translate-x-[calc(50%-(var(--scrollbar-width)/2))] flex-col-reverse gap-8`,
+            `relative left-1/2 flex w-full max-w-full -translate-x-[calc(50%-(var(--scrollbar-width)/2))] flex-col-reverse`,
             listProps?.className,
           )}
         >
-          {messages.map((message) => (
-            <li
-              key={message.id}
-              className={cn(
-                message.role !== "function" && "max-w-[75%]",
-                message.role === "function" && "w-full max-w-full",
-                message.role === "user" && "self-end",
-              )}
-            >
-              {message.node}
-            </li>
-          ))}
+          {messages.map((message, i, arr) => {
+            const isSameRole = message.role === arr[i + 1]?.role;
+
+            return (
+              <li
+                key={message.id}
+                className={cn(
+                  message.role !== "function" && "max-w-[75%]",
+                  message.role === "function" && "w-full max-w-full",
+                  message.role === "user" && "self-end",
+                  isSameRole ? "mt-2" : "mt-8",
+                  "last:mt-0",
+                )}
+              >
+                {message.node}
+              </li>
+            );
+          })}
         </ul>
       </div>
 
