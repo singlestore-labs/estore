@@ -55,8 +55,11 @@ export function ProductCard({
 
         <div className="flex flex-wrap items-center gap-2">
           <ProductSizesInfo sizes={sizes} />
-          <ProductSalesInfo className="ml-auto">{sales}</ProductSalesInfo>
-          <ProductLikesInfo>{likes}</ProductLikesInfo>
+          <ProductSalesInfo
+            className="ml-auto"
+            value={sales}
+          />
+          <ProductLikesInfo value={likes} />
         </div>
       </div>
     </Card>

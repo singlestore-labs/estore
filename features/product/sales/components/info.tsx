@@ -2,9 +2,11 @@ import { TrendingUp } from "lucide-react";
 
 import { ComponentProps } from "@/types";
 import { ProductInfoItem, ProductInfoItemProps } from "@/product/components/info-item";
+import { getProductSalesMessage } from "@/product/sales/lib/get-message";
+import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
 
-export type ProductSalesInfoProps = ComponentProps<ProductInfoItemProps>;
+export type ProductSalesInfoProps = ComponentProps<ProductInfoItemProps, { value: Product["sales"] }>;
 
 export function ProductSalesInfo({ className, value, ...props }: ProductSalesInfoProps) {
   return (
@@ -12,7 +14,9 @@ export function ProductSalesInfo({ className, value, ...props }: ProductSalesInf
       {...props}
       className={cn("", className)}
       icon={TrendingUp}
-      label="Sales for the last 3 days"
-    />
+      label={getProductSalesMessage(value.length)}
+    >
+      {value.reduce((a, b) => a + b.value, 0)}
+    </ProductInfoItem>
   );
 }

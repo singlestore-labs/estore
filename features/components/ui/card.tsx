@@ -1,13 +1,16 @@
+import { cva } from "class-variance-authority";
 import * as React from "react";
 
 import { cn } from "@/ui/lib";
+
+export const cardVariants = cva("rounded-lg border bg-card text-card-foreground shadow-sm");
 
 export type CardProps = React.HTMLAttributes<HTMLDivElement> & { as?: React.ElementType };
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(({ as: As = "div", className, ...props }, ref) => (
   <As
     ref={ref}
-    className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)}
+    className={cn(cardVariants(), className)}
     {...props}
   />
 ));

@@ -1,5 +1,38 @@
 import { Product } from "@/product/types";
 
+const sales = [
+  { value: 904, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 136, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 799, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 228, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 575, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 47, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 310, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 113, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 371, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 681, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 493, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 617, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 229, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 413, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 835, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 997, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 767, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 181, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 741, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 866, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 686, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 882, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 362, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 263, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 430, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 98, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 589, date: new Date(2024, 0, 3).toLocaleDateString() },
+  { value: 228, date: new Date(2024, 0, 1).toLocaleDateString() },
+  { value: 52, date: new Date(2024, 0, 2).toLocaleDateString() },
+  { value: 67, date: new Date(2024, 0, 3).toLocaleDateString() },
+];
+
 export const products: Product[] = [
   {
     id: "1",
@@ -8,7 +41,7 @@ export const products: Product[] = [
     image: "https://cdn-images.farfetch-contents.com/14/11/79/76/14117976_18684183_300.jpg",
     sizes: { x: 12, s: 3, m: 5 },
     likes: 4,
-    sales: 16,
+    sales,
   },
   {
     id: "2",
@@ -17,7 +50,7 @@ export const products: Product[] = [
     image: "https://cdn-images.farfetch-contents.com/14/11/79/76/14117976_18684183_300.jpg",
     sizes: { x: 12, s: 3, m: 5 },
     likes: 91,
-    sales: 320,
+    sales,
   },
   {
     id: "3",
@@ -26,7 +59,7 @@ export const products: Product[] = [
     image: "https://cdn-images.farfetch-contents.com/14/11/79/76/14117976_18684183_300.jpg",
     sizes: { x: 12, s: 3, m: 5 },
     likes: 80,
-    sales: 737,
+    sales,
   },
   {
     id: "4",
@@ -35,7 +68,7 @@ export const products: Product[] = [
     image: "https://cdn-images.farfetch-contents.com/14/11/79/76/14117976_18684183_300.jpg",
     sizes: { x: 12, s: 3, m: 5 },
     likes: 32,
-    sales: 553,
+    sales,
   },
   {
     id: "5",
@@ -44,6 +77,6 @@ export const products: Product[] = [
     image: "https://cdn-images.farfetch-contents.com/14/11/79/76/14117976_18684183_300.jpg",
     sizes: { x: 12, s: 3, m: 5 },
     likes: 82,
-    sales: 181,
+    sales,
   },
 ];

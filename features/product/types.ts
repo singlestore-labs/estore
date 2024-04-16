@@ -5,5 +5,5 @@ export type Product = {
   image: string;
   sizes: Record<string, number>;
   likes: number;
-  sales: number;
+  sales: { value: number; date: string }[];
 };
