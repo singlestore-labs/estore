@@ -18,7 +18,7 @@ export type ChatShortcutListProps = ComponentProps<"ul">;
 export function ChatShortcutList({ className, ...props }: ChatShortcutListProps) {
   const hasMessages = useAtomValue(hasMessagesAtom);
   const setMessages = useSetAtom(chatMessagesAtom);
-  const [isCollapsed, setIsCollapsed] = useState(hasMessages);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const handleShortcut = (shortcut: ChatShortcut) => {
     const message = createChatMessage({ role: "user", content: shortcut.title });
