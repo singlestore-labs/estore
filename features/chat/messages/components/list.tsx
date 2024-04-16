@@ -1,8 +1,10 @@
 "use client";
 
 import { useAtomValue } from "jotai";
+import { useRef } from "react";
 
 import { ComponentProps } from "@/types";
+import { useScrollbarWidth } from "@/hooks/use-scrollbar-width";
 import { Fade } from "@/components/fade";
 import { chatMessagesAtom } from "@/chat/messages/atom";
 import { cn } from "@/ui/lib";
@@ -10,38 +12,43 @@ import { cn } from "@/ui/lib";
 export type ChatMessageListProps = ComponentProps<"div", { listProps?: ComponentProps<"ul"> }>;
 
 export function ChatMessageList({ className, listProps, ...props }: ChatMessageListProps) {
+  const scrollbarRef = useRef<HTMLDivElement>(null);
+  const scrollbarWidth = useScrollbarWidth(scrollbarRef);
+
   const messages = useAtomValue(chatMessagesAtom);
   if (!messages.length) return null;
 
   return (
     <div
       {...props}
-      className={cn("relative flex w-full max-w-full flex-1", className)}
+      className={cn("relative w-full max-w-full", className)}
     >
-      <ul
-        {...listProps}
-        className={cn(
-          "absolute left-0 top-0 flex h-full w-full flex-col-reverse items-start overflow-y-auto",
-          listProps?.className,
-        )}
+      <div
+        ref={scrollbarRef}
+        className="absolute left-0 top-0 flex h-full w-full max-w-full flex-col-reverse overflow-x-hidden overflow-y-scroll py-8 "
       >
-        {messages.map((message, i, arr) => {
-          const isSameRole = message.role === arr[i + 1]?.role;
-          return (
+        <ul
+          {...listProps}
+          className={cn(
+            `relative left-1/2 flex w-full max-w-full -translate-x-1/2 flex-col-reverse gap-8`,
+            scrollbarWidth && `-translate-x-[calc(50%-${scrollbarWidth / 2}px)]`,
+            listProps?.className,
+          )}
+        >
+          {messages.map((message) => (
             <li
               key={message.id}
               className={cn(
                 message.role !== "function" && "max-w-[75%]",
                 message.role === "function" && "w-full max-w-full",
                 message.role === "user" && "self-end",
-                isSameRole ? (message.role === "function" ? "mt-8" : "mt-2") : "mt-8",
               )}
             >
               {message.node}
             </li>
-          );
-        })}
-      </ul>
+          ))}
+        </ul>
+      </div>
 
       <Fade
         className="left-0 top-0 z-[2] h-8 w-full"

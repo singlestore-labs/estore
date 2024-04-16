@@ -9,13 +9,13 @@ export function ChatContainer({ className, ...props }: ChatContainerProps) {
   return (
     <div
       {...props}
-      className={cn(
-        "relative mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center pt-4",
-        className,
-      )}
+      className={cn("flex w-full max-w-full flex-1 flex-col items-center justify-center", className)}
     >
-      <ChatMessageList listProps={{ className: "pb-8 pt-4" }} />
-      <ChatInputCard className="z-[3]" />
+      <ChatMessageList
+        className="flex-1"
+        listProps={{ className: "max-w-5xl px-4" }}
+      />
+      <ChatInputCard className="z-[3] max-w-5xl px-4" />
     </div>
   );
 }

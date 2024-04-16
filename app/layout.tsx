@@ -6,6 +6,7 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_NAME } from "@/constants/config";
+import { ScrollbarController } from "@/scrollbar/controller";
 import { StoreProvider } from "@/store/components/provider";
 import { ThemeProvider } from "@/theme/components/provider";
 import { cn } from "@/ui/lib";
@@ -36,15 +37,16 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="mx-auto flex min-h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto">
+            <div className="flex min-h-screen w-full min-w-80 max-w-full flex-col">
               <Header />
-              <main className="flex flex-1 flex-col px-4">
+              <main className="flex flex-1 flex-col">
                 {children}
                 {product}
               </main>
               <Footer />
               <Toaster position="bottom-center" />
             </div>
+            <ScrollbarController />
           </ThemeProvider>
         </StoreProvider>
       </body>
