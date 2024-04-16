@@ -1,13 +1,11 @@
 import { VariantProps, cva } from "class-variance-authority";
-import Markdown from "react-markdown";
+import { ReactNode } from "react";
 
 import { ComponentProps } from "@/types";
-import { Content } from "@/components/content";
 import { Card, CardProps } from "@/components/ui/card";
-import { ChatMessage } from "@/chat/message/types";
 import { cn } from "@/ui/lib";
 
-export const chatMessageCardVariants = cva("p-4 py-2", {
+export const chatMessageCardVariants = cva("p-4 py-2 flex flex-col gap-2", {
   variants: {
     variant: {
       default: "",
@@ -18,34 +16,37 @@ export const chatMessageCardVariants = cva("p-4 py-2", {
 
 export type ChatMessageCardProps = ComponentProps<
   CardProps,
-  Omit<ChatMessage, "node"> & { withAuthor?: boolean } & VariantProps<typeof chatMessageCardVariants>
+  { author?: ReactNode; createdAt?: Date } & VariantProps<typeof chatMessageCardVariants>
 >;
 
 const date = new Date().toLocaleString().split(",")[0];
 
 export function ChatMessageCard({
+  children,
   className,
   variant,
-  content,
-  role,
+  author,
   createdAt,
-  withAuthor = true,
   ...props
 }: ChatMessageCardProps) {
-  const _createdAt = createdAt.toLocaleString().startsWith(date)
-    ? createdAt.toLocaleTimeString("en-US", { hour12: false })
-    : createdAt.toLocaleString("en-US", { hour12: false });
+  const _createdAt = createdAt
+    ? createdAt.toLocaleString().startsWith(date)
+      ? createdAt.toLocaleTimeString("en-US", { hour12: false })
+      : createdAt.toLocaleString("en-US", { hour12: false })
+    : undefined;
 
   return (
     <Card
       {...props}
       className={cn(chatMessageCardVariants({ variant }), className)}
     >
-      <div className="flex items-center justify-between gap-2">
-        {withAuthor && <h4 className="font-medium first-letter:uppercase">{role}</h4>}
-        <p className="ml-auto text-right text-xs text-muted-foreground">{_createdAt}</p>
-      </div>
-      <Content>{content}</Content>
+      {(author || _createdAt) && (
+        <div className="flex items-center justify-between gap-2">
+          {author && <h4 className="font-medium first-letter:uppercase">{author}</h4>}
+          {_createdAt && <p className="ml-auto text-right text-xs text-muted-foreground">{_createdAt}</p>}
+        </div>
+      )}
+      {children}
     </Card>
   );
 }

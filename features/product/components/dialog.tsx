@@ -51,7 +51,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
       {...props}
       onOpenChange={handleToggle}
     >
-      <DialogContent>
+      <DialogContent className="bg-card">
         <div className="flex w-full flex-col items-center gap-4">
           <Card className="relative size-64 overflow-hidden">
             <Image

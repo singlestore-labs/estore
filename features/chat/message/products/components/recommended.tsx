@@ -1,30 +1,28 @@
 import { ComponentProps } from "@/types";
-import { Card, CardProps } from "@/components/ui/card";
-import { chatMessageCardVariants } from "@/chat/message/components/card";
+import { ChatMessageCard, ChatMessageCardProps } from "@/chat/message/components/card";
 import { ProductsCarousel, ProductsCarouselProps } from "@/products/components/carousel";
 import { cn } from "@/ui/lib";
 
-export type ProductsRecommendedMessageProps = ComponentProps<
-  CardProps,
+export type ChatMessageProductsRecommendedProps = ComponentProps<
+  ChatMessageCardProps,
   { products: ProductsCarouselProps["products"] }
 >;
 
-export function ProductsRecommendedMessage({
-  children = "The following products have been found based on your request:",
+export function ChatMessageProductsRecommended({
+  children,
   className,
   products,
   ...props
-}: ProductsRecommendedMessageProps) {
+}: ChatMessageProductsRecommendedProps) {
+  const _children = children || <p>Here are the recommended products based on your request:</p>;
+
   return (
-    <Card
+    <ChatMessageCard
+      variant="secondary"
       {...props}
-      className={cn(
-        chatMessageCardVariants({ variant: "secondary" }),
-        "flex flex-col gap-4 p-4 pb-2",
-        className,
-      )}
+      className={cn("gap-4 pb-2 pt-4", className)}
     >
-      {children}
+      {_children}
       <ProductsCarousel
         products={products}
         className="-mx-4 w-[calc(100%+theme(spacing.8))]"
@@ -34,6 +32,6 @@ export function ProductsRecommendedMessage({
         }}
         controllersProps={{ className: "px-4" }}
       />
-    </Card>
+    </ChatMessageCard>
   );
 }

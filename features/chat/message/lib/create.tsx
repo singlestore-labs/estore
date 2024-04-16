@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { ReactNode } from "react";
 
 import { Override } from "@/types";
-import { ChatMessageCard } from "@/chat/message/components/card";
+import { ChatMessageContentCard } from "@/chat/message/content/components/card";
 import { ChatMessage } from "@/chat/message/types";
 
 type _ChatMessage = Override<
@@ -23,7 +23,7 @@ export function createChatMessage<T extends _ChatMessage = _ChatMessage>({
   if (node) {
     _node = typeof node === "function" ? node(message) : node;
   } else {
-    _node = <ChatMessageCard {...message} />;
+    _node = <ChatMessageContentCard {...message} />;
   }
 
   return { ...message, node: _node };
