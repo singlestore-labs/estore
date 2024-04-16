@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --app-scrollbar-width: 15px;
+  --scrollbar-width: 15px;
 }
 
 @layer base {

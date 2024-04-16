@@ -30,7 +30,7 @@ export function ChatMessageList({ className, listProps, ...props }: ChatMessageL
         <ul
           {...listProps}
           className={cn(
-            `relative left-1/2 flex w-full max-w-full -translate-x-[calc(50%-(var(--app-scrollbar-width)/2))] flex-col-reverse gap-8`,
+            `relative left-1/2 flex w-full max-w-full -translate-x-[calc(50%-(var(--scrollbar-width)/2))] flex-col-reverse gap-8`,
             listProps?.className,
           )}
         >

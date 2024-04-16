@@ -6,7 +6,6 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_NAME } from "@/constants/config";
-import { ScrollbarController } from "@/scrollbar/controller";
 import { StoreProvider } from "@/store/components/provider";
 import { ThemeProvider } from "@/theme/components/provider";
 import { cn } from "@/ui/lib";
@@ -46,7 +45,6 @@ export default function RootLayout({
               <Footer />
               <Toaster position="bottom-center" />
             </div>
-            <ScrollbarController />
           </ThemeProvider>
         </StoreProvider>
       </body>
