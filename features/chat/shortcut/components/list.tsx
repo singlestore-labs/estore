@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ChatToolbar } from "@/chat/components/toolbar";
 import { chatMessagesAtom, hasMessagesAtom } from "@/chat/message/atoms/messages";
 import { createChatMessage } from "@/chat/message/lib/create";
 import { ChatShortcutButton } from "@/chat/shortcut/components/button";
@@ -37,7 +38,12 @@ export function ChatShortcutList({ className, ...props }: ChatShortcutListProps)
         value="1"
         className="border-b-0"
       >
-        <AccordionTrigger className="justify-start gap-1 p-0 text-sm">Shortcuts</AccordionTrigger>
+        <AccordionTrigger
+          className="justify-start gap-1 p-0 text-sm"
+          headerChildren={<ChatToolbar className="ml-auto" />}
+        >
+          Shortcuts
+        </AccordionTrigger>
         <AccordionContent className="mt-2">
           <ul
             {...props}
