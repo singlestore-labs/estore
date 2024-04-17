@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development tsx watch ./index.ts",
-    "start": "tsx ./index.ts"
+    "normalize": "tsx ./lib/normalize.ts",
+    "generate": "tsx ./lib/generate.ts"
   },
   "dependencies": {
     "@singlestore/elegance-sdk": "^0.0.18",
-    "nanoid": "^5.0.6"
+    "csv-parse": "^5.5.5",
+    "nanoid": "^5.0.6",
+    "random-int": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
