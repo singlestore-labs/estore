@@ -17,6 +17,7 @@
     "paths": {
       "@/*": ["./app/*", "./features/*"],
       "@/public/*": ["./public/*"],
+      "@/data/*": ["./data/*"],
       "@/tailwind-config": ["./tailwind.config.ts"]
     }
   },

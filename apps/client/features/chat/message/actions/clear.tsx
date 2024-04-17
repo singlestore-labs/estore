@@ -5,7 +5,7 @@ import { sleep } from "@/helpers";
 
 export async function clearChatMessages() {
   try {
-    await sleep();
+    await sleep(1000);
   } catch (error) {
     return forwardActionError(error);
   }

@@ -6,18 +6,16 @@ import { useState } from "react";
 import { ComponentProps } from "@/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChatToolbar } from "@/chat/components/toolbar";
-import { chatMessagesAtom, hasMessagesAtom } from "@/chat/message/atoms/messages";
+import { chatMessagesAtom } from "@/chat/message/atoms/messages";
 import { createChatMessage } from "@/chat/message/lib/create";
 import { ChatShortcutButton } from "@/chat/shortcut/components/button";
 import { ChatShortcut } from "@/chat/shortcut/types";
+import { chatShortcuts } from "@/data/chat-shortcuts";
 import { cn } from "@/ui/lib";
-
-import { chatShortcuts } from "../../../../data/chat-shortcuts";
 
 export type ChatShortcutListProps = ComponentProps<"ul">;
 
 export function ChatShortcutList({ className, ...props }: ChatShortcutListProps) {
-  const hasMessages = useAtomValue(hasMessagesAtom);
   const setMessages = useSetAtom(chatMessagesAtom);
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -48,7 +46,7 @@ export function ChatShortcutList({ className, ...props }: ChatShortcutListProps)
           <ul
             {...props}
             className={cn(
-              "grid max-h-36 w-full max-w-full flex-wrap gap-2 overflow-y-auto overflow-x-hidden grid-auto-fill-[24rem,1fr]",
+              "grid-auto-fill-[24rem,1fr] grid max-h-36 w-full max-w-full flex-wrap gap-2 overflow-y-auto overflow-x-hidden",
               className,
             )}
           >

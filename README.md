@@ -1,21 +1,23 @@
-# GenAI eStore
+# SingleStore | GenAI eStore
 
-## Getting Started
+**Attention**: The code in this repository is intended for experimental use only and is not fully tested, documented, or supported by SingleStore. Visit the [SingleStore Forums](https://www.singlestore.com/forum/) to ask questions about this repository.
 
-First, run the development server:
+## Requirements
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- `Node.js` at least `v18.15.0`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Create a `.env` file based on the `.env.example` file
+2. Install dependencies by running: `npm i`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Run the dev environment
+
+1. Run `npm run dev`
+2. Open [http://localhost:3000](http://localhost:3000)
+
+## Build the prod environment
+
+1. Run `npm run build`
+2. Run `npm run start`
+3. Open [http://localhost:3000](http://localhost:3000)
