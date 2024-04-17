@@ -19,7 +19,7 @@ export function ChatShortcutButton({
       className={cn("h-auto flex-col items-start text-wrap px-4 py-3 text-left", className)}
     >
       <span>{title}</span>
-      <span className="line-clamp-1 text-sm font-normal text-muted-foreground">{description}</span>
+      <span className="text-muted-foreground line-clamp-1 text-sm font-normal">{description}</span>
     </Button>
   );
 }

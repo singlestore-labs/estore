@@ -43,7 +43,7 @@ export function ChatMessageCard({
       {(author || _createdAt) && (
         <div className="flex items-center justify-between gap-2">
           {author && <h4 className="font-medium first-letter:uppercase">{author}</h4>}
-          {_createdAt && <p className="ml-auto text-right text-xs text-muted-foreground">{_createdAt}</p>}
+          {_createdAt && <p className="text-muted-foreground ml-auto text-right text-xs">{_createdAt}</p>}
         </div>
       )}
       {children}

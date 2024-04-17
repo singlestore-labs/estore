@@ -115,7 +115,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
       {...props}
       onOpenChange={handleToggle}
     >
-      <DialogContent className="max-w-xl bg-card">{content}</DialogContent>
+      <DialogContent className="bg-card max-w-xl">{content}</DialogContent>
     </Dialog>
   );
 }

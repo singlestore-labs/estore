@@ -21,11 +21,11 @@ export function ProductPurchaseCardSuccess({
       {...props}
       className={cn("flex flex-col items-center justify-center gap-4 py-4", className)}
     >
-      <CircleCheck className="h-24 w-24 text-primary" />
+      <CircleCheck className="text-primary h-24 w-24" />
       <h2 className="text-center text-2xl font-semibold">
         You have successfully purchased
         <br />
-        <span className="capitalize text-primary">{productName}</span>
+        <span className="text-primary capitalize">{productName}</span>
       </h2>
       <Button
         className="mt-2"

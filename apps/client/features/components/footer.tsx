@@ -11,12 +11,12 @@ export function Footer({ className, ...props }: FooterProps) {
       {...props}
       className={cn("flex items-center justify-center p-4", className)}
     >
-      <p className={cn("text-sm text-muted-foreground", className)}>
+      <p className={cn("text-muted-foreground text-sm", className)}>
         Built with ❤️ on{" "}
         <Link
           href="https://www.singlestore.com/cloud-trial"
           target="_blank"
-          className="underline hover:text-primary"
+          className="hover:text-primary underline"
         >
           SingleStoreDB
         </Link>

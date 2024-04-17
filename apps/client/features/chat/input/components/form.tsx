@@ -70,7 +70,7 @@ export function ChatInputForm({
       {...props}
       className={cn(
         "relative w-full max-w-full",
-        isFocused && "outline-none ring-2 ring-ring ring-offset-2 ring-offset-background",
+        isFocused && "ring-ring ring-offset-background outline-none ring-2 ring-offset-2",
         className,
       )}
     >

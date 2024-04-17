@@ -15,7 +15,7 @@ export function Fade({ className, direction = "t", ...props }: FadeProps) {
     <span
       {...props}
       className={cn(
-        "pointer-events-none absolute z-[1] bg-background transition-all",
+        "bg-background pointer-events-none absolute z-[1] transition-all",
         directionClasses[direction],
         className,
       )}

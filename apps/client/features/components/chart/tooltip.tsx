@@ -11,7 +11,7 @@ export function ChartTooltip({ active, payload }: TooltipProps<any, any>) {
   return (
     <Card
       className={cn(
-        "flex flex-col items-center justify-center bg-card p-2 text-center text-sm",
+        "bg-card flex flex-col items-center justify-center p-2 text-center text-sm",
         props.className,
       )}
     >

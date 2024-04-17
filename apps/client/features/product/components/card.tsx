@@ -45,7 +45,7 @@ export function ProductCard({
         <div className="flex items-start justify-between gap-1">
           <Link
             href={ROUTES.PRODUCT_BY_ID(id)}
-            className="transition-colors hover:text-primary"
+            className="hover:text-primary transition-colors"
           >
             <h4 className="line-clamp-2 text-base font-semibold capitalize">{description}</h4>
           </Link>
