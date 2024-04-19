@@ -17,9 +17,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@repo/db": ["../../packages/db/index.ts"]
+      "@repo/db": ["../../packages/db/index.ts"],
+      "@repo/db/types": ["../../packages/db/types.ts"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "../../packages/**/*"],
   "exclude": ["node_modules"]
 }

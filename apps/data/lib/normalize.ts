@@ -29,7 +29,7 @@ if (!existsSync(normalizedDatasetPath)) {
           sizesInStock = { oneSize: randomInt(0, 10000) };
         } else {
           sizesInStock = iSizes.reduce(
-            (acc, { size }) => ({ ...acc, [size]: randomInt(0, 10000) }),
+            (acc, { size }) => ({ ...acc, [(size as string).toLowerCase()]: randomInt(0, 10000) }),
             {} as NormalizedDatasetRecord["sizesInStock"],
           );
         }
