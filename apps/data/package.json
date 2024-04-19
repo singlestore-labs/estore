@@ -5,7 +5,7 @@
   "scripts": {
     "normalize": "tsx ./lib/normalize.ts",
     "generate": "tsx ./lib/generate.ts",
-    "start": "npm run generate"
+    "start": "tsx ./index.ts"
   },
   "dependencies": {
     "csv-parse": "^5.5.5",

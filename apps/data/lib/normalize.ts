@@ -6,7 +6,7 @@ import path from "path";
 import randomInt from "random-int";
 
 const sourceDatasetPath = path.join(process.cwd(), "source/current_farfetch_listings.csv");
-const normalizedDatasetPath = path.join(process.cwd(), "export/normalized-dataset.json");
+const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-dataset.json");
 
 if (!existsSync(sourceDatasetPath)) {
   mkdirSync(sourceDatasetPath.split("/")[0]);

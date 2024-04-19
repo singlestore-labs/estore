@@ -1,8 +1,16 @@
 import { NormalizedDatasetRecord } from "@/types";
 import { db } from "@repo/db";
+import {
+  ORDERS_TABLE_NAME,
+  PRODUCTS_TABLE_NAME,
+  PRODUCT_LIKES_TABLE_NAME,
+  PRODUCT_SIZES_TABLE_NAME,
+  USERS_TABLE_NAME,
+} from "@repo/db/constants";
 import { OrderRow, ProductLikeRow, ProductRow, ProductSizeRow, UserRow } from "@repo/db/types";
-import { createWriteStream, existsSync } from "fs";
-import { readFile } from "fs/promises";
+import { toChunks } from "@repo/helpers";
+import { existsSync } from "fs";
+import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import randomInt from "random-int";
 
@@ -10,7 +18,7 @@ const USERS_NUMBER = 5_000_000;
 const PRODUCT_LIKES_NUMBER = 5_000_000;
 const UNIQUE_ORDERS_NUMBER = 2_000_000;
 
-const normalizedDatasetPath = path.join(process.cwd(), "export/normalized-dataset.json");
+const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-dataset.json");
 
 (async () => {
   const dataset: NormalizedDatasetRecord[] = JSON.parse(await readFile(normalizedDatasetPath, "utf-8")).slice(
@@ -21,7 +29,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "export/normalized-datase
 
   let productRows: ProductRow[] = [];
   let productId = 0;
-  const productsPath = path.join(process.cwd(), `export/products.json`);
+  const productsPath = path.join(process.cwd(), `export/${PRODUCTS_TABLE_NAME}.json`);
   if (existsSync(productsPath)) {
     productRows = JSON.parse(await readFile(productsPath, "utf-8"));
   } else {
@@ -40,21 +48,21 @@ const normalizedDatasetPath = path.join(process.cwd(), "export/normalized-datase
         })),
       ];
     }
-    await writeToJSON(`products`, productRows);
+    await writeToJSON(PRODUCTS_TABLE_NAME, productRows);
   }
 
-  if (!existsSync(path.join(process.cwd(), `export/product_sizes.json`))) {
+  if (!existsSync(path.join(process.cwd(), `export/${PRODUCT_SIZES_TABLE_NAME}.json`))) {
     let productSizeId = 0;
     const productSizeRows: ProductSizeRow[] = productRows.flatMap(({ id: productId }) => {
       return Object.entries(dataset[productId].sizesInStock).map(([label, inStock]) => {
         return { id: productSizeId++, createdAt, label, inStock, productId };
       });
     });
-    await writeToJSON("product_sizes", productSizeRows);
+    await writeToJSON(PRODUCT_SIZES_TABLE_NAME, productSizeRows);
   }
 
   const userRows: UserRow[] = Array.from({ length: USERS_NUMBER }).map((_, id) => ({ id, createdAt }));
-  await writeToJSON("users", userRows);
+  await writeToJSON(USERS_TABLE_NAME, userRows);
 
   const productLikeRows: ProductLikeRow[] = Array.from({ length: PRODUCT_LIKES_NUMBER }).map((_, id) => ({
     id,
@@ -62,7 +70,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "export/normalized-datase
     userId: getRandomArrayItem(userRows).id,
     productId: getRandomArrayItem(productRows).id,
   }));
-  await writeToJSON("product_likes", productLikeRows);
+  await writeToJSON(PRODUCT_LIKES_TABLE_NAME, productLikeRows);
 
   let orderId = 0;
   const orderRows: OrderRow[] = Array.from({ length: UNIQUE_ORDERS_NUMBER }).flatMap((_, groupId) => {
@@ -75,7 +83,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "export/normalized-datase
       productId: getRandomArrayItem(productRows).id,
     })) satisfies OrderRow[];
   });
-  await writeToJSON("orders", orderRows);
+  await writeToJSON(ORDERS_TABLE_NAME, orderRows);
 })();
 
 function getRandomArrayItem<T extends any[]>(arr: T): T[number] {
@@ -93,38 +101,23 @@ function normalizeDate(date: Date) {
   return date.toISOString().slice(0, 19).replace("T", " ");
 }
 
-// function writeToJSON(name: string, data: any) {
-//   return writeFile(path.join(process.cwd(), `export/${name}.json`), JSON.stringify(data, null, 2), "utf-8");
-// }
+async function writeToJSON<T extends any[]>(name: string, data: T) {
+  let i = 0;
 
-async function writeToJSON(name: string, data: any[], chunkSize = 100000) {
-  console.log({ name, length: data.length });
-  return new Promise((res) => {
-    const filePath = path.join(process.cwd(), `export/${name}.json`);
-    const stream = createWriteStream(filePath, { encoding: "utf-8" });
+  const write = async (data: T) => {
+    await writeFile(
+      path.join(process.cwd(), `export/${name}${i > 0 ? `-${i}` : ""}.json`),
+      JSON.stringify(data, null, 2),
+      "utf-8",
+    );
+  };
 
-    stream.write("[\n");
-
-    for (let i = 0; i < data.length; i += chunkSize) {
-      const chunk = data.slice(i, i + chunkSize);
-      const jsonChunk = JSON.stringify(chunk, null, 2);
-      const trimmedChunk = jsonChunk.slice(1, jsonChunk.length - 1).replace("\n", "");
-      if (i > 0) stream.write(",\n");
-      stream.write(trimmedChunk);
+  if (data.length > 100_000) {
+    for await (const chunk of toChunks(data, 100_000)) {
+      i++;
+      await write(chunk as T);
     }
-
-    stream.write("\n]");
-    stream.end();
-    res(true);
-  });
-}
-
-export function toChunks<T>(array: T[], chunkSize: number): T[][] {
-  const chunks = [];
-
-  for (let i = 0; i < array.length; i += chunkSize) {
-    chunks.push(array.slice(i, i + chunkSize));
+  } else {
+    return write(data);
   }
-
-  return chunks;
 }

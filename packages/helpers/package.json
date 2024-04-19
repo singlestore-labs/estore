@@ -1,0 +1,11 @@
+{
+  "name": "@repo/helpers",
+  "version": "1.0.0",
+  "main": "./index.ts",
+  "private": true,
+  "type": "module",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.11.17"
+  }
+}
