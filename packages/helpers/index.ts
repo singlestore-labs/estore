@@ -7,3 +7,18 @@ export function toChunks<T>(array: T[], chunkSize: number): T[][] {
 
   return chunks;
 }
+
+export function getRandomArrayItem<T extends any[]>(arr: T): T[number] {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+export function getRandomDate(from: Date) {
+  const min = from.getTime();
+  const max = new Date().getTime();
+  const randomTime = Math.random() * (max - min) + min;
+  return new Date(randomTime);
+}
+
+export function normalizeDate(date: Date) {
+  return date.toISOString().slice(0, 19).replace("T", " ");
+}

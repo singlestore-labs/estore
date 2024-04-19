@@ -8,7 +8,7 @@ import {
   USERS_TABLE_NAME,
 } from "@repo/db/constants";
 import { OrderRow, ProductLikeRow, ProductRow, ProductSizeRow, UserRow } from "@repo/db/types";
-import { toChunks } from "@repo/helpers";
+import { getRandomArrayItem, getRandomDate, normalizeDate, toChunks } from "@repo/helpers";
 import { existsSync } from "fs";
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
@@ -85,21 +85,6 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   });
   await writeToJSON(ORDERS_TABLE_NAME, orderRows);
 })();
-
-function getRandomArrayItem<T extends any[]>(arr: T): T[number] {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function getRandomDate(from: Date) {
-  const min = from.getTime();
-  const max = new Date().getTime();
-  const randomTime = Math.random() * (max - min) + min;
-  return new Date(randomTime);
-}
-
-function normalizeDate(date: Date) {
-  return date.toISOString().slice(0, 19).replace("T", " ");
-}
 
 async function writeToJSON<T extends any[]>(name: string, data: T) {
   let i = 0;
