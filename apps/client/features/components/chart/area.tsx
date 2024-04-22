@@ -14,7 +14,7 @@ export type ChartAreaProps = ComponentProps<
 const theme = getTheme();
 
 export function ChartArea({ data = [], areaProps }: ChartAreaProps) {
-  const keys = Object.keys(data[0]).filter((key) => !["date"].includes(key));
+  const keys = data.length ? Object.keys(data[0]).filter((key) => !["date"].includes(key)) : [];
 
   return (
     <ResponsiveContainer

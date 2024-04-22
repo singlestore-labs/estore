@@ -2,6 +2,7 @@
 
 import { db } from "@repo/db";
 import { USERS_TABLE_NAME } from "@repo/db/constants";
+import { UserRow } from "@repo/db/types";
 
 import { USER_ID_COOKIE_KEY } from "@/cookie/constants";
 import { getCookie } from "@/cookie/lib/get";
@@ -18,7 +19,7 @@ export async function getUser(id?: User["id"]): Promise<User> {
     user = await createUser();
     await setCookie(USER_ID_COOKIE_KEY, user.id.toString());
   } else {
-    user = await db.controllers.findOne({ collection: USERS_TABLE_NAME, where: `id = ${_id}` });
+    user = await db.controllers.findOne<UserRow>({ collection: USERS_TABLE_NAME, where: `id = ${_id}` });
   }
 
   return user;

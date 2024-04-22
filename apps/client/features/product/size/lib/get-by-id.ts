@@ -6,13 +6,13 @@ import { Product } from "@/product/types";
 
 export async function getProductSizesById(id: Product["id"]): Promise<Product["sizes"]> {
   try {
-    const existedRows = await db.controllers.findMany<ProductSizeRow[]>({
+    const rows = await db.controllers.findMany<ProductSizeRow[]>({
       collection: PRODUCT_SIZES_TABLE_NAME,
       where: `productId = ${id}`,
       extra: `ORDER BY label DESC`,
     });
 
-    return Object.fromEntries(existedRows.map((i) => [i.label, i.inStock]));
+    return Object.fromEntries(rows.map((i) => [i.label, i.inStock]));
   } catch (error) {
     return {};
   }
