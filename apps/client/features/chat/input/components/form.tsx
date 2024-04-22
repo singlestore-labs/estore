@@ -63,7 +63,7 @@ export function ChatInputForm({
     }
   }, []);
 
-  useEffect(() => setFocus("content"), [setFocus, form.formState.isSubmitted]);
+  useEffect(() => setFocus("content"), [setFocus, isDisabled]);
 
   return (
     <Card

@@ -1,27 +1,25 @@
 "use client";
 
-import { useAtomValue, useSetAtom } from "jotai";
 import { useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChatToolbar } from "@/chat/components/toolbar";
-import { chatMessagesAtom } from "@/chat/message/atoms/messages";
-import { createChatMessage } from "@/chat/message/lib/create";
 import { ChatShortcutButton } from "@/chat/shortcut/components/button";
 import { ChatShortcut } from "@/chat/shortcut/types";
 import { chatShortcuts } from "@/data/chat-shortcuts";
 import { cn } from "@/ui/lib";
 
-export type ChatShortcutListProps = ComponentProps<"ul">;
+export type ChatShortcutListProps = ComponentProps<
+  "ul",
+  { isDisabled?: boolean; onShortcut?: (shortcut: ChatShortcut) => Promise<void> | void }
+>;
 
-export function ChatShortcutList({ className, ...props }: ChatShortcutListProps) {
-  const setMessages = useSetAtom(chatMessagesAtom);
+export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }: ChatShortcutListProps) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  const handleShortcut = (shortcut: ChatShortcut) => {
-    const message = createChatMessage({ role: "user", content: shortcut.title });
-    setMessages((i) => [message, ...i]);
+  const handleShortcut = async (shortcut: ChatShortcut) => {
+    await onShortcut?.(shortcut);
     setIsCollapsed(true);
   };
 
@@ -55,6 +53,7 @@ export function ChatShortcutList({ className, ...props }: ChatShortcutListProps)
                 <ChatShortcutButton
                   {...shortcut}
                   className="w-full max-w-full"
+                  disabled={isDisabled}
                   onClick={() => handleShortcut(shortcut)}
                 />
               </li>
