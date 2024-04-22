@@ -2,10 +2,15 @@
 
 import { useHydrateAtoms } from "jotai/utils";
 
-export type StoreControllerProps = {};
+import { chatMessagesAtom } from "@/chat/message/atoms/messages";
+import { ChatMessage } from "@/chat/message/types";
 
-export function StoreController({}: StoreControllerProps) {
-  useHydrateAtoms([]);
+export type StoreControllerProps = {
+  messages: ChatMessage[];
+};
+
+export function StoreController({ messages }: StoreControllerProps) {
+  useHydrateAtoms([[chatMessagesAtom, messages]]);
 
   return null;
 }

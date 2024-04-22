@@ -1,6 +1,7 @@
 import { Provider } from "jotai";
 import { ReactNode } from "react";
 
+import { getChatMessages } from "@/chat/message/lib/get-list";
 import { StoreController } from "@/store/components/controller";
 
 export type StoreProviderProps = {
@@ -8,11 +9,11 @@ export type StoreProviderProps = {
 };
 
 export async function StoreProvider({ children }: StoreProviderProps) {
-  const [] = await Promise.all([]);
+  const [messages] = await Promise.all([getChatMessages()]);
 
   return (
     <Provider>
-      <StoreController />
+      <StoreController messages={messages} />
       {children}
     </Provider>
   );

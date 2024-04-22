@@ -1,3 +1,8 @@
+"use client";
+
+import { readStreamableValue } from "ai/rsc";
+import { useEffect, useState } from "react";
+
 import { ComponentProps } from "@/types";
 import { Content } from "@/components/content";
 import { ChatMessageCard, ChatMessageCardProps } from "@/chat/message/components/card";
@@ -16,6 +21,19 @@ export function ChatMessageContentCard({
   withAuthor = true,
   ...props
 }: ChatMessageContentCardProps) {
+  const [_content, setContent] = useState<string>(typeof content === "string" ? content : "");
+
+  useEffect(() => {
+    (async () => {
+      if (typeof content === "object") {
+        let value = "";
+        for await (const token of readStreamableValue(content)) {
+          setContent((value += token));
+        }
+      }
+    })();
+  }, [content]);
+
   return (
     <ChatMessageCard
       variant={role === "assistant" ? "secondary" : "default"}
@@ -23,7 +41,7 @@ export function ChatMessageContentCard({
       className={cn("gap-0", className)}
       author={withAuthor ? role : undefined}
     >
-      <Content>{content}</Content>
+      <Content>{_content}</Content>
     </ChatMessageCard>
   );
 }
