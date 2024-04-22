@@ -30,7 +30,7 @@ export const productSizeSelectVariants = cva("flex items-center", {
     {
       variant: "read",
       size: "xs",
-      class: "rounded-sm gap-0 px-1.5",
+      class: "rounded-sm px-2 gap-1",
     },
   ],
 });
@@ -54,7 +54,7 @@ export const productSizeSelectButtonVariants = cva("border p-0 uppercase text-xs
     {
       variant: "read",
       size: "xs",
-      class: "w-4",
+      class: "w-auto",
     },
   ],
 });
@@ -115,9 +115,11 @@ export function ProductSizeSelect({
                       className={cn(
                         productSizeSelectButtonVariants({ variant, size: rootSize }),
                         size !== value && "hover:cursor-pointer",
+                        size === "oneSize" && "w-auto",
+                        size === "oneSize" && variant !== "read" && "px-2",
                       )}
                     >
-                      <Label htmlFor={_id}>{size}</Label>
+                      <Label htmlFor={_id}>{size !== "oneSize" ? size : "one size"}</Label>
                     </Button>
                   </div>
                 </TooltipTrigger>

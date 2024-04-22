@@ -1,11 +1,11 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
-import { db } from "@repo/db";
-import { PRODUCTS_TABLE_NAME } from "@repo/db/constants";
 import { z } from "zod";
 
 import { CHAT_AGENT_TOOLS } from "@/chat/agent/tool/constants";
 import { stringifyChatAgentToolOutput } from "@/chat/agent/tool/lib/stringify-output";
 import { IS_DEV } from "@/constants/env";
+import { getProducts } from "@/product/lib/get-many";
+import { getProductSalesById } from "@/product/sales/lib/get-by-id";
 import { Product } from "@/product/types";
 import { getUserId } from "@/user/lib/get-id";
 
@@ -23,17 +23,7 @@ export function createChatAgentToolList() {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.find_products);
         try {
           const userId = await getUserId();
-          console.log(userId);
-
-          let query = `SELECT id, createdAt, description, image, price, gender FROM ${PRODUCTS_TABLE_NAME} LIMIT ${limit}`;
-
-          const products = (await db.controllers.query<Product[]>({ query })).map((i) => ({
-            ...i,
-            sales: [],
-            sizes: {},
-            likes: 0,
-          }));
-
+          const products = await getProducts({ limit });
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.find_products, props: { products } });
         } catch (error) {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.find_products, props: {}, error });
@@ -49,7 +39,7 @@ export function createChatAgentToolList() {
       func: async ({ productId }) => {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.recommend_products);
         try {
-          const sales: Product["sales"] = [];
+          const sales: Product["sales"] = await getProductSalesById(productId);
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.recommend_products, props: { sales } });
         } catch (error) {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.recommend_products, props: {}, error });
@@ -65,16 +55,7 @@ export function createChatAgentToolList() {
       func: async ({}) => {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.top_product);
         try {
-          const product: Product = {
-            ...(
-              await db.controllers.query<Product[]>({
-                query: `SELECT id, createdAt, description, image, price, gender FROM ${PRODUCTS_TABLE_NAME} LIMIT 1`,
-              })
-            )[0],
-            likes: 0,
-            sales: [],
-            sizes: {},
-          };
+          const product: Product = (await getProducts({ limit: 1 }))[0];
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.top_product, props: { product } });
         } catch (error) {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.top_product, props: {}, error });
