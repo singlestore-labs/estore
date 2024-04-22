@@ -59,7 +59,10 @@ export function ProductCard({
             className="ml-auto"
             value={sales}
           />
-          <ProductLikesInfo value={likes} />
+          <ProductLikesInfo
+            value={likes}
+            productId={id}
+          />
         </div>
       </div>
     </Card>

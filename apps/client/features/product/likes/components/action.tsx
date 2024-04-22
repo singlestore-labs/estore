@@ -1,5 +1,5 @@
+import { useAtom } from "jotai/react";
 import { Heart } from "lucide-react";
-import { useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Button, ButtonProps } from "@/components/ui/button";
@@ -9,17 +9,24 @@ import { createProductLike } from "@/product/likes/actions/create";
 import { deleteProductLike } from "@/product/likes/actions/delete";
 import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
+import { userProdcutLikesAtom } from "@/user/product/atoms/likes";
 
 export type ProductLikesActionProps = ComponentProps<ButtonProps, { productId: Product["id"] }>;
 
 export function ProductLikesAction({ className, productId, ...props }: ProductLikesActionProps) {
-  const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useAtom(userProdcutLikesAtom);
+  const isLiked = likes.find((i) => i.productId === productId);
   const { execute, isPending } = useAction();
 
   const handleClick: ButtonProps["onClick"] = async () => {
     try {
-      await execute(() => (isLiked ? deleteProductLike(productId) : createProductLike(productId)));
-      setIsLiked(!isLiked);
+      if (isLiked) {
+        await execute(() => deleteProductLike(productId));
+        setLikes((i) => i.filter((i) => i.productId !== productId));
+      } else {
+        const like = await execute(() => createProductLike(productId));
+        setLikes((i) => [...i, like]);
+      }
     } catch (error) {}
   };
 
