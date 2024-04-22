@@ -76,11 +76,12 @@ function createTables() {
 
 async function insertValues() {
   const exportPath = path.join(process.cwd(), "export");
-  const files = await readdir(exportPath);
+  const files = (await readdir(exportPath)).filter((i) => i.includes(".json"));
 
   for await (const fileName of files) {
     const [tableName] = fileName.split(".")[0].split("-");
-    const values = JSON.parse(await readFile(path.join(exportPath, fileName), "utf-8"));
+    const fileContent = await readFile(path.join(exportPath, fileName), "utf-8");
+    const values = JSON.parse(fileContent);
     const limit = tableName === PRODUCTS_TABLE_NAME ? 1000 : 10000;
 
     if (values.length > limit) {

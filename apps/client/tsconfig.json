@@ -18,9 +18,12 @@
       "@/*": ["./app/*", "./features/*"],
       "@/public/*": ["./public/*"],
       "@/data/*": ["./data/*"],
-      "@/tailwind-config": ["./tailwind.config.ts"]
+      "@/tailwind-config": ["./tailwind.config.ts"],
+      "@repo/helpers": ["../../packages/helpers/index.ts"],
+      "@repo/db": ["../../packages/db/index.ts"],
+      "@repo/db/*": ["../../packages/db/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../../packages/**/*"],
   "exclude": ["node_modules"]
 }

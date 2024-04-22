@@ -9,6 +9,7 @@ import { APP_NAME } from "@/constants/config";
 import { StoreProvider } from "@/store/components/provider";
 import { ThemeProvider } from "@/theme/components/provider";
 import { cn } from "@/ui/lib";
+import { UserController } from "@/user/components/controller";
 
 import "./globals.css";
 
@@ -36,6 +37,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <UserController />
             <div className="flex min-h-screen w-full min-w-80 max-w-full flex-col">
               <Header />
               <main className="flex flex-1 flex-col">
