@@ -10,7 +10,7 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useAction } from "@/action/hooks/use-action";
-import { purchaseProduct } from "@/product/actions/purchase";
+import { createOrder } from "@/order/actions/create";
 import { ProductPurchaseCardSuccess } from "@/product/components/purchase-card-success";
 import { ProductLikesAction } from "@/product/likes/components/action";
 import { ProductSalesChart } from "@/product/sales/components/chart";
@@ -39,7 +39,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
   };
 
   const handleBuyClick: ButtonProps["onClick"] = async () => {
-    await execute(() => purchaseProduct(id));
+    await execute(() => createOrder(id));
     setIsPurchased(true);
   };
 
@@ -84,7 +84,10 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
               disabled={isPending}
               onChange={setSizeValue}
             />
-            <ProductLikesAction className="ml-auto" />
+            <ProductLikesAction
+              className="ml-auto"
+              productId={id}
+            />
           </div>
 
           <div>

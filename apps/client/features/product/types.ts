@@ -1,5 +1,7 @@
+import { ProductRow } from "@repo/db/types";
+
 export type Product = {
-  id: string;
+  id: ProductRow["id"];
   description: string;
   price: number;
   image: string;
