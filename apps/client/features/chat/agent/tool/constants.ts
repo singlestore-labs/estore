@@ -1,3 +1,6 @@
 export const CHAT_AGENT_TOOLS = {
-  db_schema: "db_scheam",
+  find_products: "recommend_products",
+  recommend_products: "recommend_products",
+  product_sales: "product_sales",
+  top_product: "top_product",
 };
