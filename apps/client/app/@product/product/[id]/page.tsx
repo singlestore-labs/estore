@@ -1,8 +1,15 @@
-import { products } from "@/data/products";
-import { ProductDialog } from "@/product/components/dialog";
+import { redirect } from "next/navigation";
 
-export default function PageProduct({ params }: { params: { id: string } }) {
-  const product = products[0];
+import { ROUTES } from "@/constants/routes";
+import { ProductDialog } from "@/product/components/dialog";
+import { getProdcutById } from "@/product/lib/get-by-id";
+
+export default async function PageProduct({ params }: { params: { id: string } }) {
+  const product = await getProdcutById(+params.id);
+
+  if (!product) {
+    redirect(ROUTES.ROOT);
+  }
 
   return <ProductDialog {...product} />;
 }

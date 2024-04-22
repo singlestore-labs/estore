@@ -21,7 +21,7 @@ export function ProductLikesInfo({ className, value, productId, ...props }: Prod
   return (
     <ProductInfoItem
       {...props}
-      className={cn("", isLiked && "[&_[fill]]:fill-primary", className)}
+      className={cn("", isLiked && "[&_[fill]]:fill-primary [&_[stroke]]:stroke-primary", className)}
       icon={Heart}
       label="Likes"
     >

@@ -38,7 +38,7 @@ export function ChatMessageContentCard({
     <ChatMessageCard
       variant={role === "assistant" ? "secondary" : "default"}
       {...props}
-      className={cn("gap-0", className)}
+      className={cn("max-w-[75%] gap-0", role === "user" ? "ml-auto" : "mr-auto", className)}
       author={withAuthor ? role : undefined}
     >
       <Content>{_content}</Content>

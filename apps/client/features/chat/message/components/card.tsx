@@ -6,7 +6,7 @@ import { Loader } from "@/components/loader";
 import { Card, CardProps } from "@/components/ui/card";
 import { cn } from "@/ui/lib";
 
-export const chatMessageCardVariants = cva("p-4 py-2 flex flex-col gap-2", {
+export const chatMessageCardVariants = cva("p-4 py-2 flex flex-col gap-2 max-w-full", {
   variants: {
     variant: {
       default: "",

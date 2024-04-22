@@ -72,7 +72,7 @@ export function ProductSizeSelect({
   className,
   variant,
   size: rootSize,
-  sizes,
+  sizes = {},
   value,
   disabled,
   onChange,

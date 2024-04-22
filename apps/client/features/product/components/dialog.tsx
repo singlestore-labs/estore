@@ -90,13 +90,15 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
             />
           </div>
 
-          <div>
-            <h3 className="font-medium">{getProductSalesMessage(sales.length)}</h3>
-            <ProductSalesChart
-              className="mt-2"
-              value={sales}
-            />
-          </div>
+          {!!sales.length && (
+            <div>
+              <h3 className="font-medium">{getProductSalesMessage(sales.length)}</h3>
+              <ProductSalesChart
+                className="mt-2"
+                sales={sales}
+              />
+            </div>
+          )}
 
           <Button
             className="mt-2"

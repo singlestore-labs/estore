@@ -42,7 +42,7 @@ export function ChatMessageProdcutSalesChart({
       className={cn("gap-4 py-4", className)}
     >
       {_children}
-      <ProductSalesChart value={product.sales} />
+      <ProductSalesChart sales={product.sales} />
     </ChatMessageCard>
   );
 }

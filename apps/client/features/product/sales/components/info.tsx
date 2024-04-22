@@ -8,7 +8,7 @@ import { cn } from "@/ui/lib";
 
 export type ProductSalesInfoProps = ComponentProps<ProductInfoItemProps, { value: Product["sales"] }>;
 
-export function ProductSalesInfo({ className, value, ...props }: ProductSalesInfoProps) {
+export function ProductSalesInfo({ className, value = [], ...props }: ProductSalesInfoProps) {
   return (
     <ProductInfoItem
       {...props}

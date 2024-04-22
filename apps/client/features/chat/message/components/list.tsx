@@ -40,14 +40,7 @@ export function ChatMessageList({ className, listProps, ...props }: ChatMessageL
             return (
               <li
                 key={message.id}
-                className={cn(
-                  message.role !== "function" && "max-w-[75%]",
-                  message.role === "function" && "w-full max-w-full",
-                  message.role === "user" && "self-end",
-                  message.role === "assistant" && "self-start",
-                  isSameRole ? "mt-2" : "mt-8",
-                  "last:mt-0",
-                )}
+                className={cn(isSameRole ? "mt-2" : "mt-8", "flex w-full max-w-full last:mt-0")}
               >
                 {message.node}
               </li>

@@ -5,7 +5,9 @@ import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
 import { BufferMemory } from "langchain/memory";
 
 import { ChatAgentHistory } from "@/chat/agent/history";
+import { CHAT_AGENT_TOOL_COMPONENTS } from "@/chat/agent/tool/components";
 import { createChatAgentToolList } from "@/chat/agent/tool/lib/create-list";
+import { parseChatAgentToolOutput } from "@/chat/agent/tool/lib/parse-output";
 import { createChatMessage } from "@/chat/message/lib/create";
 import { ChatMessage } from "@/chat/message/types";
 import { OPENAI_API_KEY } from "@/constants/env";
@@ -19,7 +21,7 @@ export async function createChatAgent() {
 
   const prompt = ChatPromptTemplate.fromMessages([
     ["system", "You are a helpful assistant."],
-    new MessagesPlaceholder("history"),
+    // new MessagesPlaceholder("history"),
     ["human", "{input}"],
     new MessagesPlaceholder("agent_scratchpad"),
   ]);
@@ -53,13 +55,13 @@ export async function createChatAgent() {
 async function normalizeBaseMessage(message: BaseMessage): Promise<ChatMessage> {
   let node: ChatMessage["node"];
 
-  // if (typeof message.content === "string") {
-  //   try {
-  //     const output = parseChatAgentToolOutput(message.content);
-  //     const component = chatSessionAgentToolComponents[output.name];
-  //     if (component) node = component({ ...output.props, children: output.props.text });
-  //   } catch (error) {}
-  // }
+  if (typeof message.content === "string") {
+    try {
+      const output = parseChatAgentToolOutput(message.content);
+      const Component = CHAT_AGENT_TOOL_COMPONENTS[output.name];
+      if (Component) node = <Component {...output.props}>{output.props.text}</Component>;
+    } catch (error) {}
+  }
 
   return createChatMessage({
     id: message.additional_kwargs.id as string,
