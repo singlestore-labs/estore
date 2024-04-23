@@ -68,7 +68,8 @@ function createTables() {
         createdAt DATETIME,
         groupId BIGINT,
         userId BIGINT,
-        productId BIGINT
+        productId BIGINT,
+        productSizeId BIGINT
       )
     `),
   ]);

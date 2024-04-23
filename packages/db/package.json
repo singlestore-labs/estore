@@ -4,10 +4,10 @@
   "main": "./index.ts",
   "private": true,
   "type": "module",
-  "dependencies": {
-    "@singlestore/elegance-sdk": "^0.0.20"
-  },
   "devDependencies": {
     "@types/node": "^20.11.17"
+  },
+  "dependencies": {
+    "@singlestore/elegance-sdk": "^0.0.21"
   }
 }

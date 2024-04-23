@@ -26,4 +26,5 @@ export type OrderRow = Row<{
   groupId: number;
   userId: UserRow["id"];
   productId: ProductRow["id"];
+  productSizeId: ProductSizeRow["id"] | null;
 }>;

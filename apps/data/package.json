@@ -9,10 +9,12 @@
   },
   "dependencies": {
     "csv-parse": "^5.5.5",
+    "lodash.groupby": "^4.6.0",
     "nanoid": "^5.0.6",
     "random-int": "^3.0.0"
   },
   "devDependencies": {
+    "@types/lodash.groupby": "^4.6.9",
     "@types/node": "^20",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
