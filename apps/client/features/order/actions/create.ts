@@ -3,8 +3,10 @@
 import { db } from "@repo/db";
 import { ORDERS_TABLE_NAME } from "@repo/db/constants";
 import { normalizeDate } from "@repo/helpers";
+import { revalidatePath } from "next/cache";
 
 import { forwardActionError } from "@/action/error/lib/forward";
+import { ROUTES } from "@/constants/routes";
 import { Order } from "@/order/types";
 import { getProductSizeByLabel } from "@/product/size/lib/get-by-label";
 import { setProdcutSizeInStock } from "@/product/size/lib/set-in-stock";
@@ -30,6 +32,8 @@ export async function createOrder(productId: Product["id"], size: keyof Product[
     if (productSize) {
       await setProdcutSizeInStock(productSize.id, productSize.inStock - 1);
     }
+
+    revalidatePath(ROUTES.ROOT);
   } catch (error) {
     return forwardActionError(error);
   }

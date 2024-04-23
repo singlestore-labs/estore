@@ -81,6 +81,7 @@ async function insertValues() {
 
   for await (const fileName of files) {
     const [tableName] = fileName.split(".")[0].split("-");
+    // if (["orders", "product_likes", "users"].includes(tableName)) continue;
     const fileContent = await readFile(path.join(exportPath, fileName), "utf-8");
     const values = JSON.parse(fileContent);
     const limit = tableName === PRODUCTS_TABLE_NAME ? 1000 : 10000;
