@@ -38,7 +38,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <UserController />
-            <div className="flex min-h-screen w-full min-w-80 max-w-full flex-col">
+            <div className="flex min-h-screen w-full min-w-80 max-w-full flex-col overflow-hidden">
               <Header />
               <main className="flex flex-1 flex-col">
                 {children}
