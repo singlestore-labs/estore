@@ -32,6 +32,29 @@ export function createChatAgentToolList() {
     }),
 
     new DynamicStructuredTool({
+      name: CHAT_AGENT_TOOLS.recommend_products,
+      description: `Useful when you need to recommend products`,
+      returnDirect: true,
+      schema: z.object({
+        prompt: z.string().describe("Unmodified user's prompt"),
+        limit: z.number().min(1).optional().describe("Number of products to recommend"),
+      }),
+      func: async ({ prompt, limit = 1 }) => {
+        if (IS_DEV) console.log(CHAT_AGENT_TOOLS.recommend_products);
+        try {
+          const userId = await getUserId();
+          const products = await getProducts({ limit });
+          return stringifyChatAgentToolOutput({
+            name: CHAT_AGENT_TOOLS.recommend_products,
+            props: { products },
+          });
+        } catch (error) {
+          return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.recommend_products, props: {}, error });
+        }
+      },
+    }),
+
+    new DynamicStructuredTool({
       name: CHAT_AGENT_TOOLS.product_sales,
       description: `Useful when you need to retrieve a product sales history chart`,
       returnDirect: true,

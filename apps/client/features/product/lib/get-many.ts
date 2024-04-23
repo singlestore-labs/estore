@@ -2,9 +2,7 @@ import { db } from "@repo/db";
 import { PRODUCTS_TABLE_NAME } from "@repo/db/constants";
 import { ProductRow } from "@repo/db/types";
 
-import { getProductLikesById } from "@/product/likes/lib/get-by-id";
-import { getProductSales } from "@/product/sales/lib/get-by-id";
-import { getProductSizesById } from "@/product/size/lib/get-by-id";
+import { getProductMetaById } from "@/product/lib/get-meta-by-id";
 import { Product } from "@/product/types";
 
 export async function getProducts({
@@ -19,17 +17,7 @@ export async function getProducts({
       limit,
     });
 
-    return await Promise.all(
-      rows.map(async (i) => {
-        const [sizes, likes, sales] = await Promise.all([
-          getProductSizesById(i.id),
-          getProductLikesById(i.id),
-          getProductSales({ id: i.id }),
-        ]);
-
-        return { ...i, sizes, likes, sales };
-      }),
-    );
+    return await Promise.all(rows.map(async (i) => ({ ...i, ...(await getProductMetaById(i.id)) })));
   } catch (error) {
     return [];
   }

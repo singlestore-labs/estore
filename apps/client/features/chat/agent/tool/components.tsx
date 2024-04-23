@@ -7,6 +7,7 @@ import { ProductSalesChart } from "@/product/sales/components/chart";
 
 export const CHAT_AGENT_TOOL_COMPONENTS: Record<string, ElementType> = {
   [CHAT_AGENT_TOOLS.find_products]: ChatMessageProductController,
+  [CHAT_AGENT_TOOLS.recommend_products]: ChatMessageProductController,
   [CHAT_AGENT_TOOLS.product_sales]: ProductSalesChart,
   [CHAT_AGENT_TOOLS.top_product]: ChatMessageProductCard,
 };
