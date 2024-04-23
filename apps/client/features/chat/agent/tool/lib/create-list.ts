@@ -12,22 +12,6 @@ import { getUserId } from "@/user/lib/get-id";
 export function createChatAgentToolList() {
   return [
     new DynamicStructuredTool({
-      name: CHAT_AGENT_TOOLS.top_product,
-      description: `Useful when you need to find the top product`,
-      returnDirect: true,
-      schema: z.object({}),
-      func: async () => {
-        if (IS_DEV) console.log(CHAT_AGENT_TOOLS.top_product);
-        try {
-          const product: Product = (await getProducts({ limit: 1 }))[0];
-          return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.top_product, props: { product } });
-        } catch (error) {
-          return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.top_product, props: {}, error });
-        }
-      },
-    }),
-
-    new DynamicStructuredTool({
       name: CHAT_AGENT_TOOLS.find_products,
       description: `Useful when you need to find products`,
       returnDirect: true,
@@ -59,6 +43,22 @@ export function createChatAgentToolList() {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.product_sales, props: { sales } });
         } catch (error) {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.product_sales, props: {}, error });
+        }
+      },
+    }),
+
+    new DynamicStructuredTool({
+      name: CHAT_AGENT_TOOLS.top_product,
+      description: `Useful when you need to find the top product`,
+      returnDirect: true,
+      schema: z.object({}),
+      func: async () => {
+        if (IS_DEV) console.log(CHAT_AGENT_TOOLS.top_product);
+        try {
+          const product: Product = (await getProducts({ limit: 1 }))[0];
+          return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.top_product, props: { product } });
+        } catch (error) {
+          return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.top_product, props: {}, error });
         }
       },
     }),
