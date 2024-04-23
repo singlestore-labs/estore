@@ -5,6 +5,7 @@ import { CHAT_AGENT_TOOLS } from "@/chat/agent/tool/constants";
 import { stringifyChatAgentToolOutput } from "@/chat/agent/tool/lib/stringify-output";
 import { IS_DEV } from "@/constants/env";
 import { getProducts } from "@/product/lib/get-many";
+import { getProductRandomId } from "@/product/lib/get-random-id";
 import { getRecommendedProducts } from "@/product/lib/get-recommended";
 import { getTopProduct } from "@/product/lib/get-top";
 import { getUserId } from "@/user/lib/get-id";
@@ -59,11 +60,14 @@ export function createChatAgentToolList() {
       name: CHAT_AGENT_TOOLS.product_sales,
       description: `Useful when you need to retrieve a product sales history chart`,
       returnDirect: true,
-      schema: z.object({ title: z.string().describe("Product title or description") }),
+      schema: z.object({ title: z.string().describe("Product title or description").optional() }),
       func: async ({ title: description }) => {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.product_sales);
         try {
-          const product = (await getProducts({ where: `LOWER(description) = '${description}'`, limit: 1 }))[0];
+          const [[key, value]] = Object.entries(
+            description ? { description } : { id: await getProductRandomId() },
+          );
+          const product = (await getProducts({ where: `LOWER(${key}) = '${value}'`, limit: 1 }))[0];
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.product_sales, props: { product } });
         } catch (error) {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.product_sales, props: {}, error });

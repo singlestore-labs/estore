@@ -9,8 +9,8 @@ export const chatShortcuts: ChatShortcut[] = [
     title: "Show the top product",
     description: "Displays the top product, based on sales data and likes.",
   },
-  // {
-  //   title: "Show the top product sales history",
-  //   description: "Displays a chart of the sales history for the top-selling product.",
-  // },
+  {
+    title: "Show random product sales",
+    description: "Displays a chart of the sales history for the top-selling product.",
+  },
 ];
