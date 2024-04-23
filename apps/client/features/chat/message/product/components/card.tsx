@@ -11,7 +11,7 @@ export function ChatMessageProductCard({
   product,
   ...props
 }: ChatMessageProductCardProps) {
-  const _children = children || <p>Here is the recommended product based on your request:</p>;
+  const _children = children || <p>Here is the product based on your request:</p>;
 
   return (
     <ChatMessageCard

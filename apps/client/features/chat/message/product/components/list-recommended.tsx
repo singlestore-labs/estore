@@ -14,7 +14,7 @@ export function ChatMessageProductListRecommended({
   products,
   ...props
 }: ChatMessageProductListRecommendedProps) {
-  const _children = children || <p>Here are the recommended products based on your request:</p>;
+  const _children = children || <p>Here are the products based on your request:</p>;
 
   return (
     <ChatMessageCard

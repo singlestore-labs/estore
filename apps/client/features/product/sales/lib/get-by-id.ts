@@ -21,8 +21,6 @@ export async function getProductSales(
 
     const rows = await db.controllers.query<OrderRow[]>({ query });
 
-    console.log({ filter, query, rows });
-
     return [];
   } catch (error) {
     return [];
