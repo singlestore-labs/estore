@@ -39,7 +39,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
   };
 
   const handleBuyClick: ButtonProps["onClick"] = async () => {
-    await execute(() => createOrder(id));
+    await execute(() => createOrder(id, sizeValue));
     setIsPurchased(true);
   };
 
