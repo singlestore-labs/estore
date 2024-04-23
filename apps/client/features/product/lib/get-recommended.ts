@@ -3,7 +3,8 @@ import { User } from "@/user/types";
 
 export async function getRecommendedProducts(
   prompt: string,
-  { userId, limit = 1 }: { userId: User["id"]; limit: number },
+  userId: User["id"],
+  { limit = 1 }: { limit: number },
 ) {
   return getProducts({ limit });
 }

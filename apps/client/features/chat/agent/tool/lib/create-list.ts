@@ -4,6 +4,7 @@ import { z } from "zod";
 import { CHAT_AGENT_TOOLS } from "@/chat/agent/tool/constants";
 import { stringifyChatAgentToolOutput } from "@/chat/agent/tool/lib/stringify-output";
 import { IS_DEV } from "@/constants/env";
+import { findProducts } from "@/product/lib/find-many";
 import { getProducts } from "@/product/lib/get-many";
 import { getProductRandomId } from "@/product/lib/get-random-id";
 import { getRecommendedProducts } from "@/product/lib/get-recommended";
@@ -23,8 +24,7 @@ export function createChatAgentToolList() {
       func: async ({ prompt, limit = 1 }) => {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.find_products);
         try {
-          const userId = await getUserId();
-          const products = await getProducts({ limit });
+          const products = await findProducts(prompt, { limit });
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.find_products, props: { products } });
         } catch (error) {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.find_products, props: {}, error });
@@ -45,7 +45,7 @@ export function createChatAgentToolList() {
         try {
           const userId = await getUserId();
           if (!userId) throw new Error("userId is undefined");
-          const products = await getRecommendedProducts(prompt, { userId, limit });
+          const products = await getRecommendedProducts(prompt, userId, { limit });
           return stringifyChatAgentToolOutput({
             name: CHAT_AGENT_TOOLS.recommend_products,
             props: { products },
@@ -64,9 +64,8 @@ export function createChatAgentToolList() {
       func: async ({ title: description }) => {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.product_sales);
         try {
-          const [[key, value]] = Object.entries(
-            description ? { description } : { id: await getProductRandomId() },
-          );
+          const filter = description ? { description } : { id: await getProductRandomId() };
+          const [[key, value]] = Object.entries(filter);
           const product = (await getProducts({ where: `LOWER(${key}) = '${value}'`, limit: 1 }))[0];
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.product_sales, props: { product } });
         } catch (error) {
