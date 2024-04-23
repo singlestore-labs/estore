@@ -9,6 +9,7 @@ export function ChatMessageProductCard({
   children,
   className,
   product,
+  createdAt,
   ...props
 }: ChatMessageProductCardProps) {
   const _children = children || <p>Here is the product based on your request:</p>;
