@@ -12,7 +12,8 @@ export async function getProductSales(
 
     const product = await db.controllers.findOne({
       collection: PRODUCTS_TABLE_NAME,
-      where: `LOWER(${filterKey}) = ${typeof filterValue === "string" ? filterValue.toLowerCase() : filterValue}`,
+      columns: ["id"],
+      where: `LOWER(${filterKey}) = ${typeof filterValue === "string" ? `'${filterValue.toLowerCase()}'` : filterValue}`,
     });
 
     if (!product) return [];

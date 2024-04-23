@@ -31,7 +31,7 @@ export function ChatMessageProdcutSalesChart({
           {product.description}
         </Link>
       </Button>{" "}
-      for the last {product.sales.length} days:
+      for the last {product.sales?.length} days:
     </p>
   );
 
@@ -39,7 +39,7 @@ export function ChatMessageProdcutSalesChart({
     <ChatMessageCard
       variant="secondary"
       {...props}
-      className={cn("gap-4 py-4", className)}
+      className={cn("w-full max-w-full gap-4 py-4", className)}
     >
       {_children}
       <ProductSalesChart sales={product.sales} />

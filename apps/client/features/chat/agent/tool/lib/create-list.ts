@@ -5,8 +5,8 @@ import { CHAT_AGENT_TOOLS } from "@/chat/agent/tool/constants";
 import { stringifyChatAgentToolOutput } from "@/chat/agent/tool/lib/stringify-output";
 import { IS_DEV } from "@/constants/env";
 import { getProducts } from "@/product/lib/get-many";
-import { getProductSales } from "@/product/sales/lib/get-by-id";
-import { Product } from "@/product/types";
+import { getRecommendedProducts } from "@/product/lib/get-recommended";
+import { getTopProduct } from "@/product/lib/get-top";
 import { getUserId } from "@/user/lib/get-id";
 
 export function createChatAgentToolList() {
@@ -43,7 +43,8 @@ export function createChatAgentToolList() {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.recommend_products);
         try {
           const userId = await getUserId();
-          const products = await getProducts({ limit });
+          if (!userId) throw new Error("userId is undefined");
+          const products = await getRecommendedProducts(prompt, { userId, limit });
           return stringifyChatAgentToolOutput({
             name: CHAT_AGENT_TOOLS.recommend_products,
             props: { products },
@@ -62,8 +63,8 @@ export function createChatAgentToolList() {
       func: async ({ title: description }) => {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.product_sales);
         try {
-          const sales: Product["sales"] = await getProductSales({ description });
-          return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.product_sales, props: { sales } });
+          const product = (await getProducts({ where: `LOWER(description) = '${description}'`, limit: 1 }))[0];
+          return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.product_sales, props: { product } });
         } catch (error) {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.product_sales, props: {}, error });
         }
@@ -78,7 +79,7 @@ export function createChatAgentToolList() {
       func: async () => {
         if (IS_DEV) console.log(CHAT_AGENT_TOOLS.top_product);
         try {
-          const product: Product = (await getProducts({ limit: 1 }))[0];
+          const product = await getTopProduct();
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.top_product, props: { product } });
         } catch (error) {
           return stringifyChatAgentToolOutput({ name: CHAT_AGENT_TOOLS.top_product, props: {}, error });
