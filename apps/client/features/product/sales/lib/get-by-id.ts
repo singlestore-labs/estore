@@ -30,7 +30,7 @@ export async function getProductSales(
         ...i,
         date: new Date(i.date).toLocaleDateString("en-US", { hour12: false }),
       }))
-      .slice(0, length);
+      .slice(-length);
   } catch (error) {
     console.log(error);
     return [];

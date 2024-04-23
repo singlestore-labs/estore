@@ -12,7 +12,7 @@ export function ProductSizesInfo({ className, sizes = {}, ...props }: ProductSiz
       variant="read"
       size="xs"
       {...props}
-      className={cn("max-w-28 overflow-x-auto", className)}
+      className={cn("max-w-24 overflow-x-auto", className)}
       sizes={sizes}
     />
   );
