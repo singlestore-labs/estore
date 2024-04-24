@@ -8,6 +8,8 @@ import { useAction } from "@/action/hooks/use-action";
 import { clearChatMessages } from "@/chat/message/actions/clear";
 import { isChatMessageSubmittingAtom } from "@/chat/message/atoms/is-submitting";
 import { chatMessagesAtom } from "@/chat/message/atoms/messages";
+import { deleteUserLikes } from "@/user/action/delete-likes";
+import { deleteUserOrders } from "@/user/action/delete-orders";
 
 export type ChatMessageActionClearProps = ComponentProps<PopoverProps>;
 
@@ -19,7 +21,7 @@ export function ChatMessageActionClear({ className, ...props }: ChatMessageActio
   const handleClearClick = async () => {
     try {
       setIsChatMessageSubmitting(true);
-      await execute(clearChatMessages);
+      await execute(() => Promise.all([clearChatMessages(), deleteUserLikes(), deleteUserOrders()]));
       setMessages([]);
     } finally {
       setIsChatMessageSubmitting(false);
