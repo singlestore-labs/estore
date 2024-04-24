@@ -2,12 +2,14 @@ import { ChatShortcut } from "@/chat/shortcut/types";
 
 export const chatShortcuts: ChatShortcut[] = [
   {
-    title: "Five random products",
-    description: "Displays five random products.",
+    title: "Random products",
+    description: "Displays random products.",
+    prompt: "5 random products",
   },
   {
-    title: "Five recommended products",
-    description: "Displays five reccomended products based on your preferences.",
+    title: "Recommended products",
+    description: "Displays reccomended products based on your preferences.",
+    prompt: "5 recommended products",
   },
   {
     title: "Random product sales",

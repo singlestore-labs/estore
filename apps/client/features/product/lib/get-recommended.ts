@@ -4,7 +4,7 @@ import { User } from "@/user/types";
 export async function getRecommendedProducts(
   prompt: string,
   userId: User["id"],
-  { limit = 1 }: { limit: number },
+  filter: Parameters<typeof getProducts>[0],
 ) {
-  return getProducts({ limit });
+  return getProducts(filter);
 }
