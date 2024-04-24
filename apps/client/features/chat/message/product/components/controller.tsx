@@ -1,29 +1,13 @@
-import { ChatMessageProductCard, ChatMessageProductCardProps } from "@/chat/message/product/components/card";
-import {
-  ChatMessageProductListRecommended,
-  ChatMessageProductListRecommendedProps,
-} from "@/chat/message/product/components/list-recommended";
+import { ChatMessageProductCard } from "@/chat/message/product/components/card";
+import { ChatMessageProductListRecommended } from "@/chat/message/product/components/list-recommended";
+import { Product } from "@/product/types";
 
-export type ChatMessageProductControllerProps =
-  | ChatMessageProductListRecommendedProps
-  | ChatMessageProductCardProps;
+export type ChatMessageProductControllerProps = { products: Product[] };
 
-export function ChatMessageProductController({ className, ...props }: ChatMessageProductControllerProps) {
-  if ("product" in props) {
-    return <ChatMessageProductCard {...props} />;
-  } else if ("products" in props) {
-    if (props.products.length === 1) {
-      const { products, ..._props } = props;
-      return (
-        <ChatMessageProductCard
-          {..._props}
-          product={products[0]}
-        />
-      );
-    }
-
-    return <ChatMessageProductListRecommended {...props} />;
+export function ChatMessageProductController({ products }: ChatMessageProductControllerProps) {
+  if (products.length === 1) {
+    return <ChatMessageProductCard product={products[0]} />;
   }
 
-  return null;
+  return <ChatMessageProductListRecommended products={products} />;
 }
