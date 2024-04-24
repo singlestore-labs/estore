@@ -8,15 +8,23 @@ import { Product } from "@/product/types";
 
 export async function getProducts({
   where,
-  limit = 1,
-}: Pick<Parameters<typeof db.controllers.findMany>[0], "limit" | "where">): Promise<Product[]> {
+  columns,
+  limit,
+  loadMeta = true,
+}: Pick<Parameters<typeof db.controllers.findMany>[0], "limit" | "where" | "columns"> & {
+  loadMeta?: boolean;
+}): Promise<Product[]> {
   try {
     const rows = await db.controllers.findMany<ProductRow[]>({
       collection: PRODUCTS_TABLE_NAME,
-      columns: PRODUCT_COLUMNS,
+      columns: columns || PRODUCT_COLUMNS,
       where,
       limit,
     });
+
+    if (!loadMeta) {
+      return rows.map((i) => ({ ...i, sizes: {}, likes: 0, sales: [] }));
+    }
 
     return await Promise.all(rows.map(async (i) => ({ ...i, ...(await getProductMetaById(i.id)) })));
   } catch (error) {

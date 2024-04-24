@@ -4,12 +4,12 @@ export const chatShortcuts: ChatShortcut[] = [
   {
     title: "Random products",
     description: "Displays random products.",
-    prompt: "5 random products",
+    prompt: "Find 5 random products",
   },
   {
     title: "Recommended products",
     description: "Displays reccomended products based on your preferences.",
-    prompt: "5 recommended products",
+    prompt: "Recommend 5 products",
   },
   {
     title: "Random product sales",
