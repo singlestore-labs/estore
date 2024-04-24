@@ -8,7 +8,7 @@ import { Product } from "@/product/types";
 
 export async function getProducts({
   where,
-  columns,
+  columns = PRODUCT_COLUMNS,
   limit,
   loadMeta = true,
 }: Pick<Parameters<typeof db.controllers.findMany>[0], "limit" | "where" | "columns"> & {
@@ -17,7 +17,7 @@ export async function getProducts({
   try {
     const rows = await db.controllers.findMany<ProductRow[]>({
       collection: PRODUCTS_TABLE_NAME,
-      columns: columns || PRODUCT_COLUMNS,
+      columns,
       where,
       limit,
     });

@@ -17,34 +17,42 @@ export async function submitChatMessage(content: ChatMessage["content"]): Promis
   const nodeStream = createStreamableUI(node);
 
   (async () => {
-    await chatAgent.invoke(
-      { input: content },
-      {
-        callbacks: [
-          {
-            handleToolEnd(output) {
-              const _output = parseChatAgentToolOutput(output);
-              const Component = CHAT_AGENT_TOOL_COMPONENTS[_output.name];
-              if (Component) {
-                nodeStream.update(<Component {..._output.props}>{_output.props.text}</Component>);
-              }
+    try {
+      await chatAgent.invoke(
+        { input: content },
+        {
+          callbacks: [
+            {
+              handleToolEnd(output) {
+                const _output = parseChatAgentToolOutput(output);
+                const Component = CHAT_AGENT_TOOL_COMPONENTS[_output.name];
+                if (Component) {
+                  nodeStream.update(<Component {..._output.props}>{_output.props.text}</Component>);
+                }
+              },
+
+              handleLLMNewToken(token) {
+                if (token.length && isLoading) {
+                  isLoading = false;
+                  nodeStream.update(
+                    createChatMessage({ ...message, isLoading, content: textStream.value }).node,
+                  );
+                }
+
+                textStream.update(token);
+              },
             },
-
-            handleLLMNewToken(token) {
-              if (token.length && isLoading) {
-                isLoading = false;
-                nodeStream.update(createChatMessage({ ...message, isLoading, content: textStream.value }).node);
-              }
-
-              textStream.update(token);
-            },
-          },
-        ],
-      },
-    );
-
-    textStream.done();
-    nodeStream.done();
+          ],
+        },
+      );
+    } catch (error: unknown) {
+      console.error(error);
+      const message = error instanceof Error ? error.message : "UnknownError";
+      nodeStream.update(<p>Error: {message}</p>);
+    } finally {
+      textStream.done();
+      nodeStream.done();
+    }
   })();
 
   return { ...message, node: nodeStream.value };
