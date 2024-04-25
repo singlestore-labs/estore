@@ -20,13 +20,13 @@ export const chatLLMTools = {
       color: z.string().describe("Product color").optional(),
       priceMax: z.number().describe("Product max price").optional(),
       priceMin: z.number().describe("Product min price").optional(),
-      gender: z.string().describe("Product gender").optional(),
+      gender: z.string().describe("Product gender in the following format: women, unisex").optional(),
       size: z.string().describe("Product size in the following format: xxxs, xxs, xs, s, m, l, xl").optional(),
       limit: z.number().min(1).optional().describe("Number of products to search"),
     }),
     node: ChatMessageProductController,
     call: async ({ prompt, ...filter }) => {
-      const products = await findProducts(prompt, filter);
+      const products = await findProducts(prompt, filter as any); // TODO: fix the filter type
       return { name: "find_products", props: { products } };
     },
   }),

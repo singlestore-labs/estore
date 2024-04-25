@@ -8,8 +8,8 @@ export async function findProducts(
     color?: string;
     priceMax?: number;
     priceMin?: number;
-    gender?: string;
-    size?: string;
+    gender?: "women" | "unisex";
+    size?: "xxxs" | "xxs" | "xs" | "s" | "m" | "l" | "xl";
     limit?: number;
   },
 ) {
