@@ -1,11 +1,10 @@
 import OpenAI from "openai";
+import { ReactNode } from "react";
 import zodToJsonSchema from "zod-to-json-schema";
 
 import { chatLLMTools } from "@/chat/llm/tool";
 import { createChatLLMToolHandler } from "@/chat/llm/tool/lib/create-handler";
 import { OPENAI_API_KEY } from "@/constants/env";
-
-type Tool = Exclude<ReturnType<ReturnType<typeof createChatLLMToolHandler>["getTool"]>, undefined>;
 
 export function createChatLLM() {
   const llm = new OpenAI({ apiKey: OPENAI_API_KEY });
@@ -14,10 +13,10 @@ export function createChatLLM() {
     content: string,
     {
       onContent,
-      onTool,
+      onNode,
     }: {
-      onContent?: (content: string) => Promise<void> | void;
-      onTool?: (tool: Tool) => Promise<void> | void;
+      onContent?: (content: string) => Promise<void>;
+      onNode?: (node: ReactNode) => Promise<void>;
     } = {},
   ) {
     const stream = await llm.chat.completions.create({
@@ -34,7 +33,7 @@ export function createChatLLM() {
       })),
     });
 
-    const { handleDeltaTool, getTool } = createChatLLMToolHandler();
+    const { handleDeltaTool, callTool } = createChatLLMToolHandler();
 
     for await (const chunk of stream) {
       const tool = chunk.choices[0].delta.tool_calls?.[0]?.function;
@@ -43,8 +42,10 @@ export function createChatLLM() {
       if (content) await onContent?.(content);
     }
 
-    const tool = getTool();
-    if (tool) await onTool?.(tool);
+    await callTool({
+      onResult: async (result) => {},
+      onNode: onNode,
+    });
   }
 
   return { send };

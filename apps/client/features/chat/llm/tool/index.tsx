@@ -17,7 +17,7 @@ export const chatLLMTools = {
     description: "Useful when you need to find products",
     schema: z.object({
       prompt: z.string().describe("Unmodified user's prompt"),
-      limit: z.number().min(1).max(5).optional().describe("Number of products to search"),
+      limit: z.number().min(1).optional().describe("Number of products to search"),
     }),
     node: ChatMessageProductController,
     call: async ({ prompt, limit }) => {

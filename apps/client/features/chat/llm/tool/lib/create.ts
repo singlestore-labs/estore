@@ -27,18 +27,21 @@ export function createChatLLMTool<
   call: Call;
 }) {
   let _args: Parameters<Call>[0] | undefined = undefined;
+  let _result: ToolResult<Name, Node extends ElementType ? ComponentProps<Node> : any> | undefined = undefined;
 
-  const _call = () => _args && call(_args);
-
-  const setArgs = (args: string) => {
-    _args = JSON.parse(args);
+  const _call = async () => {
+    _result = _args ? await call(_args) : undefined;
+    return _result;
   };
 
-  const getNode = async () => {
+  const setArgs = (args: string) => (_args = JSON.parse(args));
+
+  const getResult = () => _result;
+
+  const getNode = () => {
     if (!node) return undefined;
-    const result = await _call();
-    return result ? createElement(node, result.props) : undefined;
+    return _result ? createElement(node, _result.props) : undefined;
   };
 
-  return { name, description, schema, node, setArgs, call: _call, getNode };
+  return { name, description, schema, node, setArgs, call: _call, getResult, getNode };
 }

@@ -21,7 +21,7 @@ export async function submitChatMessage(
   (async () => {
     try {
       await chatLLM.send(content, {
-        onContent: (content) => {
+        onContent: async (content) => {
           if (content && isLoading) {
             isLoading = false;
             nodeStream.update(createChatMessage({ ...message, isLoading }).node);
@@ -29,10 +29,8 @@ export async function submitChatMessage(
           textStream.update(content);
         },
 
-        onTool: async ({ getNode }) => {
+        onNode: async (node) => {
           isLoading = false;
-          console.log("onTool");
-          const node = await getNode();
           if (node) nodeStream.update(createChatMessage({ ...message, isLoading, node }).node);
         },
       });
