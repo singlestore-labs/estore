@@ -16,10 +16,8 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@repo/helpers": ["../../packages/helpers/index.ts"],
-      "@repo/db": ["../../packages/db/index.ts"],
-      "@repo/db/*": ["../../packages/db/*"]
+      "@repo/*": ["../../packages/*"],
+      "@/*": ["./*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "../../packages/**/*"],

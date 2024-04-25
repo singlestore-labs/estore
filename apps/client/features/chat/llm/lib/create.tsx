@@ -1,6 +1,6 @@
+import { llm } from "@repo/ai";
 import { db } from "@repo/db";
 import { CHAT_MESSAGES_TABLE_NAME } from "@repo/db/constants";
-import OpenAI from "openai";
 import { ReactNode } from "react";
 import zodToJsonSchema from "zod-to-json-schema";
 
@@ -9,13 +9,10 @@ import { normalizeChatLLMMessage } from "@/chat/llm/message/lib/normalize";
 import { ChatLLMMessage } from "@/chat/llm/message/types";
 import { chatLLMTools } from "@/chat/llm/tool";
 import { createChatLLMToolHandler } from "@/chat/llm/tool/lib/create-handler";
-import { OPENAI_API_KEY } from "@/constants/env";
 import { getUserId } from "@/user/lib/get-id";
 
 export async function createChatLLM() {
   const userId = await getUserId();
-
-  const llm = new OpenAI({ apiKey: OPENAI_API_KEY });
 
   async function getMessages() {
     const chatLLMMessage = await db.controllers.findMany<ChatLLMMessage[]>({
