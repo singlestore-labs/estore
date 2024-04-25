@@ -4,11 +4,12 @@ export type UserRow = Row;
 
 export type ProductRow = Row<{
   description: string;
+  description_v: string;
   image: string;
+  imageText: string;
+  imageText_v: string;
   price: number;
   gender: string;
-  description_v: string;
-  image_v?: string;
 }>;
 
 export type ProductSizeRow = Row<{
