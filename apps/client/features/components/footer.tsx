@@ -18,7 +18,7 @@ export function Footer({ className, ...props }: FooterProps) {
           target="_blank"
           className="hover:text-primary underline"
         >
-          SingleStoreDB
+          SingleStore
         </Link>
       </p>
     </footer>

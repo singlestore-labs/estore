@@ -4,6 +4,7 @@ import { ComponentProps } from "@/types";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/constants/config";
+import { ROUTES } from "@/constants/routes";
 import { ThemeToggle } from "@/theme/components/toggle";
 import { cn } from "@/ui/lib";
 
@@ -15,13 +16,16 @@ export function Header({ className, ...props }: HeaderProps) {
       {...props}
       className={cn("flex flex-wrap items-center justify-between gap-4 p-4", className)}
     >
-      <div className="flex items-center gap-2">
+      <Link
+        href={ROUTES.ROOT}
+        className="flex items-center gap-2"
+      >
         <Logo className="w-40 flex-shrink-0" />
         <h1 className="inline-flex flex-wrap items-center gap-1 pt-0.5 text-xl">
           <span className="text-sm">|</span>
           <span>{APP_NAME}</span>
         </h1>
-      </div>
+      </Link>
 
       <div className="flex items-center gap-4">
         <ThemeToggle />
