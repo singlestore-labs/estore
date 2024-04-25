@@ -15,6 +15,8 @@ import path from "path";
 import randomInt from "random-int";
 import _groupBy from "lodash.groupby";
 import { writeToJSON } from "@/lib/write-to-json";
+import { getImageBase64ByName } from "@/lib/get-image-base64";
+import { vectorizeImages } from "@repo/ai";
 
 const USERS_NUMBER = 5_000_000;
 const PRODUCT_LIKES_NUMBER = 5_000_000;
@@ -37,6 +39,11 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
     let productId = 0;
     for await (const chunk of toChunks(dataset, 1000)) {
       const descriptionVs = await db.ai.createEmbedding(chunk.map((i) => i.description));
+      const images = await Promise.all(
+        chunk.map((i) => getImageBase64ByName(i.image.substring(i.image.lastIndexOf("/") + 1))),
+      );
+
+      const imageVs = await vectorizeImages(images);
 
       productRows = [
         ...productRows,
@@ -46,8 +53,8 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
           description: product.description,
           description_v: JSON.stringify(descriptionVs[i]),
           image: product.image,
-          imageText: "",
-          imageText_v: "",
+          imageText: imageVs[i][0],
+          imageText_v: JSON.stringify(imageVs[i][1]),
           price: product.price,
           gender: product.gender,
         })),

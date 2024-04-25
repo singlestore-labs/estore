@@ -1,3 +1,4 @@
+import { getImageBase64ByName } from "@/lib/get-image-base64";
 import { writeToJSON } from "@/lib/write-to-json";
 import { vectorizeImages } from "@repo/ai";
 import { PRODUCTS_TABLE_NAME } from "@repo/db/constants";
@@ -6,8 +7,6 @@ import { toChunks } from "@repo/helpers";
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import path from "path";
-
-const imagesPath = path.join(process.cwd(), `source/cutout-img/cutout`);
 
 (async () => {
   const productsPath = path.join(process.cwd(), `export/${PRODUCTS_TABLE_NAME}.json`);
@@ -37,10 +36,3 @@ const imagesPath = path.join(process.cwd(), `source/cutout-img/cutout`);
 
   await writeToJSON(PRODUCTS_TABLE_NAME, newProductRows);
 })();
-
-async function getImageBase64ByName(name: string) {
-  const imagePath = path.join(imagesPath, name);
-  if (!existsSync(imagePath)) return;
-  const base64 = await readFile(imagePath, "base64");
-  return `data:image/jpeg;base64,${base64}`;
-}
