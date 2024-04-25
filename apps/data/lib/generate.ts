@@ -10,10 +10,11 @@ import {
 import { OrderRow, ProductLikeRow, ProductRow, ProductSizeRow, UserRow } from "@repo/db/types";
 import { getRandomArrayItem, getRandomDate, normalizeDate, toChunks } from "@repo/helpers";
 import { existsSync } from "fs";
-import { readFile, writeFile } from "fs/promises";
+import { readFile } from "fs/promises";
 import path from "path";
 import randomInt from "random-int";
 import _groupBy from "lodash.groupby";
+import { writeToJSON } from "@/lib/write-to-json";
 
 const USERS_NUMBER = 5_000_000;
 const PRODUCT_LIKES_NUMBER = 5_000_000;
@@ -35,17 +36,20 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   } else {
     let productId = 0;
     for await (const chunk of toChunks(dataset, 1000)) {
-      const embeddings = await db.ai.createEmbedding(chunk.map((i) => i.description));
+      const descriptionVs = await db.ai.createEmbedding(chunk.map((i) => i.description));
+
       productRows = [
         ...productRows,
         ...chunk.map((product, i) => ({
           id: productId++,
           createdAt,
           description: product.description,
+          description_v: JSON.stringify(descriptionVs[i]),
           image: product.image,
+          imageText: "",
+          imageText_v: "",
           price: product.price,
           gender: product.gender,
-          description_v: JSON.stringify(embeddings[i]),
         })),
       ];
     }
@@ -97,24 +101,3 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   });
   await writeToJSON(ORDERS_TABLE_NAME, orderRows);
 })();
-
-async function writeToJSON<T extends any[]>(name: string, data: T) {
-  let i = 0;
-
-  const write = async (data: T) => {
-    await writeFile(
-      path.join(process.cwd(), `export/${name}${i > 0 ? `-${i}` : ""}.json`),
-      JSON.stringify(data, null, 2),
-      "utf-8",
-    );
-  };
-
-  if (data.length > 100_000) {
-    for await (const chunk of toChunks(data, 100_000)) {
-      i++;
-      await write(chunk as T);
-    }
-  } else {
-    return write(data);
-  }
-}

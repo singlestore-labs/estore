@@ -37,9 +37,11 @@ function createTables() {
         createdAt DATETIME,
         description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
         image VARCHAR(256),
+        imageText TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
         price DECIMAL(9,2),
         gender VARCHAR(64),
-        description_v VECTOR(1536)
+        description_v VECTOR(1536),
+        imageText_v VECTOR(1536)
       )
     `),
 
@@ -81,7 +83,6 @@ async function insertValues() {
 
   for await (const fileName of files) {
     const [tableName] = fileName.split(".")[0].split("-");
-    // if (["orders", "product_likes", "users"].includes(tableName)) continue;
     const fileContent = await readFile(path.join(exportPath, fileName), "utf-8");
     const values = JSON.parse(fileContent);
     const limit = tableName === PRODUCTS_TABLE_NAME ? 1000 : 10000;
