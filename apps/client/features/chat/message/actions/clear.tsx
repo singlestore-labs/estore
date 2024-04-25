@@ -5,8 +5,8 @@ import { createChatLLM } from "@/chat/llm/lib/create";
 
 export async function clearChatMessages() {
   try {
-    const chatSessionAgent = await createChatLLM();
-    await chatSessionAgent.clearMessages();
+    const chatLLM = await createChatLLM();
+    await chatLLM.clearMessages();
   } catch (error) {
     return forwardActionError(error);
   }
