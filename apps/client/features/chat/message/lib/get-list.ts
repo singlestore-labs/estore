@@ -1,9 +1,9 @@
-import { createChatAgent } from "@/chat/agent/lib/create";
+import { createChatLLM } from "@/chat/llm/lib/create";
 
 export async function getChatMessages() {
   try {
-    const chatAgent = await createChatAgent();
-    return (await chatAgent.getMessages()).reverse();
+    const chatLLM = await createChatLLM();
+    return (await chatLLM.getMessages()).reverse();
   } catch (error) {
     return [];
   }

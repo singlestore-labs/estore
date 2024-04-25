@@ -6,7 +6,6 @@ import { submitChatMessage } from "@/chat/message/actions/submit";
 import { isChatMessageSubmittingAtom } from "@/chat/message/atoms/is-submitting";
 import { chatMessagesAtom } from "@/chat/message/atoms/messages";
 import { createChatMessage } from "@/chat/message/lib/create";
-import { ChatMessage } from "@/chat/message/types";
 
 export function useSubmitMessage() {
   const setMessages = useSetAtom(chatMessagesAtom);
@@ -14,7 +13,7 @@ export function useSubmitMessage() {
   const { execute } = useAction();
 
   const submit = useCallback(
-    async (content: ChatMessage["content"]) => {
+    async (content: string) => {
       try {
         setIsChatMessageSubmitting(true);
         setMessages((i) => [createChatMessage({ role: "user", content }), ...i]);

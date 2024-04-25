@@ -1,12 +1,12 @@
 "use server";
 
 import { forwardActionError } from "@/action/error/lib/forward";
-import { createChatAgent } from "@/chat/agent/lib/create";
+import { createChatLLM } from "@/chat/llm/lib/create";
 
 export async function clearChatMessages() {
   try {
-    const chatSessionAgent = await createChatAgent();
-    await chatSessionAgent.chatHistory.clear();
+    const chatLLM = await createChatLLM();
+    await chatLLM.clearMessages();
   } catch (error) {
     return forwardActionError(error);
   }

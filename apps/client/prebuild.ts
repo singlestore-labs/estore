@@ -14,7 +14,8 @@ const env = loadEnvConfig(dir).combinedEnv;
           id BIGINT AUTO_INCREMENT PRIMARY KEY,
           createdAt BIGINT,
           userId BIGINT,
-          message JSON
+          role VARCHAR(64),
+          content JSON
         )
       `),
     ]);

@@ -6,17 +6,17 @@ import { Product } from "@/product/types";
 export type ChatMessageProductControllerProps = { products: Product[] } | { productIDs: Product["id"][] };
 
 export async function ChatMessageProductController(props: ChatMessageProductControllerProps) {
-  let _products: Product[] = [];
+  let products: Product[] = [];
 
   if ("products" in props) {
-    _products = props.products;
+    products = props.products;
   } else if ("productIDs" in props) {
-    _products = await getProductByIDs(props.productIDs);
+    products = await getProductByIDs(props.productIDs);
   }
 
-  if (_products.length === 1) {
-    return <ChatMessageProductCard product={_products[0]} />;
+  if (products.length === 1) {
+    return <ChatMessageProductCard product={products[0]} />;
   }
 
-  return <ChatMessageProductListRecommended products={_products} />;
+  return <ChatMessageProductListRecommended products={products} />;
 }
