@@ -29,11 +29,15 @@ export async function submitChatMessage(
           textStream.update(content);
         },
 
-        onTool: (tool) => {
-          console.log(tool);
+        onTool: async ({ getNode }) => {
+          isLoading = false;
+          console.log("onTool");
+          const node = await getNode();
+          if (node) nodeStream.update(createChatMessage({ ...message, isLoading, node }).node);
         },
       });
     } catch (error) {
+      console.error(error);
     } finally {
       textStream.done();
       nodeStream.done();

@@ -3,7 +3,7 @@ import { ChatMessageCard, ChatMessageCardProps } from "@/chat/message/components
 import { ProductCard } from "@/product/components/card";
 import { Product } from "@/product/types";
 
-export type ChatMessageProductCardProps = ComponentProps<ChatMessageCardProps, { product: Product }>;
+export type ChatMessageProductCardProps = ComponentProps<ChatMessageCardProps, { product?: Product }>;
 
 export function ChatMessageProductCard({
   children,
@@ -12,6 +12,8 @@ export function ChatMessageProductCard({
   createdAt,
   ...props
 }: ChatMessageProductCardProps) {
+  if (!product) return null;
+
   const _children = children || <p>Here is the product based on your request:</p>;
 
   return (
