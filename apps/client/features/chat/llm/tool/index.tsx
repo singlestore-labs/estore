@@ -6,7 +6,7 @@ import { ChatMessageProductController } from "@/chat/message/product/components/
 import { ChatMessageProdcutSalesChart } from "@/chat/message/product/components/sales-chart";
 import { findProducts } from "@/product/lib/find-many";
 import { getProducts } from "@/product/lib/get-many";
-import { getProductRandomId } from "@/product/lib/get-random-id";
+import { getProductRandomIds } from "@/product/lib/get-random-ids";
 import { getRecommendedProducts } from "@/product/lib/get-recommended";
 import { getTopProduct } from "@/product/lib/get-top";
 import { getUserId } from "@/user/lib/get-id";
@@ -26,6 +26,20 @@ export const chatLLMTools = {
     },
   }),
 
+  get_random_products: createChatLLMTool({
+    name: "get_random_products",
+    description: "Useful when you need to get random products",
+    schema: z.object({
+      limit: z.number().min(1).optional().describe("Number of products to get"),
+    }),
+    node: ChatMessageProductController,
+    call: async ({ limit }) => {
+      const productIDs = await getProductRandomIds({ limit });
+      const products = await getProducts({ where: `id IN (${productIDs.join(",")})`, limit });
+      return { name: "get_random_products", props: { products } };
+    },
+  }),
+
   recommend_products: createChatLLMTool({
     name: "recommend_products",
     description: "Useful when you need to recommend products",
@@ -42,27 +56,27 @@ export const chatLLMTools = {
     },
   }),
 
-  product_sales: createChatLLMTool({
-    name: "product_sales",
+  get_product_sales: createChatLLMTool({
+    name: "get_product_sales",
     description: "Useful when you need to retrieve a product sales history chart",
     schema: z.object({ title: z.string().describe("Product title or description").optional() }),
     node: ChatMessageProdcutSalesChart,
     call: async ({ title: description }) => {
-      const filter = description ? { description } : { id: await getProductRandomId() };
+      const filter = description ? { description } : { id: (await getProductRandomIds())[0] };
       const [[key, value]] = Object.entries(filter);
       const product = (await getProducts({ where: `LOWER(${key}) = '${value}'`, limit: 1 }))[0];
-      return { name: "product_sales", props: { product } };
+      return { name: "get_product_sales", props: { product } };
     },
   }),
 
-  top_product: createChatLLMTool({
-    name: "top_product",
+  get_top_product: createChatLLMTool({
+    name: "get_top_product",
     description: "Useful when you need to retrieve a product sales history chart",
     schema: z.object({}),
     node: ChatMessageProductCard,
     call: async ({}) => {
       const product = await getTopProduct();
-      return { name: "top_product", props: { product } };
+      return { name: "get_top_product", props: { product } };
     },
   }),
 };
