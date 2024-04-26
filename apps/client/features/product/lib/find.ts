@@ -28,8 +28,9 @@ export async function findProducts(
   const whereDefinitions = [];
 
   if (priceMin && priceMax) whereDefinitions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
-  if (priceMin) whereDefinitions.push(`price >= ${priceMin}`);
-  if (priceMax) whereDefinitions.push(`price <= ${priceMax}`);
+  else if (priceMin) whereDefinitions.push(`price >= ${priceMin}`);
+  else if (priceMax) whereDefinitions.push(`price <= ${priceMax}`);
+
   if (gender) whereDefinitions.push(`gender = '${gender}'`);
 
   if (whereDefinitions.length) {
