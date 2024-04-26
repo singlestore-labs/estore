@@ -15,13 +15,14 @@ export async function findProducts(
     limit?: number;
   },
 ) {
-  const { color, priceMin, priceMax, gender, size, limit } = filter;
+  const { color, priceMin, priceMax, gender, size, limit = 1 } = filter;
   console.log({ prompt, filter });
 
   const promptV = (await db.ai.createEmbedding(prompt))[0];
+  const promptVJSON = JSON.stringify(promptV);
 
   let query = `\
-    SELECT id, imageText_v <*> '${JSON.stringify(promptV)}' :> VECTOR(${promptV.length}) as similarity
+    SELECT id, imageText_v <*> '${promptVJSON}' :> VECTOR(${promptV.length}) as similarity
     FROM ${PRODUCTS_TABLE_NAME}
   `;
 
@@ -30,18 +31,12 @@ export async function findProducts(
   if (priceMin && priceMax) whereDefinitions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
   else if (priceMin) whereDefinitions.push(`price >= ${priceMin}`);
   else if (priceMax) whereDefinitions.push(`price <= ${priceMax}`);
-
   if (gender) whereDefinitions.push(`gender = '${gender}'`);
-
-  if (whereDefinitions.length) {
-    query += ` WHERE ${whereDefinitions.join(" AND ")}`;
-  }
+  if (whereDefinitions.length) query += ` WHERE ${whereDefinitions.join(" AND ")}`;
 
   query += ` ORDER BY similarity DESC`;
 
   if (limit) query += ` LIMIT ${limit}`;
-
-  console.log(query);
 
   const result = await db.controllers.query<{ id: Product["id"]; similarity: number }[]>({ query });
 
