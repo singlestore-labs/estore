@@ -14,6 +14,7 @@ export const chatShortcuts: ChatShortcut[] = [
   {
     title: "Random product sales",
     description: "Displays a chart of a product's sales history.",
+    prompt: "Get a product sales chart",
   },
   {
     title: "The top product",

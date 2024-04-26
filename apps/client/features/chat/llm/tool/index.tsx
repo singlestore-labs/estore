@@ -20,13 +20,13 @@ export const chatLLMTools = {
       color: z.string().describe("Product color").optional(),
       priceMax: z.number().describe("Product max price").optional(),
       priceMin: z.number().describe("Product min price").optional(),
-      gender: z.string().describe("Product gender in the following format: women, unisex").optional(),
-      size: z.string().describe("Product size in the following format: xxxs, xxs, xs, s, m, l, xl").optional(),
+      gender: z.enum(["women", "unisex"]).describe("What gender the product is for").optional(),
+      size: z.enum(["xxxs", "xxs", "xs", "s", "m", "l", "xl"]).describe("Product size").optional(),
       limit: z.number().min(1).optional().describe("Number of products to search"),
     }),
     node: ChatMessageProductController,
     call: async ({ prompt, ...filter }) => {
-      const products = await findProducts(prompt, filter as any); // TODO: fix the filter type
+      const products = await findProducts(prompt, filter);
       return { name: "find_products", props: { products } };
     },
   }),
@@ -49,14 +49,13 @@ export const chatLLMTools = {
     name: "recommend_products",
     description: "Useful when you need to recommend products",
     schema: z.object({
-      prompt: z.string().describe("Unmodified user's prompt"),
       limit: z.number().min(1).optional().describe("Number of products to recommend"),
     }),
     node: ChatMessageProductController,
-    call: async ({ prompt, limit }) => {
+    call: async ({ limit }) => {
       const userId = await getUserId();
       if (!userId) throw new Error("userId is undefined");
-      const products = await getRecommendedProducts(prompt, userId, { limit });
+      const products = await getRecommendedProducts(userId, { limit });
       return { name: "recommend_products", props: { products } };
     },
   }),
@@ -69,8 +68,12 @@ export const chatLLMTools = {
     call: async ({ title: description }) => {
       const filter = description ? { description } : { id: (await getProductRandomIds())[0] };
       const [[key, value]] = Object.entries(filter);
-      const product = (await getProducts({ where: `LOWER(${key}) = '${value}'`, limit: 1 }))[0];
-      return { name: "get_product_sales", props: { product } };
+      const result = await getProducts({
+        where: `LOWER(${key}) = '${value}'`,
+        limit: 1,
+        metaColumns: ["sales"],
+      });
+      return { name: "get_product_sales", props: { product: result[0] } };
     },
   }),
 

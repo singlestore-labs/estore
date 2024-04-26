@@ -10,9 +10,9 @@ export async function getProducts({
   where,
   columns = PRODUCT_COLUMNS,
   limit,
-  loadMeta = true,
+  metaColumns,
 }: Pick<Parameters<typeof db.controllers.findMany>[0], "limit" | "where" | "columns"> & {
-  loadMeta?: boolean;
+  metaColumns?: Parameters<typeof getProductMetaById>[1];
 }): Promise<Product[]> {
   try {
     const rows = await db.controllers.findMany<ProductRow[]>({
@@ -22,11 +22,9 @@ export async function getProducts({
       limit,
     });
 
-    if (!loadMeta) {
-      return rows.map((i) => ({ ...i, sizes: {}, likes: 0, sales: [] }));
-    }
-
-    return await Promise.all(rows.map(async (i) => ({ ...i, ...(await getProductMetaById(i.id)) })));
+    return await Promise.all(
+      rows.map(async (i) => ({ ...i, ...(await getProductMetaById(i.id, metaColumns)) })),
+    );
   } catch (error) {
     return [];
   }
