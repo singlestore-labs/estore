@@ -1,7 +1,7 @@
 import { db } from "@repo/db";
 import { ORDERS_TABLE_NAME, PRODUCTS_TABLE_NAME, PRODUCT_LIKES_TABLE_NAME } from "@repo/db/constants";
 
-import { getProdcutById } from "@/product/lib/get-by-id";
+import { getProductByIds } from "@/product/lib/get-by-ids";
 import { Product } from "@/product/types";
 
 export async function getTopProduct(): Promise<Product | undefined> {
@@ -28,5 +28,5 @@ export async function getTopProduct(): Promise<Product | undefined> {
     })
   )[0];
 
-  return getProdcutById(id);
+  return (await getProductByIds([id]))[0];
 }

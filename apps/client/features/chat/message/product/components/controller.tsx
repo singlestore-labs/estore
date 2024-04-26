@@ -1,17 +1,17 @@
 import { ChatMessageProductCard } from "@/chat/message/product/components/card";
 import { ChatMessageProductListRecommended } from "@/chat/message/product/components/list-recommended";
-import { getProductByIDs } from "@/product/lib/get-many-by-ids";
+import { getProductByIds } from "@/product/lib/get-by-ids";
 import { Product } from "@/product/types";
 
-export type ChatMessageProductControllerProps = { products: Product[] } | { productIDs: Product["id"][] };
+export type ChatMessageProductControllerProps = { products: Product[] } | { productIds: Product["id"][] };
 
 export async function ChatMessageProductController(props: ChatMessageProductControllerProps) {
   let products: Product[] = [];
 
   if ("products" in props) {
     products = props.products;
-  } else if ("productIDs" in props) {
-    products = await getProductByIDs(props.productIDs);
+  } else if ("productIds" in props) {
+    products = await getProductByIds(props.productIds);
   }
 
   if (products.length === 1) {

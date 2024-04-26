@@ -4,9 +4,9 @@ import { createChatLLMTool } from "@/chat/llm/tool/lib/create";
 import { ChatMessageProductCard } from "@/chat/message/product/components/card";
 import { ChatMessageProductController } from "@/chat/message/product/components/controller";
 import { ChatMessageProdcutSalesChart } from "@/chat/message/product/components/sales-chart";
-import { findProducts } from "@/product/lib/find-many";
-import { getProducts } from "@/product/lib/get-many";
-import { getProductRandomIds } from "@/product/lib/get-random-ids";
+import { findProducts } from "@/product/lib/find";
+import { getProducts } from "@/product/lib/get";
+import { getRandomProductIds } from "@/product/lib/get-random-ids";
 import { getRecommendedProducts } from "@/product/lib/get-recommended";
 import { getTopProduct } from "@/product/lib/get-top";
 import { getUserId } from "@/user/lib/get-id";
@@ -37,8 +37,8 @@ export const chatLLMTools = {
     schema: z.object({ limit: z.number().min(1).optional().describe("Number of products to get") }),
     node: ChatMessageProductController,
     call: async ({ limit }) => {
-      const productIDs = await getProductRandomIds({ limit });
-      const products = await getProducts({ where: `id IN (${productIDs.join(",")})`, limit });
+      const productIds = await getRandomProductIds({ limit });
+      const products = await getProducts({ where: `id IN (${productIds.join(",")})`, limit });
       return { name: "get_random_products", props: { products } };
     },
   }),
@@ -62,7 +62,7 @@ export const chatLLMTools = {
     schema: z.object({ title: z.string().describe("Product title or description").optional() }),
     node: ChatMessageProdcutSalesChart,
     call: async ({ title: description }) => {
-      const filter = description ? { description } : { id: (await getProductRandomIds())[0] };
+      const filter = description ? { description } : { id: (await getRandomProductIds())[0] };
       const [[key, value]] = Object.entries(filter);
       const result = await getProducts({
         where: `LOWER(${key}) = '${value}'`,

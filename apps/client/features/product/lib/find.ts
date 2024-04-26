@@ -1,6 +1,6 @@
 import { db } from "@repo/db";
 
-import { getProductByIDs } from "@/product/lib/get-many-by-ids";
+import { getProductByIds } from "@/product/lib/get-by-ids";
 
 export async function findProducts(
   prompt: string,
@@ -18,5 +18,5 @@ export async function findProducts(
   const productIds = await db.controllers.query({ query: `` });
   console.log(productIds);
 
-  return getProductByIDs(productIds);
+  return getProductByIds(productIds);
 }
