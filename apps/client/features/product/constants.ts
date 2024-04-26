@@ -1,1 +1,1 @@
-export const PRODUCT_COLUMNS = ["id", "createdAt", "description", "image", "price", "gender"];
+export const PRODUCT_COLUMNS = ["id", "createdAt", "description", "image", "imageText", "price", "gender"];
