@@ -24,7 +24,7 @@ export function ChartArea({ data = [], areaProps }: ChartAreaProps) {
       <AreaChart
         data={data}
         className="text-sm"
-        margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
+        margin={{ top: 16, bottom: 0, left: 0, right: 0 }}
       >
         <defs>
           {keys.map((key, i) => (

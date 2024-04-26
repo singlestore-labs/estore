@@ -10,7 +10,7 @@ export function ProductSalesChart({ className, sales, ...props }: ProductSalesCh
   return (
     <Card
       {...props}
-      className={cn("relative h-48 pt-4", className)}
+      className={cn("relative h-48", className)}
     >
       <ChartArea
         data={sales}
