@@ -34,9 +34,7 @@ export const chatLLMTools = {
   get_random_products: createChatLLMTool({
     name: "get_random_products",
     description: "Useful when you need to get random products",
-    schema: z.object({
-      limit: z.number().min(1).optional().describe("Number of products to get"),
-    }),
+    schema: z.object({ limit: z.number().min(1).optional().describe("Number of products to get") }),
     node: ChatMessageProductController,
     call: async ({ limit }) => {
       const productIDs = await getProductRandomIds({ limit });
@@ -48,9 +46,7 @@ export const chatLLMTools = {
   recommend_products: createChatLLMTool({
     name: "recommend_products",
     description: "Useful when you need to recommend products",
-    schema: z.object({
-      limit: z.number().min(1).optional().describe("Number of products to recommend"),
-    }),
+    schema: z.object({ limit: z.number().min(1).optional().describe("Number of products to recommend") }),
     node: ChatMessageProductController,
     call: async ({ limit }) => {
       const userId = await getUserId();
@@ -62,7 +58,7 @@ export const chatLLMTools = {
 
   get_product_sales: createChatLLMTool({
     name: "get_product_sales",
-    description: "Useful when you need to retrieve a product sales history chart",
+    description: "Useful when you to get a product sales history chart",
     schema: z.object({ title: z.string().describe("Product title or description").optional() }),
     node: ChatMessageProdcutSalesChart,
     call: async ({ title: description }) => {
@@ -79,7 +75,7 @@ export const chatLLMTools = {
 
   get_top_product: createChatLLMTool({
     name: "get_top_product",
-    description: "Useful when you need to retrieve a product sales history chart",
+    description: "Useful when you need to get the top product",
     schema: z.object({}),
     node: ChatMessageProductCard,
     call: async ({}) => {
