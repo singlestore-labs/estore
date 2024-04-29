@@ -13,11 +13,11 @@
 
 ## Run the dev environment
 
-1. Run `npm run dev`
+1. Run `npm run dev:client`
 2. Open [http://localhost:3000](http://localhost:3000)
 
 ## Build the prod environment
 
-1. Run `npm run build`
-2. Run `npm run start`
+1. Run `npm run build:client`
+2. Run `npm run start:client`
 3. Open [http://localhost:3000](http://localhost:3000)
