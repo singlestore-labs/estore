@@ -1,31 +1,34 @@
-export type Row<T extends object = object> = { id: number; createdAt: string } & T;
+export type Row<T extends object = object> = { id: number } & T;
+export type RowWithCreatedAt<T extends object = object> = Row<T> & { created_at: string };
 
-export type UserRow = Row;
+export type UserRow = RowWithCreatedAt;
 
-export type ProductRow = Row<{
+export type ProductRow = RowWithCreatedAt<{
   description: string;
-  description_v: string;
   image: string;
-  imageText: string;
-  imageText_v: string;
+  image_text: string;
   price: number;
   gender: string;
+  description_v: string;
+  image_text_v: string;
 }>;
 
 export type ProductSizeRow = Row<{
-  productId: ProductRow["id"];
-  label: string;
-  inStock: number;
+  value: string;
 }>;
 
-export type ProductLikeRow = Row<{
-  userId: UserRow["id"];
-  productId: ProductRow["id"];
+export type ProductSKURow = Row<{
+  product_id: ProductRow["id"];
+  product_size_id: ProductSizeRow["id"];
+  stock: number;
 }>;
 
-export type OrderRow = Row<{
-  groupId: number;
-  userId: UserRow["id"];
-  productId: ProductRow["id"];
-  productSizeId: ProductSizeRow["id"] | null;
+export type ProductLikeRow = RowWithCreatedAt<{
+  user_id: UserRow["id"];
+  product_id: ProductRow["id"];
+}>;
+
+export type OrderRow = RowWithCreatedAt<{
+  user_id: UserRow["id"];
+  product_sku_id: ProductRow["id"];
 }>;

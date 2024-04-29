@@ -4,6 +4,8 @@ import {
   PRODUCTS_TABLE_NAME,
   PRODUCT_LIKES_TABLE_NAME,
   PRODUCT_SIZES_TABLE_NAME,
+  PRODUCT_SKU_TABLE_NAME,
+  TABLE_NAMES,
   USERS_TABLE_NAME,
 } from "@repo/db/constants";
 import { toChunks } from "@repo/helpers";
@@ -11,15 +13,7 @@ import { readFile, readdir } from "fs/promises";
 import path from "path";
 
 function dropTables() {
-  return Promise.all(
-    [
-      USERS_TABLE_NAME,
-      PRODUCTS_TABLE_NAME,
-      PRODUCT_SIZES_TABLE_NAME,
-      PRODUCT_LIKES_TABLE_NAME,
-      ORDERS_TABLE_NAME,
-    ].map((tableName) => db.connection.query(`DROP TABLE IF EXISTS ${tableName}`)),
-  );
+  return Promise.all(TABLE_NAMES.map((tableName) => db.connection.query(`DROP TABLE IF EXISTS ${tableName}`)));
 }
 
 function createTables() {
@@ -27,51 +21,56 @@ function createTables() {
     db.connection.query(`
       CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${USERS_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        createdAt DATETIME
+        created_at DATETIME
       )
     `),
 
     db.connection.query(`
       CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${PRODUCTS_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        createdAt DATETIME,
+        created_at DATETIME,
         description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
         image VARCHAR(256),
-        imageText TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+        image_text TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
         price DECIMAL(9,2),
         gender VARCHAR(64),
         description_v VECTOR(1536),
-        imageText_v VECTOR(1536)
+        image_text_v VECTOR(1536),
+        FULLTEXT KEY(description, image_text)
       )
     `),
 
     db.connection.query(`
       CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${PRODUCT_SIZES_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        createdAt DATETIME,
-        productId BIGINT,
-        label VARCHAR(64),
-        inStock INT
+        value VARCHAR(64)
+      )
+    `),
+
+    db.connection.query(`
+      CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${PRODUCT_SKU_TABLE_NAME} (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        product_id BIGINT,
+        product_size_id BIGINT,
+        stock INT
       )
     `),
 
     db.connection.query(`
       CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${PRODUCT_LIKES_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        createdAt DATETIME,
-        userId BIGINT,
-        productId BIGINT
+        created_at DATETIME,
+        user_id BIGINT,
+        product_id BIGINT
       )
     `),
 
     db.connection.query(`
       CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${ORDERS_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        createdAt DATETIME,
-        groupId BIGINT,
-        userId BIGINT,
-        productId BIGINT,
-        productSizeId BIGINT
+        created_at DATETIME,
+        user_id BIGINT,
+        product_sku_id BIGINT
       )
     `),
   ]);

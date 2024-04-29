@@ -5,22 +5,21 @@ import {
   PRODUCTS_TABLE_NAME,
   PRODUCT_LIKES_TABLE_NAME,
   PRODUCT_SIZES_TABLE_NAME,
+  PRODUCT_SKU_TABLE_NAME,
   USERS_TABLE_NAME,
 } from "@repo/db/constants";
-import { OrderRow, ProductLikeRow, ProductRow, ProductSizeRow, UserRow } from "@repo/db/types";
+import { OrderRow, ProductLikeRow, ProductRow, ProductSKURow, ProductSizeRow, UserRow } from "@repo/db/types";
 import { getRandomArrayItem, getRandomDate, normalizeDate, toChunks } from "@repo/helpers";
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import path from "path";
-import randomInt from "random-int";
-import _groupBy from "lodash.groupby";
 import { writeToJSON } from "@/lib/write-to-json";
 import { getImageBase64ByName } from "@/lib/get-image-base64";
 import { vectorizeImages } from "@repo/ai";
 
 const USERS_NUMBER = 5_000_000;
 const PRODUCT_LIKES_NUMBER = 5_000_000;
-const UNIQUE_ORDERS_NUMBER = 2_000_000;
+const UNIQUE_ORDERS_NUMBER = 5_000_000;
 
 const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-dataset.json");
 
@@ -29,7 +28,10 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
     0,
     10000,
   );
-  const createdAt = normalizeDate(new Date());
+  const created_at = normalizeDate(new Date());
+
+  const userRows: UserRow[] = Array.from({ length: USERS_NUMBER }).map((_, id) => ({ id, created_at }));
+  await writeToJSON(USERS_TABLE_NAME, userRows);
 
   let productRows: ProductRow[] = [];
   const productsPath = path.join(process.cwd(), `export/${PRODUCTS_TABLE_NAME}.json`);
@@ -49,14 +51,14 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
         ...productRows,
         ...chunk.map((product, i) => ({
           id: productId++,
-          createdAt,
+          created_at,
           description: product.description,
-          description_v: JSON.stringify(descriptionVs[i]),
           image: product.image,
-          imageText: imageVs[i][0],
-          imageText_v: JSON.stringify(imageVs[i][1]),
+          image_text: imageVs[i][0],
           price: product.price,
           gender: product.gender,
+          description_v: JSON.stringify(descriptionVs[i]),
+          image_text_v: JSON.stringify(imageVs[i][1]),
         })),
       ];
     }
@@ -64,47 +66,40 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   }
 
   let productSizeRows: ProductSizeRow[];
-  const productSizesPath = path.join(process.cwd(), `export/${PRODUCT_SIZES_TABLE_NAME}.json`);
-  if (existsSync(productSizesPath)) {
-    productSizeRows = JSON.parse(await readFile(productSizesPath, "utf-8"));
-  } else {
-    let productSizeId = 0;
-    productSizeRows = productRows.flatMap(({ id: productId }) => {
-      return Object.entries(dataset[productId].sizesInStock).map(([label, inStock]) => {
-        return { id: productSizeId++, createdAt, label, inStock, productId };
-      });
-    });
-    await writeToJSON(PRODUCT_SIZES_TABLE_NAME, productSizeRows);
-  }
-  const productSizesGroup = _groupBy(productSizeRows, "productId");
+  const sizes = new Set<string>();
+  productRows.forEach(({ id }) => {
+    Object.keys(dataset[id].sizesInStock).forEach((i) => sizes.add(i));
+  });
+  productSizeRows = [...sizes].map((value, id) => ({ id, value }));
+  await writeToJSON(PRODUCT_SIZES_TABLE_NAME, productSizeRows);
 
-  const userRows: UserRow[] = Array.from({ length: USERS_NUMBER }).map((_, id) => ({ id, createdAt }));
-  await writeToJSON(USERS_TABLE_NAME, userRows);
+  let productSKUId = 0;
+  let prodcutSKURows: ProductSKURow[] = dataset.flatMap((product, product_id) => {
+    return Object.entries(product.sizesInStock).map(([size, stock]) => {
+      return {
+        id: productSKUId++,
+        product_id,
+        product_size_id: productSizeRows.find((i) => i.value === size)!.id,
+        stock,
+      } satisfies ProductSKURow;
+    });
+  });
+  await writeToJSON(PRODUCT_SKU_TABLE_NAME, prodcutSKURows);
 
   const productLikeRows: ProductLikeRow[] = Array.from({ length: PRODUCT_LIKES_NUMBER }).map((_, id) => ({
     id,
-    createdAt,
-    userId: getRandomArrayItem(userRows).id,
-    productId: getRandomArrayItem(productRows).id,
+    created_at,
+    user_id: getRandomArrayItem(userRows).id,
+    product_id: getRandomArrayItem(productRows).id,
   }));
   await writeToJSON(PRODUCT_LIKES_TABLE_NAME, productLikeRows);
 
-  let orderId = 0;
-  const orderRows: OrderRow[] = Array.from({ length: UNIQUE_ORDERS_NUMBER }).flatMap((_, groupId) => {
-    const userId = getRandomArrayItem(userRows).id;
-    return Array.from({ length: randomInt(1, 5) }).map(() => {
-      const productId = getRandomArrayItem(productRows).id;
-      const productSize = productSizesGroup[productId];
-      const productSizeId = productSize ? getRandomArrayItem(productSize).id : null;
-      return {
-        id: orderId++,
-        createdAt: normalizeDate(getRandomDate(new Date(2024, 0, 1))),
-        groupId,
-        userId,
-        productId,
-        productSizeId,
-      };
-    }) satisfies OrderRow[];
-  });
+  const orderRows: OrderRow[] = Array.from({ length: UNIQUE_ORDERS_NUMBER }).map((_, id) => ({
+    id,
+    created_at: normalizeDate(getRandomDate(new Date(2024, 0, 1))),
+    user_id: getRandomArrayItem(userRows).id,
+    product_sku_id: getRandomArrayItem(prodcutSKURows).id,
+  }));
   await writeToJSON(ORDERS_TABLE_NAME, orderRows);
+  console.log("Generated");
 })();
