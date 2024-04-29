@@ -1,5 +1,10 @@
 import { db } from "@repo/db";
-import { ORDERS_TABLE_NAME, PRODUCTS_TABLE_NAME, PRODUCT_LIKES_TABLE_NAME } from "@repo/db/constants";
+import {
+  ORDERS_TABLE_NAME,
+  PRODUCTS_TABLE_NAME,
+  PRODUCT_LIKES_TABLE_NAME,
+  PRODUCT_SKU_TABLE_NAME,
+} from "@repo/db/constants";
 
 import { getProductByIds } from "@/product/lib/get-by-ids";
 import { Product } from "@/product/types";
@@ -13,9 +18,10 @@ export async function getTopProduct(): Promise<Product | undefined> {
           (COALESCE(o.orders, 0) + COALESCE(l.likes, 0)) AS score
         FROM ${PRODUCTS_TABLE_NAME} p
         LEFT JOIN (
-          SELECT product_id, COUNT(*) AS orders
-          FROM ${ORDERS_TABLE_NAME}
-          GROUP BY product_id
+          SELECT sku.product_id, COUNT(*) AS orders
+          FROM ${ORDERS_TABLE_NAME} orders
+          JOIN ${PRODUCT_SKU_TABLE_NAME} sku ON orders.product_sku_id = sku.id
+          GROUP BY sku.product_id
         ) o ON p.id = o.product_id
         LEFT JOIN (
           SELECT product_id, COUNT(*) AS likes
@@ -23,7 +29,7 @@ export async function getTopProduct(): Promise<Product | undefined> {
           GROUP BY product_id
         ) l ON p.id = l.product_id
         ORDER BY score DESC
-        LIMIT 1
+        LIMIT 1;
     `,
     })
   )[0];
