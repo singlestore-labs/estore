@@ -4,8 +4,8 @@ import { User } from "@/user/types";
 
 export type ChatLLMMessage = {
   id: number;
-  createdAt: ReturnType<Date["getTime"]>;
-  userId: User["id"];
+  created_at: ReturnType<Date["getTime"]>;
+  user_id: User["id"];
   role: "user" | "assistant" | "system" | "function";
   content: string | Record<string, any>;
 };

@@ -16,7 +16,7 @@ export type ProductLikesInfoProps = ComponentProps<
 
 export function ProductLikesInfo({ className, value, productId, ...props }: ProductLikesInfoProps) {
   const likes = useAtomValue(userProdcutLikesAtom);
-  const isLiked = likes.find((i) => i.productId === productId);
+  const isLiked = likes.find((i) => i.product_id === productId);
 
   return (
     <ProductInfoItem

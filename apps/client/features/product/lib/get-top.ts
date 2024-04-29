@@ -13,15 +13,15 @@ export async function getTopProduct(): Promise<Product | undefined> {
           (COALESCE(o.orders, 0) + COALESCE(l.likes, 0)) AS score
         FROM ${PRODUCTS_TABLE_NAME} p
         LEFT JOIN (
-          SELECT productId, COUNT(*) AS orders
+          SELECT product_id, COUNT(*) AS orders
           FROM ${ORDERS_TABLE_NAME}
-          GROUP BY productId
-        ) o ON p.id = o.productId
+          GROUP BY product_id
+        ) o ON p.id = o.product_id
         LEFT JOIN (
-          SELECT productId, COUNT(*) AS likes
+          SELECT product_id, COUNT(*) AS likes
           FROM ${PRODUCT_LIKES_TABLE_NAME}
-          GROUP BY productId
-        ) l ON p.id = l.productId
+          GROUP BY product_id
+        ) l ON p.id = l.product_id
         ORDER BY score DESC
         LIMIT 1
     `,

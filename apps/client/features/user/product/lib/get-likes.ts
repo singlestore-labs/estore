@@ -11,7 +11,7 @@ export async function getUserProductLikes(): Promise<ProdcutLike[]> {
     if (!userId) throw new Error("userId is undefined");
     return db.controllers.findMany<ProductLikeRow[]>({
       collection: PRODUCT_LIKES_TABLE_NAME,
-      where: `userId = ${userId}`,
+      where: `user_id = ${userId}`,
     });
   } catch (error) {
     return [];

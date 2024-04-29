@@ -15,7 +15,11 @@ export async function createProductLike(productId: Product["id"]) {
   try {
     const userId = await getUserId();
     if (!userId) throw new Error("userId is undefined");
-    const like: ProdcutLike = { createdAt: normalizeDate(new Date()), productId, userId };
+    const like: Omit<ProdcutLike, "id"> = {
+      created_at: normalizeDate(new Date()),
+      product_id: productId,
+      user_id: userId,
+    };
     const newLike = (await db.controllers.insertOne({
       collection: PRODUCT_LIKES_TABLE_NAME,
       value: like,

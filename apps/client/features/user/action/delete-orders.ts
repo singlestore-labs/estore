@@ -9,7 +9,7 @@ import { getUserId } from "@/user/lib/get-id";
 export async function deleteUserOrders() {
   try {
     const userId = await getUserId();
-    await db.controllers.deleteMany({ collection: ORDERS_TABLE_NAME, where: `userId = ${userId}` });
+    await db.controllers.deleteMany({ collection: ORDERS_TABLE_NAME, where: `user_id = ${userId}` });
   } catch (error) {
     return forwardActionError(error);
   }

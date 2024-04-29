@@ -21,7 +21,7 @@ export function ProductCard({
   sizes,
   likes,
   sales,
-  createdAt,
+  created_at,
   ...props
 }: ProductCardProps) {
   return (

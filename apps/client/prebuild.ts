@@ -7,13 +7,13 @@ const env = loadEnvConfig(dir).combinedEnv;
 
 (async () => {
   try {
-    // await db.connection.query(`DROP TABLE ${env.DB_NAME}.${CHAT_MESSAGES_TABLE_NAME}`);
+    // await db.connection.query(`DROP TABLE IF EXISTS ${env.DB_NAME}.${CHAT_MESSAGES_TABLE_NAME}`);
     await Promise.all([
       db.connection.query(`
         CREATE TABLE IF NOT EXISTS ${env.DB_NAME}.${CHAT_MESSAGES_TABLE_NAME} (
           id BIGINT AUTO_INCREMENT PRIMARY KEY,
-          createdAt BIGINT,
-          userId BIGINT,
+          created_at BIGINT,
+          user_id BIGINT,
           role VARCHAR(64),
           content JSON
         )

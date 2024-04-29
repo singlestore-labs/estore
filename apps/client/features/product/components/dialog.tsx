@@ -25,7 +25,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
 
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
-  const [sizeValue, setSizeValue] = useState<keyof typeof sizes>(Object.keys(sizes)[0]);
+  const [sizeValue, setSizeValue] = useState<Product["sizes"][number][1]>(sizes[0][1]);
   const [isPurchased, setIsPurchased] = useState(false);
   const { execute, isPending } = useAction();
 
@@ -39,7 +39,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
   };
 
   const handleBuyClick: ButtonProps["onClick"] = async () => {
-    await execute(() => createOrder(id, sizeValue));
+    await execute(() => createOrder(id, sizes.find((i) => i[1] === sizeValue)![0]));
     setIsPurchased(true);
   };
 

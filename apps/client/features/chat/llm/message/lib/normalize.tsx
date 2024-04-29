@@ -17,7 +17,7 @@ export function normalizeChatLLMMessage(message: ChatLLMMessage | ChatLLMMessage
 
   return createChatMessage({
     id: message.id.toString(),
-    createdAt: new Date(message.createdAt),
+    createdAt: new Date(message.created_at),
     role: message.role,
     content,
     node,

@@ -13,7 +13,7 @@ export async function deleteProductLike(productId: Product["id"]) {
     if (!userId) throw new Error("userId is undefined");
     await db.controllers.deleteMany({
       collection: PRODUCT_LIKES_TABLE_NAME,
-      where: `productId = ${productId} AND userId = ${userId}`,
+      where: `product_id = ${productId} AND user_id = ${userId}`,
     });
   } catch (error) {
     return forwardActionError(error);

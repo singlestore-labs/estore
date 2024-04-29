@@ -19,11 +19,11 @@ export async function getProductSales(
     if (!product) return [];
 
     let query = `\
-      SELECT COUNT(*) AS value, DATE(createdAt) AS date FROM ${ORDERS_TABLE_NAME}
-      WHERE createdAt >= CURDATE() - INTERVAL ${length} DAY
-      AND productId = ${product.id}
-      GROUP BY DATE(createdAt)
-      ORDER BY DATE(createdAt)
+      SELECT COUNT(*) AS value, DATE(created_at) AS date FROM ${ORDERS_TABLE_NAME}
+      WHERE created_at >= CURDATE() - INTERVAL ${length} DAY
+      AND product_id = ${product.id}
+      GROUP BY DATE(created_at)
+      ORDER BY DATE(created_at)
     `;
 
     return (await db.controllers.query<Product["sales"]>({ query }))

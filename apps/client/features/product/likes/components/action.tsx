@@ -15,14 +15,14 @@ export type ProductLikesActionProps = ComponentProps<ButtonProps, { productId: P
 
 export function ProductLikesAction({ className, productId, ...props }: ProductLikesActionProps) {
   const [likes, setLikes] = useAtom(userProdcutLikesAtom);
-  const isLiked = likes.find((i) => i.productId === productId);
+  const isLiked = likes.find((i) => i.product_id === productId);
   const { execute, isPending } = useAction();
 
   const handleClick: ButtonProps["onClick"] = async () => {
     try {
       if (isLiked) {
         await execute(() => deleteProductLike(productId));
-        setLikes((i) => i.filter((i) => i.productId !== productId));
+        setLikes((i) => i.filter((i) => i.product_id !== productId));
       } else {
         const like = await execute(() => createProductLike(productId));
         setLikes((i) => [...i, like]);

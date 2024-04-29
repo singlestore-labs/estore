@@ -17,8 +17,8 @@ export async function createChatLLM() {
   async function getMessages() {
     const chatLLMMessage = await db.controllers.findMany<ChatLLMMessage[]>({
       collection: CHAT_MESSAGES_TABLE_NAME,
-      where: `userId = ${userId}`,
-      extra: "ORDER BY createdAt ASC",
+      where: `user_id = ${userId}`,
+      extra: "ORDER BY created_at ASC",
     });
     return chatLLMMessage.map(normalizeChatLLMMessage);
   }
@@ -26,7 +26,7 @@ export async function createChatLLM() {
   function clearMessages() {
     return db.controllers.deleteMany({
       collection: CHAT_MESSAGES_TABLE_NAME,
-      where: `userId = ${userId}`,
+      where: `user_id = ${userId}`,
     });
   }
 
@@ -57,7 +57,7 @@ export async function createChatLLM() {
         })),
       }),
 
-      createChatLLMMessage({ role: "user", userId, content: JSON.stringify(content) }),
+      createChatLLMMessage({ role: "user", user_id: userId, content: JSON.stringify(content) }),
     ]);
 
     const { handleDeltaTool, callTool } = createChatLLMToolHandler();
@@ -78,13 +78,13 @@ export async function createChatLLM() {
         if (!llmContent) return;
         return createChatLLMMessage({
           role: "assistant",
-          userId,
+          user_id: userId,
           content: JSON.stringify(llmContent),
         });
       })(),
       callTool({
         onResult: async (result) => {
-          await createChatLLMMessage({ role: "function", userId, content: JSON.stringify(result) });
+          await createChatLLMMessage({ role: "function", user_id: userId, content: JSON.stringify(result) });
         },
         onNode: onNode,
       }),

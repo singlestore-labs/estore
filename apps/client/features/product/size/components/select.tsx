@@ -63,8 +63,8 @@ export type ProductSizeSelectProps = ComponentProps<
   RadioGroupProps,
   {
     sizes: Product["sizes"];
-    value?: keyof Product["sizes"];
-    onChange?: (value: keyof Product["sizes"]) => Promise<void> | void;
+    value?: Product["sizes"][number][1];
+    onChange?: (value: Product["sizes"][number][1]) => Promise<void> | void;
   } & VariantProps<typeof productSizeSelectVariants>
 >;
 
@@ -72,7 +72,7 @@ export function ProductSizeSelect({
   className,
   variant,
   size: rootSize,
-  sizes = {},
+  sizes = [],
   value,
   disabled,
   onChange,

@@ -13,7 +13,7 @@ const columnsConfig: {
   };
 } = {
   sizes: {
-    defaultValue: {},
+    defaultValue: [],
     get: getProductSizesById,
   },
   likes: {

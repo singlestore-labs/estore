@@ -6,7 +6,7 @@ import { Product } from "@/product/types";
 export async function getProductLikesById(id: Product["id"]): Promise<Product["likes"]> {
   try {
     const rows = await db.controllers.query<Record<string, number>[]>({
-      query: `SELECT COUNT(*) FROM ${PRODUCT_LIKES_TABLE_NAME} WHERE productId = ${id}`,
+      query: `SELECT COUNT(*) FROM ${PRODUCT_LIKES_TABLE_NAME} WHERE product_id = ${id}`,
     });
 
     return Object.values(rows[0])[0];

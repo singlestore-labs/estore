@@ -7,9 +7,9 @@ import { normalizeDate } from "@repo/helpers";
 import { User } from "@/user/types";
 
 export async function createUser<T extends User = User>(user?: Partial<T>): Promise<User> {
-  const createdAt = normalizeDate(new Date());
+  const created_at = normalizeDate(new Date());
   return (await db.controllers.insertOne({
     collection: USERS_TABLE_NAME,
-    value: { createdAt, ...user },
+    value: { created_at, ...user },
   })) as User;
 }

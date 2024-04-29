@@ -4,7 +4,7 @@ import { cn } from "@/ui/lib";
 
 export type ProductSizesInfoProps = ComponentProps<ProductSizeSelectProps>;
 
-export function ProductSizesInfo({ className, sizes = {}, ...props }: ProductSizesInfoProps) {
+export function ProductSizesInfo({ className, sizes = [], ...props }: ProductSizesInfoProps) {
   if (!Object.keys(sizes).length) return null;
 
   return (
