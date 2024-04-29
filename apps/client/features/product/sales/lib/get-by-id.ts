@@ -1,5 +1,5 @@
 import { db } from "@repo/db";
-import { ORDERS_TABLE_NAME, PRODUCTS_TABLE_NAME } from "@repo/db/constants";
+import { ORDERS_TABLE_NAME, PRODUCTS_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "@repo/db/constants";
 
 import { Product } from "@/product/types";
 
@@ -19,11 +19,15 @@ export async function getProductSales(
     if (!product) return [];
 
     let query = `\
-      SELECT COUNT(*) AS value, DATE(created_at) AS date FROM ${ORDERS_TABLE_NAME}
-      WHERE created_at >= CURDATE() - INTERVAL ${length} DAY
-      AND product_id = ${product.id}
-      GROUP BY DATE(created_at)
-      ORDER BY DATE(created_at)
+      SELECT COUNT(*) AS value, DATE(orders.created_at) AS date
+      FROM ${ORDERS_TABLE_NAME} AS orders
+      JOIN (
+        SELECT id FROM ${PRODUCT_SKU_TABLE_NAME}
+        WHERE product_id = ${product.id}
+      ) AS sku ON orders.product_sku_id = sku.id
+      WHERE orders.created_at >= (SELECT CURDATE() - INTERVAL ${length} DAY)
+      GROUP BY DATE(orders.created_at)
+      ORDER BY DATE(orders.created_at)
     `;
 
     return (await db.controllers.query<Product["sales"]>({ query }))

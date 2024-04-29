@@ -80,7 +80,6 @@ export function ProductSizeSelect({
 }: ProductSizeSelectProps) {
   const id = useId();
   const isDisabled = disabled || variant === "read";
-  const entries = Object.entries(sizes);
 
   return (
     <RadioGroup
@@ -90,7 +89,7 @@ export function ProductSizeSelect({
       disabled={isDisabled}
       onValueChange={onChange}
     >
-      {entries.map(([size, amount]) => {
+      {sizes.map(([, size, amount]) => {
         const _id = id + ` ${size}`;
 
         return (
