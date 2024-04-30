@@ -16,6 +16,7 @@ import path from "path";
 import { writeToJSON } from "@/lib/write-to-json";
 import { getImageBase64ByName } from "@/lib/get-image-base64";
 import { vectorizeImages } from "@repo/ai";
+import randomInteger from "random-int";
 
 const USERS_NUMBER = 5_000_000;
 const PRODUCT_LIKES_NUMBER = 5_000_000;
@@ -75,7 +76,9 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
 
   let productSKUId = 1;
   let prodcutSKURows: ProductSKURow[] = productRows.flatMap((product) => {
-    return Object.entries(dataset[product.id - 1].sizesInStock).map(([size, stock]) => {
+    let sizes = dataset[product.id - 1].sizesInStock;
+    if (!Object.keys(sizes).length) sizes = { oneSize: randomInteger(1000, 10000) };
+    return Object.entries(sizes).map(([size, stock]) => {
       return {
         id: productSKUId++,
         product_id: product.id,
