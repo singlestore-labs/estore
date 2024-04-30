@@ -1,8 +1,10 @@
+import { writeFile } from "fs/promises";
+
 import { db } from "@repo/db";
 import { PRODUCTS_TABLE_NAME } from "@repo/db/constants";
 
+import { IS_DEV } from "@/constants/env";
 import { getProductByIds } from "@/product/lib/get-by-ids";
-import { Product } from "@/product/types";
 
 export async function findProducts(
   prompt: string,
@@ -16,29 +18,43 @@ export async function findProducts(
   },
 ) {
   const { color, priceMin, priceMax, gender, size, limit = 1 } = filter;
-  console.log({ prompt, filter });
+  const promptV = JSON.stringify((await db.ai.createEmbedding(prompt))[0]);
+  const whereConditions = [];
 
-  const promptV = (await db.ai.createEmbedding(prompt))[0];
-  const promptVJSON = JSON.stringify(promptV);
+  if (gender) whereConditions.push(`gender = '${gender}'`);
+  if (priceMin && priceMax) whereConditions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
+  else if (priceMin) whereConditions.push(`price >= ${priceMin}`);
+  else if (priceMax) whereConditions.push(`price <= ${priceMax}`);
+  const where = whereConditions.join(" AND ");
 
   let query = `\
-    SELECT id, imageText_v <*> '${promptVJSON}' :> VECTOR(${promptV.length}) as similarity
-    FROM ${PRODUCTS_TABLE_NAME}
+    SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score, 0) AS score
+    FROM (
+      SELECT id, MATCH(image_text) AGAINST ('${color}') AS ft_score
+      FROM ${PRODUCTS_TABLE_NAME}
+      WHERE ft_score
+      ${where ? `AND ${where}` : ""}
+    ) ft_result FULL OUTER JOIN (
+      SELECT id, image_text_v <*> '${promptV}' AS v_score
+      FROM ${PRODUCTS_TABLE_NAME}
+      ${where ? `WHERE ${where}` : ""}
+      ORDER BY v_score DESC
+      LIMIT 100
+    ) v_result
+    ON ft_result.id = v_result.id
+    ORDER BY score DESC
+    LIMIT ${limit}
   `;
 
-  const whereDefinitions = [];
+  if (IS_DEV) console.log({ prompt, filter });
 
-  if (priceMin && priceMax) whereDefinitions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
-  else if (priceMin) whereDefinitions.push(`price >= ${priceMin}`);
-  else if (priceMax) whereDefinitions.push(`price <= ${priceMax}`);
-  if (gender) whereDefinitions.push(`gender = '${gender}'`);
-  if (whereDefinitions.length) query += ` WHERE ${whereDefinitions.join(" AND ")}`;
+  const result = await db.controllers.query<{ id: number }[]>({
+    query: query,
+  });
 
-  query += ` ORDER BY similarity DESC`;
+  if (IS_DEV) console.log({ result });
 
-  if (limit) query += ` LIMIT ${limit}`;
-
-  const result = await db.controllers.query<{ id: Product["id"]; similarity: number }[]>({ query });
+  await writeFile("query.txt", query);
 
   return getProductByIds(result.map((i) => i.id));
 }

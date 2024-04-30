@@ -16,7 +16,7 @@ export const chatLLMTools = {
     name: "find_products",
     description: "Useful when you need to find products",
     schema: z.object({
-      prompt: z.string().describe("Initial user query"),
+      prompt: z.string().describe("User's prompt"),
       color: z.string().describe("Product color").optional(),
       priceMax: z.number().describe("Product max price").optional(),
       priceMin: z.number().describe("Product min price").optional(),
