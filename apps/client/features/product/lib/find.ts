@@ -15,30 +15,27 @@ export async function findProducts(
     limit?: number;
   },
 ) {
-  try {
-    if (IS_DEV) console.log({ prompt, filter });
+  if (IS_DEV) console.log({ prompt, filter });
 
-    const { color, priceMin, priceMax, gender, size, limit = 1 } = filter;
-    const promptV = JSON.stringify((await db.ai.createEmbedding(prompt))[0]);
-    const whereConditions: string[] = [];
-    const joins: string[] = [];
+  const { color, priceMin, priceMax, gender, size, limit = 1 } = filter;
+  const promptV = JSON.stringify((await db.ai.createEmbedding(prompt))[0]);
+  const whereConditions: string[] = [];
+  const joins: string[] = [];
 
-    if (gender) whereConditions.push(`gender = '${gender}'`);
-    if (priceMin && priceMax) whereConditions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
-    else if (priceMin) whereConditions.push(`price >= ${priceMin}`);
-    else if (priceMax) whereConditions.push(`price <= ${priceMax}`);
+  if (gender) whereConditions.push(`gender = '${gender}'`);
+  if (priceMin && priceMax) whereConditions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
+  else if (priceMin) whereConditions.push(`price >= ${priceMin}`);
+  else if (priceMax) whereConditions.push(`price <= ${priceMax}`);
 
-    if (size) {
-      joins.push(`${PRODUCT_SKU_TABLE_NAME} sku ON p.id = sku.product_id`);
-      joins.push(
-        `${PRODUCT_SIZES_TABLE_NAME} size ON sku.product_size_id = size.id AND size.value = '${size}'`,
-      );
-    }
+  if (size) {
+    joins.push(`${PRODUCT_SKU_TABLE_NAME} sku ON p.id = sku.product_id`);
+    joins.push(`${PRODUCT_SIZES_TABLE_NAME} size ON sku.product_size_id = size.id AND size.value = '${size}'`);
+  }
 
-    const where = whereConditions.join(" AND ");
-    const join = joins.length ? `JOIN ${joins.join(" JOIN ")}` : "";
+  const where = whereConditions.join(" AND ");
+  const join = joins.length ? `JOIN ${joins.join(" JOIN ")}` : "";
 
-    let query = `\
+  let query = `\
     SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score, 0) AS score
     FROM (
       SELECT p.id, ${color ? `MATCH(p.image_text) AGAINST ('${color}')` : "1"} AS ft_score
@@ -59,13 +56,9 @@ export async function findProducts(
     LIMIT ${limit}
   `;
 
-    const result = await db.controllers.query<{ id: number }[]>({ query });
+  const result = await db.controllers.query<{ id: number }[]>({ query });
 
-    if (IS_DEV) console.log({ query, result });
+  if (IS_DEV) console.log({ query, result });
 
-    return getProductByIds(result.map((i) => i.id));
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
+  return getProductByIds(result.map((i) => i.id));
 }

@@ -28,7 +28,6 @@ export function createChatLLMToolHandler() {
       await tool.call();
       onResult?.(tool.getResult());
       onNode?.(tool.getNode());
-      return tool;
     }
   }
 

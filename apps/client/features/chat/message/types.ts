@@ -8,6 +8,7 @@ export type ChatMessage = {
   createdAt: Date;
   role: ChatLLMMessage["role"];
   content: string | StreamableValue<string>;
+  error?: string;
   node?: ReactNode;
   isLoading?: boolean;
 };

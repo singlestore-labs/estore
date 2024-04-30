@@ -28,6 +28,8 @@ export function ChatMessageContentCard({
   className,
   content,
   role,
+  error,
+  createdAt,
   withAuthor = true,
   ...props
 }: ChatMessageContentCardProps) {
@@ -47,12 +49,13 @@ export function ChatMessageContentCard({
 
   return (
     <ChatMessageCard
-      variant={role === "assistant" ? "secondary" : "default"}
+      variant={error ? "destructive" : role === "assistant" ? "secondary" : "default"}
       {...props}
       className={cn("max-w-[75%] gap-0", role === "user" ? "ml-auto" : "mr-auto", className)}
-      author={withAuthor ? role : undefined}
+      createdAt={!error ? createdAt : undefined}
+      author={!error && withAuthor ? role : undefined}
     >
-      <Content>{activeContent}</Content>
+      <Content>{error || activeContent}</Content>
     </ChatMessageCard>
   );
 }

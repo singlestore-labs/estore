@@ -15,10 +15,11 @@ export function createChatMessage<T extends _ChatMessage = _ChatMessage>({
   createdAt = new Date(),
   role = "system",
   content = "",
+  error,
   isLoading = false,
   node,
 }: Partial<T> = {}): ChatMessage {
-  const message = { id, createdAt, role, content, isLoading };
+  const message = { id, createdAt, role, content, error, isLoading };
   let _node: ReactNode;
 
   if (node) {

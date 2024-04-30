@@ -31,6 +31,17 @@ export async function submitChatMessage(content: string) {
             isLoading = false;
             if (node) nodeStream.update(createChatMessage({ ...message, isLoading, node }).node);
           },
+
+          onError: async (error) => {
+            isLoading = false;
+            nodeStream.update(
+              createChatMessage({
+                ...message,
+                isLoading,
+                error: error instanceof Error ? error.message : "UnknownError",
+              }).node,
+            );
+          },
         });
       } catch (error) {
         console.error(error);

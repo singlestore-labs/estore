@@ -33,11 +33,13 @@ export async function createChatLLM() {
   async function sendMessage(
     content: string,
     {
-      onContent,
       onNode,
+      onError,
+      onContent,
     }: {
-      onContent?: (content: string) => Promise<void>;
       onNode?: (node: ReactNode) => Promise<void>;
+      onError?: (error: Error | unknown) => Promise<void>;
+      onContent?: (content: string) => Promise<void>;
     } = {},
   ) {
     if (!userId) throw new Error("userId is undefined");
@@ -73,22 +75,26 @@ export async function createChatLLM() {
       }
     }
 
-    await Promise.all([
-      (async () => {
-        if (!llmContent) return;
-        return createChatLLMMessage({
-          role: "assistant",
-          user_id: userId,
-          content: JSON.stringify(llmContent),
-        });
-      })(),
-      callTool({
-        onResult: async (result) => {
-          await createChatLLMMessage({ role: "function", user_id: userId, content: JSON.stringify(result) });
-        },
-        onNode: onNode,
-      }),
-    ]);
+    try {
+      await Promise.all([
+        (async () => {
+          if (!llmContent) return;
+          return createChatLLMMessage({
+            role: "assistant",
+            user_id: userId,
+            content: JSON.stringify(llmContent),
+          });
+        })(),
+        callTool({
+          onNode,
+          onResult: async (result) => {
+            await createChatLLMMessage({ role: "function", user_id: userId, content: JSON.stringify(result) });
+          },
+        }),
+      ]);
+    } catch (error) {
+      await onError?.(error);
+    }
   }
 
   return { getMessages, clearMessages, sendMessage };

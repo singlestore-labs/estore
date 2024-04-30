@@ -1,3 +1,4 @@
+import { ChatMessageProduct404 } from "@/chat/message/product/components/404";
 import { ChatMessageProductCard } from "@/chat/message/product/components/card";
 import { ChatMessageProductListRecommended } from "@/chat/message/product/components/list-recommended";
 import { getProductByIds } from "@/product/lib/get-by-ids";
@@ -13,6 +14,8 @@ export async function ChatMessageProductController(props: ChatMessageProductCont
   } else if ("productIds" in props) {
     products = await getProductByIds(props.productIds);
   }
+
+  if (!products.length) return <ChatMessageProduct404 />;
 
   if (products.length === 1) {
     return <ChatMessageProductCard product={products[0]} />;

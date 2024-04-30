@@ -11,6 +11,7 @@ export const chatMessageCardVariants = cva("p-4 py-2 flex flex-col gap-2 max-w-f
     variant: {
       default: "",
       secondary: "bg-zinc-50 dark:bg-card",
+      destructive: "text-destructive border-destructive bg-destructive/10",
     },
   },
 });
