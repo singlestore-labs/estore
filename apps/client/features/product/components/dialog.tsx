@@ -25,7 +25,7 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
 
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
-  const [sizeValue, setSizeValue] = useState<Product["sizes"][number][1]>(sizes[0][1]);
+  const [sizeValue, setSizeValue] = useState<Product["sizes"][number][1]>(sizes[0]?.[1]);
   const [isPurchased, setIsPurchased] = useState(false);
   const { execute, isPending } = useAction();
 

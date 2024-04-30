@@ -10,7 +10,7 @@ export async function getProductSales(
   try {
     const [[filterKey, filterValue]] = Object.entries(filter);
 
-    const product = await db.controllers.findOne({
+    const product = await db.controllers.findOne<Pick<Product, "id">>({
       collection: PRODUCTS_TABLE_NAME,
       columns: ["id"],
       where: `LOWER(${filterKey}) = ${typeof filterValue === "string" ? `'${filterValue.toLowerCase()}'` : filterValue}`,
@@ -30,7 +30,9 @@ export async function getProductSales(
       ORDER BY DATE(orders.created_at)
     `;
 
-    return (await db.controllers.query<Product["sales"]>({ query }))
+    const rows = await db.controllers.query<Product["sales"]>({ query });
+
+    return rows
       .map((i) => ({
         ...i,
         date: new Date(i.date).toLocaleDateString("en-US", { hour12: false }),

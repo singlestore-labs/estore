@@ -1,5 +1,3 @@
-import { writeFile } from "fs/promises";
-
 import { db } from "@repo/db";
 import { PRODUCTS_TABLE_NAME } from "@repo/db/constants";
 
@@ -53,8 +51,6 @@ export async function findProducts(
   });
 
   if (IS_DEV) console.log({ result });
-
-  await writeFile("query.txt", query);
 
   return getProductByIds(result.map((i) => i.id));
 }
