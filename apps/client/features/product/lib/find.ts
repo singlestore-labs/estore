@@ -1,5 +1,5 @@
 import { db } from "@repo/db";
-import { PRODUCTS_TABLE_NAME } from "@repo/db/constants";
+import { PRODUCTS_TABLE_NAME, PRODUCT_SIZES_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "@repo/db/constants";
 
 import { IS_DEV } from "@/constants/env";
 import { getProductByIds } from "@/product/lib/get-by-ids";
@@ -11,30 +11,45 @@ export async function findProducts(
     priceMin?: number;
     priceMax?: number;
     gender?: "women" | "unisex";
-    size?: "xxxs" | "xxs" | "xs" | "s" | "m" | "l" | "xl";
+    size?: "xxxs" | "xxs" | "xs" | "s" | "m" | "l" | "xl" | "oneSize";
     limit?: number;
   },
 ) {
-  const { color, priceMin, priceMax, gender, size, limit = 1 } = filter;
-  const promptV = JSON.stringify((await db.ai.createEmbedding(prompt))[0]);
-  const whereConditions = [];
+  try {
+    if (IS_DEV) console.log({ prompt, filter });
 
-  if (gender) whereConditions.push(`gender = '${gender}'`);
-  if (priceMin && priceMax) whereConditions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
-  else if (priceMin) whereConditions.push(`price >= ${priceMin}`);
-  else if (priceMax) whereConditions.push(`price <= ${priceMax}`);
-  const where = whereConditions.join(" AND ");
+    const { color, priceMin, priceMax, gender, size, limit = 1 } = filter;
+    const promptV = JSON.stringify((await db.ai.createEmbedding(prompt))[0]);
+    const whereConditions: string[] = [];
+    const joins: string[] = [];
 
-  let query = `\
+    if (gender) whereConditions.push(`gender = '${gender}'`);
+    if (priceMin && priceMax) whereConditions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
+    else if (priceMin) whereConditions.push(`price >= ${priceMin}`);
+    else if (priceMax) whereConditions.push(`price <= ${priceMax}`);
+
+    if (size) {
+      joins.push(`${PRODUCT_SKU_TABLE_NAME} sku ON p.id = sku.product_id`);
+      joins.push(
+        `${PRODUCT_SIZES_TABLE_NAME} size ON sku.product_size_id = size.id AND size.value = '${size}'`,
+      );
+    }
+
+    const where = whereConditions.join(" AND ");
+    const join = joins.length ? `JOIN ${joins.join(" JOIN ")}` : "";
+
+    let query = `\
     SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score, 0) AS score
     FROM (
-      SELECT id, MATCH(image_text) AGAINST ('${color}') AS ft_score
-      FROM ${PRODUCTS_TABLE_NAME}
+      SELECT p.id, MATCH(p.image_text) AGAINST ('${color}') AS ft_score
+      FROM ${PRODUCTS_TABLE_NAME} p
+      ${join}
       WHERE ft_score
       ${where ? `AND ${where}` : ""}
     ) ft_result FULL OUTER JOIN (
-      SELECT id, image_text_v <*> '${promptV}' AS v_score
-      FROM ${PRODUCTS_TABLE_NAME}
+      SELECT p.id, p.image_text_v <*> '${promptV}' AS v_score
+      FROM ${PRODUCTS_TABLE_NAME} p
+      ${join}
       ${where ? `WHERE ${where}` : ""}
       ORDER BY v_score DESC
       LIMIT 100
@@ -44,13 +59,13 @@ export async function findProducts(
     LIMIT ${limit}
   `;
 
-  if (IS_DEV) console.log({ prompt, filter });
+    const result = await db.controllers.query<{ id: number }[]>({ query });
 
-  const result = await db.controllers.query<{ id: number }[]>({
-    query: query,
-  });
+    if (IS_DEV) console.log({ query, result });
 
-  if (IS_DEV) console.log({ result });
-
-  return getProductByIds(result.map((i) => i.id));
+    return getProductByIds(result.map((i) => i.id));
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
