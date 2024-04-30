@@ -41,7 +41,7 @@ export async function findProducts(
     let query = `\
     SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score, 0) AS score
     FROM (
-      SELECT p.id, MATCH(p.image_text) AGAINST ('${color}') AS ft_score
+      SELECT p.id, ${color ? `MATCH(p.image_text) AGAINST ('${color}')` : "1"} AS ft_score
       FROM ${PRODUCTS_TABLE_NAME} p
       ${join}
       WHERE ft_score
