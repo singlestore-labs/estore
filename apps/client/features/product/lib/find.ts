@@ -36,7 +36,7 @@ export async function findProducts(
   const join = joins.length ? `JOIN ${joins.join(" JOIN ")}` : "";
 
   let query = `\
-    SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score, 0) AS score
+    SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score + v_score2, 0) AS score
     FROM (
       SELECT p.id, ${color ? `MATCH(p.image_text) AGAINST ('${color}')` : "1"} AS ft_score
       FROM ${PRODUCTS_TABLE_NAME} p
@@ -44,11 +44,14 @@ export async function findProducts(
       WHERE ft_score
       ${where ? `AND ${where}` : ""}
     ) ft_result FULL OUTER JOIN (
-      SELECT p.id, ${promptV ? `p.image_text_v <*> '${promptV}'` : "1"} AS v_score
+      SELECT
+        p.id,
+        ${promptV ? `p.image_text_v <*> '${promptV}'` : "1"} AS v_score,
+        ${promptV ? `p.description_v <*> '${promptV}'` : "1"} AS v_score2
       FROM ${PRODUCTS_TABLE_NAME} p
       ${join}
       ${where ? `WHERE ${where}` : ""}
-      ORDER BY v_score DESC
+      ORDER BY v_score + v_score2 DESC
       LIMIT 100
     ) v_result
     ON ft_result.id = v_result.id
