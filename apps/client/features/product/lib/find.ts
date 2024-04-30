@@ -18,7 +18,7 @@ export async function findProducts(
   if (IS_DEV) console.log({ prompt, filter });
 
   const { color, priceMin, priceMax, gender, size, limit = 1 } = filter;
-  const promptV = JSON.stringify((await db.ai.createEmbedding(prompt))[0]);
+  const promptV = prompt ? JSON.stringify((await db.ai.createEmbedding(prompt))[0]) : undefined;
   const whereConditions: string[] = [];
   const joins: string[] = [];
 
@@ -44,7 +44,7 @@ export async function findProducts(
       WHERE ft_score
       ${where ? `AND ${where}` : ""}
     ) ft_result FULL OUTER JOIN (
-      SELECT p.id, p.image_text_v <*> '${promptV}' AS v_score
+      SELECT p.id, ${promptV ? `p.image_text_v <*> '${promptV}'` : "1"} AS v_score
       FROM ${PRODUCTS_TABLE_NAME} p
       ${join}
       ${where ? `WHERE ${where}` : ""}
