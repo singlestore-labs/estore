@@ -26,8 +26,7 @@ export function createChatLLMToolHandler() {
       const tool = chatLLMTools[name];
       tool.setArgs(args);
       await tool.call();
-      onResult?.(tool.getResult());
-      onNode?.(tool.getNode());
+      await Promise.all([onResult?.(tool.getResult()), onNode?.(tool.getNode())]);
     }
   }
 

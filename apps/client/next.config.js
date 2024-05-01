@@ -4,10 +4,6 @@ const nextConfig = {
     remotePatterns: [{ hostname: "*" }],
   },
 
-  experimental: {
-    serverComponentsExternalPackages: ["langchain", "@langchain/openai"],
-  },
-
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/i,

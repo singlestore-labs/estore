@@ -3,17 +3,17 @@ import { ChatMessageCard, ChatMessageCardProps } from "@/chat/message/components
 import { ProductListCarousel, ProductListCarouselProps } from "@/product/components/list-carousel";
 import { cn } from "@/ui/lib";
 
-export type ChatMessageProductListRecommendedProps = ComponentProps<
+export type ChatMessageProductCarouselProps = ComponentProps<
   ChatMessageCardProps,
   { products: ProductListCarouselProps["products"] }
 >;
 
-export function ChatMessageProductListRecommended({
+export function ChatMessageProductCarousel({
   children,
   className,
   products,
   ...props
-}: ChatMessageProductListRecommendedProps) {
+}: ChatMessageProductCarouselProps) {
   const _children = children || <p>Here are the products based on your request:</p>;
 
   return (

@@ -22,19 +22,19 @@ export async function submitChatMessage(content: string) {
           onContent: async (content) => {
             if (content && isLoading) {
               isLoading = false;
-              nodeStream.update(createChatMessage({ ...message, isLoading }).node);
+              nodeStream.done(createChatMessage({ ...message, isLoading }).node);
             }
             textStream.update(content);
           },
 
           onNode: async (node) => {
             isLoading = false;
-            if (node) nodeStream.update(createChatMessage({ ...message, isLoading, node }).node);
+            if (node) nodeStream.done(createChatMessage({ ...message, isLoading, node }).node);
           },
 
           onError: async (error) => {
             isLoading = false;
-            nodeStream.update(
+            nodeStream.done(
               createChatMessage({
                 ...message,
                 isLoading,
@@ -45,10 +45,9 @@ export async function submitChatMessage(content: string) {
         });
       } catch (error) {
         console.error(error);
-      } finally {
-        textStream.done();
-        nodeStream.done();
       }
+
+      textStream.done();
     })();
 
     return { ...message, node: nodeStream.value };
