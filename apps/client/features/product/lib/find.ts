@@ -1,3 +1,5 @@
+import { inspect } from "util";
+
 import { db } from "@repo/db";
 import { PRODUCTS_TABLE_NAME, PRODUCT_SIZES_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "@repo/db/constants";
 
@@ -36,6 +38,7 @@ export async function findProducts(
   const join = joins.length ? `JOIN ${joins.join(" JOIN ")}` : "";
 
   let query = `\
+    SET @promptV = '${promptV}';
     SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score + v_score2, 0) AS score
     FROM (
       SELECT p.id, ${color ? `MATCH(p.image_text) AGAINST ('${color}')` : "1"} AS ft_score
@@ -46,8 +49,8 @@ export async function findProducts(
     ) ft_result FULL OUTER JOIN (
       SELECT
         p.id,
-        ${promptV ? `p.image_text_v <*> '${promptV}'` : "1"} AS v_score,
-        ${promptV ? `p.description_v <*> '${promptV}'` : "1"} AS v_score2
+        ${promptV ? `p.image_text_v <*> @promptV` : "1"} AS v_score,
+        ${promptV ? `p.description_v <*> @promptV` : "1"} AS v_score2
       FROM ${PRODUCTS_TABLE_NAME} p
       ${join}
       ${where ? `WHERE ${where}` : ""}
@@ -56,12 +59,12 @@ export async function findProducts(
     ) v_result
     ON ft_result.id = v_result.id
     ORDER BY score DESC
-    LIMIT ${limit}
+    LIMIT ${limit};
   `;
 
-  const result = await db.controllers.query<{ id: number }[]>({ query });
+  const result = await db.controllers.query<[object, { id: number }[]]>({ query });
 
-  if (IS_DEV) console.log({ query, result });
+  if (IS_DEV) console.log(inspect({ query, result }, true, 10, true));
 
-  return getProductByIds(result.map((i) => i.id));
+  return getProductByIds(result[1].map((i) => i.id));
 }

@@ -6,6 +6,7 @@ export const db = createEleganceServerClient("mysql", {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    multipleStatements: true,
   },
   ai: {
     openai: {
