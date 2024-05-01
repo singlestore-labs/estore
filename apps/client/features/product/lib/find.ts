@@ -21,7 +21,8 @@ export async function findProducts(
   if (IS_DEV) console.log({ prompt, filter });
 
   const { color, priceMin, priceMax, gender, size, limit = 1 } = filter;
-  const promptV = prompt ? JSON.stringify((await db.ai.createEmbedding(prompt))[0]) : undefined;
+  const promptV = prompt ? (await db.ai.createEmbedding(prompt))[0] : undefined;
+  const promptVJSON = promptV ? JSON.stringify(promptV) : "";
   const whereConditions: string[] = [];
   const joins: string[] = [];
 
@@ -39,7 +40,7 @@ export async function findProducts(
   const join = joins.length ? `JOIN ${joins.join(" JOIN ")}` : "";
 
   let query = `\
-    SET @promptV = '${promptV}';
+    ${promptVJSON ? `SET @promptV = '${promptVJSON}' :> vector(${promptV!.length}) :> blob;` : ""}
     SELECT ft_result.id, ft_score, v_score, v_score2, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score + v_score2, 0) AS score
     FROM (
       SELECT p.id, ${color ? `MATCH(p.image_text) AGAINST ('${color}')` : "1"} AS ft_score
@@ -50,8 +51,8 @@ export async function findProducts(
     ) ft_result FULL OUTER JOIN (
       SELECT
         p.id,
-        ${promptV ? `p.image_text_v <*> @promptV` : "1"} AS v_score,
-        ${promptV ? `p.description_v <*> @promptV` : "1"} AS v_score2
+        ${promptVJSON ? `p.image_text_v <*> @promptV` : "1"} AS v_score,
+        ${promptVJSON ? `p.description_v <*> @promptV` : "1"} AS v_score2
       FROM ${PRODUCTS_TABLE_NAME} p
       ${join}
       WHERE v_score >= 0.9 OR v_score2 >= 0.9
