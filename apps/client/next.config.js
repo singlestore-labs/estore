@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [{ hostname: "*" }],
+    remotePatterns: [{ hostname: "cdn-images.farfetch-contents.com" }],
   },
 
   webpack: (config) => {
