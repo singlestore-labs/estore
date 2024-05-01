@@ -53,7 +53,8 @@ export async function findProducts(
         ${promptV ? `p.description_v <*> @promptV` : "1"} AS v_score2
       FROM ${PRODUCTS_TABLE_NAME} p
       ${join}
-      ${where ? `WHERE ${where}` : ""}
+      WHERE v_score >= 0.9 OR v_score2 >= 0.9
+      ${where ? `AND ${where}` : ""}
       ORDER BY v_score + v_score2 DESC
       LIMIT 100
     ) v_result

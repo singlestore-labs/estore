@@ -1,0 +1,23 @@
+SET @promptV = '[-0.028644899,...]';
+SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score + v_score2, 0) AS score
+FROM (
+  SELECT p.id, MATCH(p.image_text) AGAINST ('red') AS ft_score
+  FROM products p
+  JOIN product_sku sku ON p.id = sku.product_id JOIN product_sizes size ON sku.product_size_id = size.id AND size.value = 'oneSize'
+  WHERE ft_score
+  AND gender = 'women' AND price <= 300
+) ft_result FULL OUTER JOIN (
+  SELECT
+    p.id,
+    p.image_text_v <*> @promptV AS v_score,
+    p.description_v <*> @promptV AS v_score2
+  FROM products p
+  JOIN product_sku sku ON p.id = sku.product_id JOIN product_sizes size ON sku.product_size_id = size.id AND size.value = 'oneSize'
+  WHERE v_score >= 0.9 OR v_score2 >= 0.9
+  AND gender = 'women' AND price <= 300
+  ORDER BY v_score + v_score2 DESC
+  LIMIT 100
+) v_result
+ON ft_result.id = v_result.id
+ORDER BY score DESC
+LIMIT 2;
