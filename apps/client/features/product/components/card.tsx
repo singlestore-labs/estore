@@ -35,6 +35,7 @@ export function ProductCard({
           src={image}
           alt="Glasses"
           fill
+          unoptimized
         />
         <Link
           href={ROUTES.PRODUCT_BY_ID(id)}
