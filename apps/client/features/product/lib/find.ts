@@ -1,3 +1,4 @@
+import { writeFile } from "fs/promises";
 import { inspect } from "util";
 
 import { db } from "@repo/db";
@@ -39,7 +40,7 @@ export async function findProducts(
 
   let query = `\
     SET @promptV = '${promptV}';
-    SELECT ft_result.id, ft_score, v_score, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score + v_score2, 0) AS score
+    SELECT ft_result.id, ft_score, v_score, v_score2, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score + v_score2, 0) AS score
     FROM (
       SELECT p.id, ${color ? `MATCH(p.image_text) AGAINST ('${color}')` : "1"} AS ft_score
       FROM ${PRODUCTS_TABLE_NAME} p
@@ -59,13 +60,17 @@ export async function findProducts(
       LIMIT 100
     ) v_result
     ON ft_result.id = v_result.id
+    WHERE ft_score AND (v_score OR v_score2)
     ORDER BY score DESC
     LIMIT ${limit};
   `;
 
   const result = await db.controllers.query<[object, { id: number }[]]>({ query });
 
-  if (IS_DEV) console.log(inspect({ query, result }, true, 10, true));
+  if (IS_DEV) {
+    console.log(inspect({ query, result }, true, 10, true));
+    await writeFile("export/findProducts.txt", query);
+  }
 
   return getProductByIds(result[1].map((i) => i.id));
 }
