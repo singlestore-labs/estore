@@ -20,7 +20,16 @@ import { Product } from "@/product/types";
 
 export type ProductDialogProps = ComponentProps<DialogProps, Product>;
 
-export function ProductDialog({ id, description, price, image, sizes, sales, ...props }: ProductDialogProps) {
+export function ProductDialog({
+  id,
+  description,
+  price,
+  image,
+  sizes,
+  sales,
+  image_text,
+  ...props
+}: ProductDialogProps) {
   const unmountTimeoutRef = useRef<NodeJS.Timeout>();
 
   const router = useRouter();
@@ -76,6 +85,8 @@ export function ProductDialog({ id, description, price, image, sizes, sales, ...
             <h2 className="text-2xl font-semibold capitalize">{description}</h2>
             <p className="text-2xl font-semibold">${price}</p>
           </div>
+
+          {image_text && <p className="text-muted-foreground">{image_text}</p>}
 
           <div className="flex flex-wrap items-center gap-4">
             <ProductSizeSelect

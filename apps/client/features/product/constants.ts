@@ -8,4 +8,4 @@ export const PRODUCT_COLUMNS: Exclude<keyof ProductRow, "description_v" | "image
   "image_text",
   "price",
   "gender",
-];
+] as const;
