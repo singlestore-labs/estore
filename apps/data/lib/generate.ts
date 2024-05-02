@@ -31,6 +31,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   );
   const created_at = normalizeDate(new Date());
 
+  console.log(`Generating ${USERS_TABLE_NAME}`);
   const userRows: UserRow[] = Array.from({ length: USERS_NUMBER }).map((_, i) => ({ id: i + 1, created_at }));
   await writeToJSON(USERS_TABLE_NAME, userRows);
 
@@ -39,6 +40,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   if (existsSync(productsPath)) {
     productRows = JSON.parse(await readFile(productsPath, "utf-8"));
   } else {
+    console.log(`Generating ${PRODUCTS_TABLE_NAME}`);
     let productId = 1;
     for await (const chunk of toChunks(dataset, 1000)) {
       const descriptionVs = await db.ai.createEmbedding(chunk.map((i) => i.description));
@@ -66,6 +68,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
     await writeToJSON(PRODUCTS_TABLE_NAME, productRows);
   }
 
+  console.log(`Generating ${PRODUCT_SIZES_TABLE_NAME}`);
   let productSizeRows: ProductSizeRow[];
   const sizes = new Set<string>();
   productRows.forEach(({ id }) => {
@@ -74,6 +77,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   productSizeRows = [...sizes].map((value, i) => ({ id: i + 1, value }));
   await writeToJSON(PRODUCT_SIZES_TABLE_NAME, productSizeRows);
 
+  console.log(`Generating ${PRODUCT_SKU_TABLE_NAME}`);
   let productSKUId = 1;
   let prodcutSKURows: ProductSKURow[] = productRows.flatMap((product) => {
     let sizes = dataset[product.id - 1].sizesInStock;
@@ -89,6 +93,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   });
   await writeToJSON(PRODUCT_SKU_TABLE_NAME, prodcutSKURows);
 
+  console.log(`Generating ${PRODUCT_LIKES_TABLE_NAME}`);
   const productLikeRows: ProductLikeRow[] = Array.from({ length: PRODUCT_LIKES_NUMBER }).map((_, i) => ({
     id: i + 1,
     created_at,
@@ -97,6 +102,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   }));
   await writeToJSON(PRODUCT_LIKES_TABLE_NAME, productLikeRows);
 
+  console.log(`Generating ${ORDERS_TABLE_NAME}`);
   const orderRows: OrderRow[] = Array.from({ length: UNIQUE_ORDERS_NUMBER }).map((_, i) => ({
     id: i + 1,
     created_at: normalizeDate(getRandomDate(new Date(2024, 0, 1))),

@@ -11,13 +11,19 @@
 1. Create a `.env` file based on the `.env.example` file
 2. Install dependencies by running: `npm i`
 
+## Insert the data into a database
+
+1. Create a database
+2. Run: `npm run start:data`
+
 ## Run the dev environment
 
-1. Run `npm run dev:client`
-2. Open [http://localhost:3000](http://localhost:3000)
+1. Run `npm run build`
+2. Run `npm run dev`
+3. Open [http://localhost:3000](http://localhost:3000)
 
 ## Build the prod environment
 
-1. Run `npm run build:client`
-2. Run `npm run start:client`
+1. Run `npm run build`
+2. Run `npm run start`
 3. Open [http://localhost:3000](http://localhost:3000)

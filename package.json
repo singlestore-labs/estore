@@ -2,14 +2,10 @@
   "name": "genai-estore",
   "private": true,
   "scripts": {
-    "build": "dotenv -- turbo build",
-    "build:client": "dotenv -- turbo build --filter='./apps/client'",
-    "start": "dotenv -- turbo start",
-    "start:client": "dotenv -- turbo start --filter='./apps/client'",
+    "build": "dotenv -- turbo build --filter='./apps/client'",
+    "start": "dotenv -- turbo start --filter='./apps/client'",
     "start:data": "dotenv -- turbo start --filter='./apps/data'",
-    "dev": "dotenv -- turbo dev",
-    "dev:client": "dotenv -- turbo dev --filter='./apps/client'",
-    "dev:data": "dotenv -- turbo dev --filter='./apps/data'",
+    "dev": "dotenv -- turbo dev --filter='./apps/client'",
     "prettify": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "devDependencies": {

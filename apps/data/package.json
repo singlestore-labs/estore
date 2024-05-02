@@ -5,8 +5,7 @@
   "scripts": {
     "normalize": "tsx ./lib/normalize.ts",
     "generate": "tsx ./lib/generate.ts",
-    "start": "tsx ./index.ts",
-    "dev": "tsx watch ./lib/generate.ts"
+    "start": "npm run generate && tsx ./index.ts"
   },
   "dependencies": {
     "@repo/ai": "*",
