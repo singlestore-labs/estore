@@ -15,9 +15,10 @@ export function useSubmitMessage() {
   const submit = useCallback(
     async (content: string) => {
       try {
+        const _content = content.trim();
         setIsChatMessageSubmitting(true);
-        setMessages((i) => [createChatMessage({ role: "user", content }), ...i]);
-        const message = await execute(() => submitChatMessage(content));
+        setMessages((i) => [createChatMessage({ role: "user", content: _content }), ...i]);
+        const message = await execute(() => submitChatMessage(_content));
         setMessages((i) => [message, ...i]);
       } finally {
         setIsChatMessageSubmitting(false);
