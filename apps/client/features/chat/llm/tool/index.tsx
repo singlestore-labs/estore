@@ -18,6 +18,7 @@ export const chatLLMTools = {
     schema: z.object({
       prompt: z.string().describe("User's prompt"),
       color: z.string().describe("Product color").optional(),
+      price: z.number().describe("Product exact price").optional(),
       priceMax: z.number().describe("Product max price").optional(),
       priceMin: z.number().describe("Product min price").optional(),
       gender: z.enum(["women", "unisex"]).describe("What gender the product is for").optional(),

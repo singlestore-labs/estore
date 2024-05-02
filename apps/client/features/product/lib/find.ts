@@ -24,6 +24,7 @@ export async function findProducts(
   prompt: string,
   filter: {
     color?: string;
+    price?: number;
     priceMin?: number;
     priceMax?: number;
     gender?: "women" | "unisex";
@@ -33,14 +34,14 @@ export async function findProducts(
 ) {
   if (IS_DEV) console.log({ prompt, filter });
 
-  const { color, priceMin, priceMax, gender, size, limit = 5 } = filter;
+  const { color, price, priceMin, priceMax, gender, size, limit = 5 } = filter;
   const promptV = prompt ? (await db.ai.createEmbedding(prompt))[0] : undefined;
   const promptVJSON = promptV ? JSON.stringify(promptV) : "";
   const whereConditions: string[] = [];
   const joins: string[] = [];
 
-  if (gender) whereConditions.push(`gender = '${gender}'`);
-  if (priceMin && priceMax) whereConditions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
+  if (price) whereConditions.push(`price = ${price}`);
+  else if (priceMin && priceMax) whereConditions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
   else if (priceMin) whereConditions.push(`price >= ${priceMin}`);
   else if (priceMax) whereConditions.push(`price <= ${priceMax}`);
 
@@ -48,6 +49,8 @@ export async function findProducts(
     joins.push(`${PRODUCT_SKU_TABLE_NAME} sku ON p.id = sku.product_id`);
     joins.push(`${PRODUCT_SIZES_TABLE_NAME} size ON sku.product_size_id = size.id AND size.value = '${size}'`);
   }
+
+  if (gender) whereConditions.push(`gender = '${gender}'`);
 
   const where = whereConditions.join(" AND ");
   const join = joins.length ? `JOIN ${joins.join(" JOIN ")}` : "";
