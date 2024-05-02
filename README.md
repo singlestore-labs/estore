@@ -16,6 +16,8 @@
 1. Create a database
 2. Run: `npm run start:data`
 
+**Note:** Creating product image descriptors can cost up to $50 using OpenAI Vision API.
+
 ## Run the dev environment
 
 1. Run `npm run build`
