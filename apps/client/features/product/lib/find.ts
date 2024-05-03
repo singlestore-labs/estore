@@ -1,18 +1,14 @@
-import { writeFile } from "fs/promises";
-import { inspect } from "util";
-
 import { db } from "@repo/db";
 import { PRODUCTS_TABLE_NAME, PRODUCT_SIZES_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "@repo/db/constants";
 import { ProductRow } from "@repo/db/types";
 
-import { IS_DEV } from "@/constants/env";
 import { getProductByIds } from "@/product/lib/get-by-ids";
 
 type QueryResult = {
   id: ProductRow["id"];
-  ft_score: number;
-  v_score: number;
-  v_score2: number;
+  ft_score_color: number;
+  v_score_image_text: number;
+  v_score_description: number;
   score: number;
 };
 
@@ -28,66 +24,74 @@ export async function findProducts(
     priceMin?: number;
     priceMax?: number;
     gender?: "women" | "unisex";
-    size?: "xxxs" | "xxs" | "xs" | "s" | "m" | "l" | "xl" | "oneSize";
+    size?: "xxxs" | "xxs" | "xs" | "s" | "m" | "l" | "xl" | "xxl" | "oneSize";
     limit?: number;
   },
 ) {
-  if (IS_DEV) console.log({ prompt, filter });
-
   const { color, price, priceMin, priceMax, gender, size, limit = 5 } = filter;
-  const promptV = prompt ? (await db.ai.createEmbedding(prompt))[0] : undefined;
+  const promptV = prompt ? (await db.ai.createEmbedding(prompt))[0] : "";
   const promptVJSON = promptV ? JSON.stringify(promptV) : "";
-  const whereConditions: string[] = [];
-  const joins: string[] = [];
+  const whereDefinitions: string[] = [];
+  const joinDefinitions: string[] = [];
 
-  if (price) whereConditions.push(`price = ${price}`);
-  else if (priceMin && priceMax) whereConditions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
-  else if (priceMin) whereConditions.push(`price >= ${priceMin}`);
-  else if (priceMax) whereConditions.push(`price <= ${priceMax}`);
-
-  if (size) {
-    joins.push(`${PRODUCT_SKU_TABLE_NAME} sku ON p.id = sku.product_id`);
-    joins.push(`${PRODUCT_SIZES_TABLE_NAME} size ON sku.product_size_id = size.id AND size.value = '${size}'`);
+  if (price) {
+    whereDefinitions.push(`price = ${price}`);
+  } else if (priceMin && priceMax) {
+    whereDefinitions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
+  } else if (priceMin) {
+    whereDefinitions.push(`price >= ${priceMin}`);
+  } else if (priceMax) {
+    whereDefinitions.push(`price <= ${priceMax}`);
   }
 
-  if (gender) whereConditions.push(`gender = '${gender}'`);
+  if (size) {
+    joinDefinitions.push(`${PRODUCT_SKU_TABLE_NAME} sku ON products.id = sku.product_id`);
+    joinDefinitions.push(
+      `${PRODUCT_SIZES_TABLE_NAME} size ON sku.product_size_id = size.id AND size.value = '${size}'`,
+    );
+  }
 
-  const where = whereConditions.join(" AND ");
-  const join = joins.length ? `JOIN ${joins.join(" JOIN ")}` : "";
+  if (gender) whereDefinitions.push(`gender = '${gender}'`);
+
+  const where = whereDefinitions.join(" AND ");
+  const join = joinDefinitions.join(" JOIN ");
 
   let query = `\
-    ${promptVJSON ? `SET @promptV = '${promptVJSON}' :> vector(${promptV!.length}) :> blob;` : ""}
-    SELECT ft_result.id, ft_score, v_score, v_score2, 0.5 * IFNULL(ft_score, 0) + 0.5 * IFNULL(v_score + v_score2, 0) AS score
+    ${promptVJSON ? `SET @promptV = '${promptVJSON}' :> vector(${promptV.length}) :> blob;` : ""}
+    SELECT
+      ft_result.id,
+      ft_score_color,
+      v_score_image_text,
+      v_score_description,
+      0.5 * IFNULL(ft_score_color, 0) + 0.5 * IFNULL(v_score_image_text + v_score_description, 0) AS score
     FROM (
-      SELECT p.id, ${color ? `MATCH(p.image_text) AGAINST ('${color}')` : "1"} AS ft_score
-      FROM ${PRODUCTS_TABLE_NAME} p
-      ${join}
-      WHERE ft_score
+      SELECT
+        products.id,
+        ${color ? `MATCH(products.image_text) AGAINST ('${color}')` : "1"} AS ft_score_color
+      FROM ${PRODUCTS_TABLE_NAME} products
+      ${join ? `JOIN ${join}` : ""}
+      WHERE ft_score_color
       ${where ? `AND ${where}` : ""}
     ) ft_result FULL OUTER JOIN (
       SELECT
-        p.id,
-        ${promptVJSON ? `p.image_text_v <*> @promptV` : "1"} AS v_score,
-        ${promptVJSON ? `p.description_v <*> @promptV` : "1"} AS v_score2
-      FROM ${PRODUCTS_TABLE_NAME} p
-      ${join}
-      WHERE v_score >= 0.75 OR v_score2 >= 0.75
+        products.id,
+        ${promptVJSON ? `products.image_text_v <*> @promptV` : "1"} AS v_score_image_text,
+        ${promptVJSON ? `products.description_v <*> @promptV` : "1"} AS v_score_description
+      FROM ${PRODUCTS_TABLE_NAME} products
+      ${join ? `JOIN ${join}` : ""}
+      WHERE v_score_image_text >= 0.75 OR v_score_description >= 0.75
       ${where ? `AND ${where}` : ""}
-      ORDER BY v_score + v_score2 DESC
+      ORDER BY v_score_image_text + v_score_description DESC
       LIMIT 100
     ) v_result
     ON ft_result.id = v_result.id
-    WHERE ft_score AND (v_score OR v_score2)
+    WHERE ft_score_color AND (v_score_image_text OR v_score_description)
     ORDER BY score DESC
     LIMIT ${limit};
   `;
 
   const result = await db.controllers.query<[object, QueryResult[]] | QueryResult[]>({ query });
+  const productIds = (isQueryResult(result) ? result : result[1]).map((i) => i.id);
 
-  if (IS_DEV) {
-    console.log(inspect({ result }, true, 10, true));
-    await writeFile("export/findProducts.txt", query);
-  }
-
-  return getProductByIds(isQueryResult(result) ? result.map((i) => i.id) : result[1].map((i) => i.id));
+  return getProductByIds(productIds);
 }

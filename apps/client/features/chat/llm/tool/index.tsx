@@ -22,7 +22,10 @@ export const chatLLMTools = {
       priceMax: z.number().describe("Product max price").optional(),
       priceMin: z.number().describe("Product min price").optional(),
       gender: z.enum(["women", "unisex"]).describe("What gender the product is for").optional(),
-      size: z.enum(["xxxs", "xxs", "xs", "s", "m", "l", "xl", "oneSize"]).describe("Product size").optional(),
+      size: z
+        .enum(["xxxs", "xxs", "xs", "s", "m", "l", "xl", "xxl", "oneSize"])
+        .describe("Product size")
+        .optional(),
       limit: z.number().min(1).optional().describe("Number of products to search"),
     }),
     node: ChatMessageProductController,
