@@ -1,4 +1,4 @@
-import { IS_DEV } from "@/constants/env";
+import { IS_DEV } from "@/constants/config";
 import { getProductLikesById } from "@/product/likes/lib/get-by-id";
 import { getProductSales } from "@/product/sales/lib/get-by-id";
 import { getProductSizesById } from "@/product/size/lib/get-by-id";

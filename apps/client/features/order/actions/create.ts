@@ -2,8 +2,8 @@
 
 import { db } from "@repo/db";
 import { ORDERS_TABLE_NAME } from "@repo/db/constants";
+import { serializeDate } from "@repo/db/lib/serialize-date";
 import { ProductSizeRow } from "@repo/db/types";
-import { normalizeDate } from "@repo/helpers";
 import { revalidatePath } from "next/cache";
 
 import { forwardActionError } from "@/action/error/lib/forward";
@@ -23,7 +23,7 @@ export async function createOrder(productId: Product["id"], sizeId: ProductSizeR
     if (!product_sku_id) throw new Error("Prodcut SKU is not found");
 
     const value: Omit<Order, "id"> = {
-      created_at: normalizeDate(new Date()),
+      created_at: serializeDate(new Date()),
       user_id: userId,
       product_sku_id,
     };

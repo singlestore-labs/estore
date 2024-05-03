@@ -9,7 +9,7 @@ import { normalizeChatLLMMessage } from "@/chat/llm/message/lib/normalize";
 import { ChatLLMMessage } from "@/chat/llm/message/types";
 import { chatLLMTools } from "@/chat/llm/tool";
 import { createChatLLMToolHandler } from "@/chat/llm/tool/lib/create-handler";
-import { IS_DEV } from "@/constants/env";
+import { IS_DEV } from "@/constants/config";
 import { getUserId } from "@/user/lib/get-id";
 
 export async function createChatLLM() {

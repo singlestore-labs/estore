@@ -1,5 +1,6 @@
 import { db } from "@repo/db";
 import {
+  CHAT_MESSAGES_TABLE_NAME,
   ORDERS_TABLE_NAME,
   PRODUCTS_TABLE_NAME,
   PRODUCT_LIKES_TABLE_NAME,
@@ -19,14 +20,14 @@ function dropTables() {
 function createTables() {
   return Promise.all([
     db.connection.query(`
-      CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${USERS_TABLE_NAME} (
+      CREATE TABLE IF NOT EXISTS ${USERS_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         created_at DATETIME
       )
     `),
 
     db.connection.query(`
-      CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${PRODUCTS_TABLE_NAME} (
+      CREATE TABLE IF NOT EXISTS ${PRODUCTS_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         created_at DATETIME,
         description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
@@ -41,14 +42,14 @@ function createTables() {
     `),
 
     db.connection.query(`
-      CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${PRODUCT_SIZES_TABLE_NAME} (
+      CREATE TABLE IF NOT EXISTS ${PRODUCT_SIZES_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         value VARCHAR(64)
       )
     `),
 
     db.connection.query(`
-      CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${PRODUCT_SKU_TABLE_NAME} (
+      CREATE TABLE IF NOT EXISTS ${PRODUCT_SKU_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         product_id BIGINT,
         product_size_id BIGINT,
@@ -57,7 +58,7 @@ function createTables() {
     `),
 
     db.connection.query(`
-      CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${PRODUCT_LIKES_TABLE_NAME} (
+      CREATE TABLE IF NOT EXISTS ${PRODUCT_LIKES_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         created_at DATETIME,
         user_id BIGINT,
@@ -66,11 +67,21 @@ function createTables() {
     `),
 
     db.connection.query(`
-      CREATE TABLE IF NOT EXISTS ${process.env.DB_NAME}.${ORDERS_TABLE_NAME} (
+      CREATE TABLE IF NOT EXISTS ${ORDERS_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         created_at DATETIME,
         user_id BIGINT,
         product_sku_id BIGINT
+      )
+    `),
+
+    db.connection.query(`
+      CREATE TABLE IF NOT EXISTS ${CHAT_MESSAGES_TABLE_NAME} (
+          id BIGINT AUTO_INCREMENT PRIMARY KEY,
+          created_at BIGINT,
+          user_id BIGINT,
+          role VARCHAR(64),
+          content JSON
       )
     `),
   ]);

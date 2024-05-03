@@ -2,7 +2,7 @@ import { toChunks } from "@repo/helpers";
 import { writeFile } from "fs/promises";
 import path from "path";
 
-export async function writeToJSON<T extends any[]>(name: string, data: T) {
+export async function writeDataset<T extends any[]>(name: string, data: T) {
   let i = 0;
 
   const write = async (data: T) => {

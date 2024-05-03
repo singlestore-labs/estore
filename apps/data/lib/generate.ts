@@ -9,14 +9,15 @@ import {
   USERS_TABLE_NAME,
 } from "@repo/db/constants";
 import { OrderRow, ProductLikeRow, ProductRow, ProductSKURow, ProductSizeRow, UserRow } from "@repo/db/types";
-import { getRandomArrayItem, getRandomDate, normalizeDate, toChunks } from "@repo/helpers";
+import { getRandomArrayItem, getRandomDate, toChunks } from "@repo/helpers";
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import path from "path";
-import { writeToJSON } from "@/lib/write-to-json";
+import { writeDataset } from "@/lib/write-dataset";
 import { getImageBase64ByName } from "@/lib/get-image-base64";
-import { vectorizeImages } from "@repo/ai";
 import randomInteger from "random-int";
+import { serializeDate } from "@repo/db/lib/serialize-date";
+import { vectorizeImages } from "@repo/ai/lib/vectorize-images";
 
 const USERS_NUMBER = 5_000_000;
 const PRODUCT_LIKES_NUMBER = 5_000_000;
@@ -29,11 +30,11 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
     0,
     10000,
   );
-  const created_at = normalizeDate(new Date());
+  const created_at = serializeDate(new Date());
 
   console.log(`Generating ${USERS_TABLE_NAME}`);
   const userRows: UserRow[] = Array.from({ length: USERS_NUMBER }).map((_, i) => ({ id: i + 1, created_at }));
-  await writeToJSON(USERS_TABLE_NAME, userRows);
+  await writeDataset(USERS_TABLE_NAME, userRows);
 
   let productRows: ProductRow[] = [];
   const productsPath = path.join(process.cwd(), `export/${PRODUCTS_TABLE_NAME}.json`);
@@ -65,7 +66,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
         })),
       ];
     }
-    await writeToJSON(PRODUCTS_TABLE_NAME, productRows);
+    await writeDataset(PRODUCTS_TABLE_NAME, productRows);
   }
 
   console.log(`Generating ${PRODUCT_SIZES_TABLE_NAME}`);
@@ -75,7 +76,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
     Object.keys(dataset[id - 1].sizesInStock).forEach((i) => sizes.add(i));
   });
   productSizeRows = [...sizes].map((value, i) => ({ id: i + 1, value }));
-  await writeToJSON(PRODUCT_SIZES_TABLE_NAME, productSizeRows);
+  await writeDataset(PRODUCT_SIZES_TABLE_NAME, productSizeRows);
 
   console.log(`Generating ${PRODUCT_SKU_TABLE_NAME}`);
   let productSKUId = 1;
@@ -91,7 +92,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
       } satisfies ProductSKURow;
     });
   });
-  await writeToJSON(PRODUCT_SKU_TABLE_NAME, prodcutSKURows);
+  await writeDataset(PRODUCT_SKU_TABLE_NAME, prodcutSKURows);
 
   console.log(`Generating ${PRODUCT_LIKES_TABLE_NAME}`);
   const productLikeRows: ProductLikeRow[] = Array.from({ length: PRODUCT_LIKES_NUMBER }).map((_, i) => ({
@@ -100,15 +101,15 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
     user_id: getRandomArrayItem(userRows).id,
     product_id: getRandomArrayItem(productRows).id,
   }));
-  await writeToJSON(PRODUCT_LIKES_TABLE_NAME, productLikeRows);
+  await writeDataset(PRODUCT_LIKES_TABLE_NAME, productLikeRows);
 
   console.log(`Generating ${ORDERS_TABLE_NAME}`);
   const orderRows: OrderRow[] = Array.from({ length: UNIQUE_ORDERS_NUMBER }).map((_, i) => ({
     id: i + 1,
-    created_at: normalizeDate(getRandomDate(new Date(2024, 0, 1))),
+    created_at: serializeDate(getRandomDate(new Date(2024, 0, 1))),
     user_id: getRandomArrayItem(userRows).id,
     product_sku_id: getRandomArrayItem(prodcutSKURows).id,
   }));
-  await writeToJSON(ORDERS_TABLE_NAME, orderRows);
+  await writeDataset(ORDERS_TABLE_NAME, orderRows);
   console.log("Generated");
 })();

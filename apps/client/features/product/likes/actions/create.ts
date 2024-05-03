@@ -2,7 +2,7 @@
 
 import { db } from "@repo/db";
 import { PRODUCT_LIKES_TABLE_NAME } from "@repo/db/constants";
-import { normalizeDate } from "@repo/helpers";
+import { serializeDate } from "@repo/db/lib/serialize-date";
 import { revalidatePath } from "next/cache";
 
 import { forwardActionError } from "@/action/error/lib/forward";
@@ -16,7 +16,7 @@ export async function createProductLike(productId: Product["id"]) {
     const userId = await getUserId();
     if (!userId) throw new Error("userId is undefined");
     const like: Omit<ProdcutLike, "id"> = {
-      created_at: normalizeDate(new Date()),
+      created_at: serializeDate(new Date()),
       product_id: productId,
       user_id: userId,
     };

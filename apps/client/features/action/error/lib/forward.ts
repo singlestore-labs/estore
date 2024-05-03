@@ -1,5 +1,5 @@
 import { ActionError } from "@/action/error/types";
-import { IS_DEV } from "@/constants/env";
+import { IS_DEV } from "@/constants/config";
 
 export function forwardActionError(error: unknown): ActionError {
   if (IS_DEV) console.error(error);

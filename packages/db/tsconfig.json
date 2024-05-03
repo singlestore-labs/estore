@@ -16,9 +16,10 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@repo/db/*": ["./*"],
+      "@repo/ai/*": ["../ai/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "../ai/**/*"],
   "exclude": ["node_modules"]
 }

@@ -8,21 +8,16 @@
 
 ## Getting started
 
-1. Create a `.env` file based on the `.env.example` file
-2. Install dependencies by running: `npm i`
-
-## Insert the data into a database
-
 1. Create a database
-2. Run: `npm run start:data`
-
-**Note:** Creating product image descriptors can cost up to $50 using OpenAI Vision API.
+2. Create a `.env` file based on the `.env.example` file
+3. Install dependencies by running: `npm i`
+4. Generate and insert data into the database by running: `npm run start:data`
+5. Build the app by running: `npm run build`
 
 ## Run the dev environment
 
-1. Run `npm run build`
-2. Run `npm run dev`
-3. Open [http://localhost:3000](http://localhost:3000)
+1. Run `npm run dev`
+2. Open [http://localhost:3000](http://localhost:3000)
 
 ## Build the prod environment
 

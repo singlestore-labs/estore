@@ -16,7 +16,7 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@repo/ai/*": ["./*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
