@@ -22,12 +22,9 @@ export async function getProducts({
       limit,
     });
 
-    const productsInfo = products.map(async (i) => ({
-      ...i,
-      ...(await getProductInfoById(i.id, metaColumns)),
-    }));
-
-    return await Promise.all(productsInfo);
+    return await Promise.all(
+      products.map(async (i) => ({ ...i, ...(await getProductInfoById(i.id, metaColumns)) })),
+    );
   } catch (error) {
     return [];
   }

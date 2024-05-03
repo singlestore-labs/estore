@@ -1,3 +1,4 @@
+import { IS_DEV } from "@/constants/env";
 import { getProductLikesById } from "@/product/likes/lib/get-by-id";
 import { getProductSales } from "@/product/sales/lib/get-by-id";
 import { getProductSizesById } from "@/product/size/lib/get-by-id";
@@ -35,7 +36,17 @@ export async function getProductInfoById(
   const result = await Promise.all(
     columnNames.map(async (columnName) => {
       const config = columnsConfig[columnName];
-      return [columnName, columns.includes(columnName) ? await config.get(id) : config.defaultValue] as const;
+      let value = config.defaultValue;
+
+      if (columns.includes(columnName)) {
+        try {
+          value = await config.get(id);
+        } catch (error) {
+          if (IS_DEV) console.error(error);
+        }
+      }
+
+      return [columnName, value] as const;
     }),
   );
 

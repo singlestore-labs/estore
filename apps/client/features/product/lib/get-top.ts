@@ -13,24 +13,22 @@ export async function getTopProduct(): Promise<Product | undefined> {
   const { id } = (
     await db.controllers.query<{ id: Product["id"]; score: number }[]>({
       query: `\
-        SELECT
-          p.id,
-          (COALESCE(o.orders, 0) + COALESCE(l.likes, 0)) AS score
-        FROM ${PRODUCTS_TABLE_NAME} p
-        LEFT JOIN (
-          SELECT sku.product_id, COUNT(*) AS orders
+        SELECT products.id, orders.count + likes.count AS score
+        FROM ${PRODUCTS_TABLE_NAME} products
+        JOIN (
+          SELECT sku.product_id, COUNT(*) AS count
           FROM ${ORDERS_TABLE_NAME} orders
           JOIN ${PRODUCT_SKU_TABLE_NAME} sku ON orders.product_sku_id = sku.id
           GROUP BY sku.product_id
-        ) o ON p.id = o.product_id
-        LEFT JOIN (
-          SELECT product_id, COUNT(*) AS likes
+        ) orders ON products.id = orders.product_id
+        JOIN (
+          SELECT product_id, COUNT(*) AS count
           FROM ${PRODUCT_LIKES_TABLE_NAME}
           GROUP BY product_id
-        ) l ON p.id = l.product_id
+        ) likes ON products.id = likes.product_id
         ORDER BY score DESC
         LIMIT 1;
-    `,
+      `,
     })
   )[0];
 

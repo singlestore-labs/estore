@@ -1,25 +1,20 @@
 import { db } from "@repo/db";
-import { PRODUCT_SIZES_TABLE_NAME } from "@repo/db/constants";
-import { ProductSizeRow } from "@repo/db/types";
+import { PRODUCT_SIZES_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "@repo/db/constants";
+import { ProductSKURow, ProductSizeRow } from "@repo/db/types";
 
-import { getProductSKUByProductId } from "@/product/sku/lib/get-by-product-id";
 import { Product } from "@/product/types";
 
 export async function getProductSizesById(productId: Product["id"]): Promise<Product["sizes"]> {
-  try {
-    const [skuRows, sizeRows] = await Promise.all([
-      getProductSKUByProductId(productId),
-      db.controllers.findMany<ProductSizeRow[]>({
-        collection: PRODUCT_SIZES_TABLE_NAME,
-      }),
-    ]);
+  const result = await db.controllers.query<
+    { id: ProductSKURow["product_size_id"]; value: ProductSizeRow["value"]; stock: ProductSKURow["stock"] }[]
+  >({
+    query: `\
+      SELECT product_size_id as id, sizes.value, stock
+      FROM ${PRODUCT_SKU_TABLE_NAME} sku
+      JOIN ${PRODUCT_SIZES_TABLE_NAME} sizes ON sizes.id = sku.product_size_id
+      WHERE sku.product_id = ${productId}
+    `,
+  });
 
-    return skuRows.map((skuRow) => [
-      skuRow.product_size_id,
-      sizeRows.find((i) => i.id === skuRow.product_size_id)?.value || "",
-      skuRow.stock,
-    ]);
-  } catch (error) {
-    return [];
-  }
+  return result.map(({ id, value, stock }) => [id, value, stock]);
 }

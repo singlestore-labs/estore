@@ -7,39 +7,20 @@ export async function getProductSales(
   filter: Pick<Product, "id"> | Pick<Product, "description">,
   length: number = 30,
 ): Promise<Product["sales"]> {
-  try {
-    const [[filterKey, filterValue]] = Object.entries(filter);
+  const [[filterKey, filterValue]] = Object.entries(filter);
 
-    const product = await db.controllers.findOne<Pick<Product, "id">>({
-      collection: PRODUCTS_TABLE_NAME,
-      columns: ["id"],
-      where: `LOWER(${filterKey}) = ${typeof filterValue === "string" ? `'${filterValue.toLowerCase()}'` : filterValue}`,
-    });
-
-    if (!product) return [];
-
-    let query = `\
+  const result = await db.controllers.query<Product["sales"]>({
+    query: `\
       SELECT COUNT(*) AS value, DATE(orders.created_at) AS date
-      FROM ${ORDERS_TABLE_NAME} AS orders
-      JOIN (
-        SELECT id FROM ${PRODUCT_SKU_TABLE_NAME}
-        WHERE product_id = ${product.id}
-      ) AS sku ON orders.product_sku_id = sku.id
-      WHERE orders.created_at >= (SELECT CURDATE() - INTERVAL ${length} DAY)
+      FROM ${ORDERS_TABLE_NAME} orders
+      JOIN ${PRODUCT_SKU_TABLE_NAME} sku ON orders.product_sku_id = sku.id
+      JOIN ${PRODUCTS_TABLE_NAME} products ON sku.product_id = products.id
+      WHERE LOWER(products.${filterKey}) = LOWER(${filterValue})
+        AND orders.created_at >= (SELECT CURDATE() - INTERVAL ${length} DAY)
       GROUP BY DATE(orders.created_at)
       ORDER BY DATE(orders.created_at)
-    `;
+  `,
+  });
 
-    const rows = await db.controllers.query<Product["sales"]>({ query });
-
-    return rows
-      .map((i) => ({
-        ...i,
-        date: new Date(i.date).toLocaleDateString("en-US", { hour12: false }),
-      }))
-      .slice(-length);
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
+  return result.map((i) => ({ ...i, date: new Date(i.date).toLocaleDateString("en-US", { hour12: false }) }));
 }
