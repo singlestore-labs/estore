@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ComponentProps } from "@/types";
 import { Logo } from "@/components/logo";
+import { Navigation } from "@/components/navigation";
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/constants/config";
 import { ROUTES } from "@/constants/routes";
@@ -26,6 +27,8 @@ export function Header({ className, ...props }: HeaderProps) {
           <span>{APP_NAME}</span>
         </h1>
       </Link>
+
+      <Navigation />
 
       <div className="flex items-center gap-4">
         <ThemeToggle />
