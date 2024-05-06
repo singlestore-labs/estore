@@ -109,6 +109,7 @@ async function insertValues() {
 
 (async () => {
   try {
+    console.log("Inserting data");
     await dropTables();
     await createTables();
     await insertValues();
