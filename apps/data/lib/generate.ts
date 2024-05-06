@@ -10,8 +10,7 @@ import {
 } from "@repo/db/constants";
 import { OrderRow, ProductLikeRow, ProductRow, ProductSKURow, ProductSizeRow, UserRow } from "@repo/db/types";
 import { getRandomArrayItem, getRandomDate, toChunks } from "@repo/helpers";
-import { existsSync } from "fs";
-import { readFile } from "fs/promises";
+import { readFile, readdir } from "fs/promises";
 import path from "path";
 import { writeDataset } from "@/lib/write-dataset";
 import { getImageBase64ByName } from "@/lib/get-image-base64";
@@ -26,6 +25,8 @@ const UNIQUE_ORDERS_NUMBER = 5_000_000;
 const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-dataset.json");
 
 (async () => {
+  const exportFileNames = await readdir(path.join(process.cwd(), `export`));
+
   const dataset: NormalizedDatasetRecord[] = JSON.parse(await readFile(normalizedDatasetPath, "utf-8")).slice(
     0,
     10000,
@@ -37,9 +38,13 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   await writeDataset(USERS_TABLE_NAME, userRows);
 
   let productRows: ProductRow[] = [];
-  const productsPath = path.join(process.cwd(), `export/${PRODUCTS_TABLE_NAME}.json`);
-  if (existsSync(productsPath)) {
-    productRows = JSON.parse(await readFile(productsPath, "utf-8"));
+  const productExportFileNames = exportFileNames.filter((i) => i.startsWith(PRODUCTS_TABLE_NAME));
+  if (productExportFileNames.length) {
+    console.log(`Loading ${PRODUCTS_TABLE_NAME}`);
+    for await (const fileName of productExportFileNames) {
+      const fileContent = await readFile(path.join(process.cwd(), `export/${fileName}`), "utf-8");
+      productRows = [...productRows, ...JSON.parse(fileContent)];
+    }
   } else {
     console.log(`Generating ${PRODUCTS_TABLE_NAME}`);
     let productId = 1;
@@ -66,7 +71,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
         })),
       ];
     }
-    await writeDataset(PRODUCTS_TABLE_NAME, productRows);
+    await writeDataset(PRODUCTS_TABLE_NAME, productRows, 2500);
   }
 
   console.log(`Generating ${PRODUCT_SIZES_TABLE_NAME}`);
@@ -111,5 +116,6 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
     product_sku_id: getRandomArrayItem(prodcutSKURows).id,
   }));
   await writeDataset(ORDERS_TABLE_NAME, orderRows);
+
   console.log("Generated");
 })();
