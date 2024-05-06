@@ -4,3 +4,4 @@
 !/source/normalized-dataset.json
 
 /export/*
+!/export/products-*
