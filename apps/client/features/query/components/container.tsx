@@ -1,12 +1,38 @@
+"use client";
+
+import { useCallback, useState } from "react";
+
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
+import { Stopwatch } from "@/components/stopwatch";
 import { Button } from "@/components/ui/button";
-import { QuerySpeedometer } from "@/query/components/speedometer";
+import { useAction } from "@/action/hooks/use-action";
 import { cn } from "@/ui/lib";
 
 export type QueryContainerProps = ComponentProps<SectionProps>;
 
+function getRandomInt(min: number, max: number): number {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const action = () => {
+  return new Promise((res) => setTimeout(() => res(true), getRandomInt(100, 5000)));
+};
+
 export function QueryContainer({ className, ...props }: QueryContainerProps) {
+  const [result, setResult] = useState<any | undefined>(undefined);
+  const { execute, isPending } = useAction();
+
+  const handleRunClick = useCallback(async () => {
+    try {
+      setResult(await execute(action));
+    } catch (error) {
+      console.error(error);
+    }
+  }, [execute]);
+
   return (
     <Section
       {...props}
@@ -39,8 +65,17 @@ export function QueryContainer({ className, ...props }: QueryContainerProps) {
       </div>
 
       <div className="flex items-center justify-between gap-4">
-        <QuerySpeedometer />
-        <Button className="ml-auto">Run</Button>
+        <Stopwatch
+          resultLabel="Executed in "
+          isRunning={isPending}
+        />
+        <Button
+          className="ml-auto"
+          disabled={isPending}
+          onClick={handleRunClick}
+        >
+          Run
+        </Button>
       </div>
     </Section>
   );

@@ -21,7 +21,7 @@ export function toChunks<T>(array: T[], chunkSize: number): T[][] {
   return chunks;
 }
 
-export function formatMS(milliseconds: number) {
+export function formatMs(milliseconds: number) {
   let formattedTime: string;
   let unit: string;
 
@@ -58,5 +58,5 @@ export async function withDuration<T extends (...args: any[]) => Promise<any>>(c
   const result = await callback();
   const endTime = performance.now();
   const ms = Math.abs(differenceInMilliseconds(startTime, endTime));
-  return [result, ms, ...formatMS(ms)] as const;
+  return [result, ms, ...formatMs(ms)] satisfies [Awaited<ReturnType<T>>, number, string, string];
 }
