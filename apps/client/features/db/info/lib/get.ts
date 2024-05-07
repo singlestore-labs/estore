@@ -21,9 +21,9 @@ export function getDbInfo() {
   return db.controllers.query<{ tableName: string; value: number }[]>({
     query: `\
       SELECT tableName, COUNT(*) AS value
-      FROM (${tables.map((i) => `SELECT '${i}' AS tableName FROM ${i}`).join(" UNION ALL ")}) AS all_tables
+      FROM (${tables.map((i) => `SELECT '${i}' AS tableName FROM ${i}`).join(" UNION ALL ")})
       GROUP BY tableName
-      ORDER BY value DESC
+      ORDER BY value DESC, tableName ASC
     `,
   });
 }

@@ -32,6 +32,7 @@ export function ChartPie({ data, dataKey, chartProps, pieProps, ...props }: Char
             <Cell
               key={`cell-${i}`}
               fill={data.color}
+              stroke={"transparent"}
             />
           ))}
         </Pie>

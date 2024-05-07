@@ -18,7 +18,7 @@ export const sectionVariants = cva("", {
   variants: {
     variant: {
       default: "",
-      secondary: "border-none shadow-none",
+      secondary: "border-none shadow-none bg-transparent dark:bg-transparent",
     },
     size: {
       default: "",
@@ -39,9 +39,9 @@ export const sectionHeaderVariants = cva("", {
       secondary: "",
     },
     size: {
-      default: "py-4 px-6",
-      sm: "py-3 px-5",
-      xs: "p-0",
+      default: "py-4 px-6 [&+*]:mt-4",
+      sm: "py-3 px-5 [&+*]:mt-4",
+      xs: "p-0 [&+*]:mt-2",
     },
   },
   defaultVariants: {
@@ -75,9 +75,9 @@ export const sectionContentVariants = cva("", {
       secondary: "",
     },
     size: {
-      default: "pt-4 pb-5 px-6",
-      sm: "pt-4 px-5 pb-5",
-      xs: "p-0 pt-2 text-sm",
+      default: "pb-5 px-6",
+      sm: "px-5 pb-5",
+      xs: "p-0 text-sm",
     },
   },
   defaultVariants: {

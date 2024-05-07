@@ -12,10 +12,7 @@ export default async function PageAnalytics() {
 
   return (
     <div className="relative mt-4 flex-1 px-4">
-      <DbInfoSection
-        className="w-1/2"
-        data={dbInfo}
-      />
+      <DbInfoSection data={dbInfo} />
     </div>
   );
 }
