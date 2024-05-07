@@ -13,8 +13,9 @@ export function useAction(initialIsPending = false) {
     setError(undefined);
 
     return new Promise<Exclude<Awaited<ReturnType<T>>, ActionError>>((resolve, reject) => {
+      setIsPending(true);
+
       startTransition(async () => {
-        setIsPending(true);
         const result = await action();
 
         if (isActionError(result)) {

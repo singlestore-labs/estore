@@ -61,7 +61,7 @@ export function DbInfoSection({ className, ...props }: DbInfoSectionProps) {
           <ChartPie
             data={data}
             dataKey="value"
-            pieProps={{ innerRadius: "75%" }}
+            pieProps={{ innerRadius: "75%", isAnimationActive: false }}
           />
         )}
       </div>

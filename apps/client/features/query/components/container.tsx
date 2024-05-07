@@ -7,19 +7,10 @@ import { Section, SectionProps } from "@/components/section";
 import { Stopwatch } from "@/components/stopwatch";
 import { Button } from "@/components/ui/button";
 import { useAction } from "@/action/hooks/use-action";
+import { sleep } from "@/action/lib/sleep";
 import { cn } from "@/ui/lib";
 
 export type QueryContainerProps = ComponentProps<SectionProps>;
-
-function getRandomInt(min: number, max: number): number {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-const action = () => {
-  return new Promise((res) => setTimeout(() => res(true), getRandomInt(100, 5000)));
-};
 
 export function QueryContainer({ className, ...props }: QueryContainerProps) {
   const [result, setResult] = useState<any | undefined>(undefined);
@@ -27,7 +18,7 @@ export function QueryContainer({ className, ...props }: QueryContainerProps) {
 
   const handleRunClick = useCallback(async () => {
     try {
-      setResult(await execute(action));
+      setResult(await execute(sleep));
     } catch (error) {
       console.error(error);
     }
