@@ -131,7 +131,9 @@ export function ProductDialog({
       {...props}
       onOpenChange={handleToggle}
     >
-      <DialogContent className="bg-card max-w-xl">{content}</DialogContent>
+      <DialogContent className="bg-card max-h-[calc(100vh-2rem)] max-w-xl overflow-y-auto">
+        {content}
+      </DialogContent>
     </Dialog>
   );
 }
