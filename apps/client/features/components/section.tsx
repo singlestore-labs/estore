@@ -19,10 +19,10 @@ export const sectionVariants = cva("", {
     variant: {
       default: "",
       secondary: "border-none shadow-none bg-transparent dark:bg-transparent",
+      tertiary: "border-none shadow-none bg-transparent dark:bg-transparent",
     },
     size: {
       default: "",
-      sm: "",
       xs: "",
     },
   },
@@ -32,22 +32,23 @@ export const sectionVariants = cva("", {
   },
 });
 
-export const sectionHeaderVariants = cva("", {
+export const sectionHeaderVariants = cva("space-y-1", {
   variants: {
     variant: {
       default: "border-b",
       secondary: "",
+      tertiary: "",
     },
     size: {
-      default: "py-4 px-6 [&+*]:mt-4",
-      sm: "py-3 px-5 [&+*]:mt-4",
-      xs: "p-0 [&+*]:mt-2",
+      default: "py-3 px-5",
+      xs: "p-0",
     },
   },
   defaultVariants: {
     variant: "default",
     size: "default",
   },
+  compoundVariants: [{ variant: "tertiary", size: "xs", class: "[&+*]:mt-2" }],
 });
 
 export const sectionTitleVariants = cva("font-medium", {
@@ -55,10 +56,10 @@ export const sectionTitleVariants = cva("font-medium", {
     variant: {
       default: "",
       secondary: "",
+      tertiary: "",
     },
     size: {
-      default: "text-lg",
-      sm: "text-base",
+      default: "text-base",
       xs: "text-sm",
     },
   },
@@ -73,10 +74,10 @@ export const sectionContentVariants = cva("", {
     variant: {
       default: "",
       secondary: "",
+      tertiary: "bg-zinc-50 dark:bg-zinc-800 rounded-lg border",
     },
     size: {
-      default: "pb-5 px-6",
-      sm: "px-5 pb-5",
+      default: "px-5 pb-5 pt-4",
       xs: "p-0 text-sm",
     },
   },
@@ -84,6 +85,8 @@ export const sectionContentVariants = cva("", {
     variant: "default",
     size: "default",
   },
+
+  compoundVariants: [{ variant: "tertiary", size: "xs", class: "py-2 px-4" }],
 });
 
 export type SectionProps = ComponentProps<

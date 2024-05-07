@@ -18,6 +18,7 @@ const tables = [
 ] as const;
 
 export function getDbInfo() {
+  return [{ tableName: PRODUCTS_TABLE_NAME, value: 1000000 }];
   return db.controllers.query<{ tableName: string; value: number }[]>({
     query: `\
       SELECT tableName, COUNT(*) AS value

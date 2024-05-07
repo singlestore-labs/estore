@@ -8,7 +8,7 @@ export function Loader({ className, ...props }: LoaderProps) {
     <span
       {...props}
       className={cn(
-        "fill-primary z-[1] block h-full max-h-full w-full max-w-full text-zinc-200 dark:text-zinc-700",
+        "fill-primary z-[1] flex h-full max-h-full w-full max-w-full items-center justify-center text-zinc-200 dark:text-zinc-700",
         className,
       )}
     >
