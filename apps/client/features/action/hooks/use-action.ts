@@ -4,15 +4,17 @@ import { handleActionError } from "@/action/error/lib/handle";
 import { isActionError } from "@/action/error/lib/is";
 import { ActionError } from "@/action/error/types";
 
-export function useAction() {
+export function useAction(initialIsPending = false) {
+  const [isPending, setIsPending] = useState(initialIsPending);
   const [error, setError] = useState<ActionError["error"] | undefined>();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const execute = useCallback(<T extends (...args: any[]) => Promise<any>>(action: T) => {
     setError(undefined);
 
     return new Promise<Exclude<Awaited<ReturnType<T>>, ActionError>>((resolve, reject) => {
       startTransition(async () => {
+        setIsPending(true);
         const result = await action();
 
         if (isActionError(result)) {
@@ -21,6 +23,7 @@ export function useAction() {
           handleActionError(result.error);
         }
 
+        setIsPending(false);
         resolve(result);
       });
     });
