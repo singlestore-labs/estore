@@ -12,10 +12,7 @@ export function ProductSalesChart({ className, sales, ...props }: ProductSalesCh
       {...props}
       className={cn("relative h-48", className)}
     >
-      <ChartArea
-        data={sales}
-        areaProps={{ isAnimationActive: false }}
-      />
+      <ChartArea data={sales} />
     </Card>
   );
 }

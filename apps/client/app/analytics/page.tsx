@@ -1,9 +1,21 @@
 import { Metadata } from "next";
 
+import { DbInfoSection } from "@/db/info/components/section";
+import { getDbInfo } from "@/db/info/lib/get";
+
 export const metadata: Metadata = {
   title: `Analytics`,
 };
 
 export default async function PageAnalytics() {
-  return <div className="relative flex w-full max-w-full flex-1 px-4"></div>;
+  const dbInfo = getDbInfo();
+
+  return (
+    <div className="relative mt-4 flex-1 px-4">
+      <DbInfoSection
+        className="w-1/2"
+        data={dbInfo}
+      />
+    </div>
+  );
 }
