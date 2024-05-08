@@ -1,7 +1,7 @@
 "use client";
 
 import { formatMs } from "@repo/helpers";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Loader } from "@/components/loader";
@@ -15,12 +15,14 @@ export type StopwatchProps = ComponentProps<
 const msAttributeName = "data-ms";
 
 export function Stopwatch({ className, ms = 0, resultLabel, isRunning, ...props }: StopwatchProps) {
+  const [hasRun, setHasRun] = useState(!!isRunning);
   const msRef = useRef<HTMLParagraphElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | undefined>();
 
   useEffect(() => {
     if (!isRunning) return;
 
+    setHasRun(true);
     clearInterval(intervalRef.current);
 
     if (msRef.current) {
@@ -49,7 +51,7 @@ export function Stopwatch({ className, ms = 0, resultLabel, isRunning, ...props 
     >
       {isRunning && <Loader className="flex h-6 w-6" />}
       <p>
-        {!isRunning && resultLabel}
+        {hasRun && !isRunning && resultLabel}
         <span
           ref={msRef}
           data-ms={ms}

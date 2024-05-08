@@ -26,32 +26,33 @@ export function QueryContainer({ className, ...props }: QueryContainerProps) {
 
   return (
     <Section
+      size="sm"
       {...props}
       className={cn("flex flex-col", className)}
-      title="Get the top product"
-      description="Finds the top product, based on sales and likes"
-      contentProps={{ className: "flex flex-col flex-1 gap-4" }}
+      contentProps={{ className: cn("flex flex-col flex-1 gap-4", props.contentProps?.className) }}
     >
       <div className="flex flex-1 flex-wrap gap-4">
         <Section
           variant="tertiary"
           size="xs"
+          spacing="none"
           className="flex flex-1 flex-col max-md:basis-full"
           title="Query"
           titleProps={{ as: "h3" }}
-          contentProps={{ className: "flex-1 overflow-auto" }}
+          contentProps={{ className: "overflow-auto h-80 bg-zinc-50 text-sm" }}
         >
-          Test
+          MySQL query
         </Section>
         <Section
           variant="tertiary"
           size="xs"
+          spacing="none"
           className="flex flex-1 flex-col max-md:basis-full"
           title="Result"
           titleProps={{ as: "h3" }}
-          contentProps={{ className: "flex-1 overflow-auto bg-transparent" }}
+          contentProps={{ className: "h-80 overflow-auto bg-transparent text-sm" }}
         >
-          Test
+          Result table
         </Section>
       </div>
 

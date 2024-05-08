@@ -8,6 +8,7 @@ import {
   CardContentProps,
   CardDescription,
   CardHeader,
+  CardHeaderProps,
   CardProps,
   CardTitle,
   CardTitleProps,
@@ -23,7 +24,12 @@ export const sectionVariants = cva("", {
     },
     size: {
       default: "",
+      sm: "",
       xs: "",
+    },
+    spacing: {
+      default: "",
+      none: "",
     },
   },
   defaultVariants: {
@@ -32,7 +38,7 @@ export const sectionVariants = cva("", {
   },
 });
 
-export const sectionHeaderVariants = cva("space-y-1", {
+export const sectionHeaderVariants = cva("", {
   variants: {
     variant: {
       default: "border-b",
@@ -40,15 +46,24 @@ export const sectionHeaderVariants = cva("space-y-1", {
       tertiary: "",
     },
     size: {
-      default: "py-3 px-5",
-      xs: "p-0",
+      default: "py-3 px-5 space-y-1",
+      sm: "py-3 px-5 space-y-1",
+      xs: "py-2 px-4 space-y-0.5",
+    },
+    spacing: {
+      default: "",
+      none: "p-0",
     },
   },
   defaultVariants: {
     variant: "default",
     size: "default",
   },
-  compoundVariants: [{ variant: "tertiary", size: "xs", class: "[&+*]:mt-2" }],
+  compoundVariants: [
+    { variant: "tertiary", size: "default", class: "[&+*]:mt-3" },
+    { variant: "tertiary", size: "sm", class: "[&+*]:mt-3" },
+    { variant: "tertiary", size: "xs", class: "[&+*]:mt-2" },
+  ],
 });
 
 export const sectionTitleVariants = cva("font-medium", {
@@ -59,8 +74,13 @@ export const sectionTitleVariants = cva("font-medium", {
       tertiary: "",
     },
     size: {
-      default: "text-base",
+      default: "text-xl",
+      sm: "text-base",
       xs: "text-sm",
+    },
+    spacing: {
+      default: "",
+      none: "",
     },
   },
   defaultVariants: {
@@ -74,11 +94,16 @@ export const sectionContentVariants = cva("", {
     variant: {
       default: "",
       secondary: "",
-      tertiary: "bg-zinc-50 dark:bg-zinc-800 rounded-lg border",
+      tertiary: "rounded-lg border",
     },
     size: {
-      default: "px-5 pb-5 pt-4",
-      xs: "p-0 text-sm",
+      default: "p-5",
+      sm: "px-5 pb-5 pt-4",
+      xs: "px-4 pb-4 pt-3",
+    },
+    spacing: {
+      default: "",
+      none: "px-0 pb-0",
     },
   },
   defaultVariants: {
@@ -86,7 +111,11 @@ export const sectionContentVariants = cva("", {
     size: "default",
   },
 
-  compoundVariants: [{ variant: "tertiary", size: "xs", class: "py-2 px-4" }],
+  compoundVariants: [
+    { variant: "tertiary", size: "default", class: "py-4 px-5" },
+    { variant: "tertiary", size: "sm", class: "py-4 px-5" },
+    { variant: "tertiary", size: "xs", class: "py-3 px-4" },
+  ],
 });
 
 export type SectionProps = ComponentProps<
@@ -95,6 +124,7 @@ export type SectionProps = ComponentProps<
     title?: ReactNode;
     titleProps?: CardTitleProps;
     description?: ReactNode;
+    headerProps?: CardHeaderProps;
     contentProps?: CardContentProps;
   } & VariantProps<typeof sectionVariants>
 >;
@@ -102,11 +132,13 @@ export type SectionProps = ComponentProps<
 export function Section({
   variant,
   size,
+  spacing,
   children,
   className,
   title,
   titleProps,
   description,
+  headerProps,
   contentProps,
   ...props
 }: SectionProps) {
@@ -114,14 +146,17 @@ export function Section({
     <Card
       {...props}
       as="section"
-      className={cn(sectionVariants({ variant, size }), className)}
+      className={cn(sectionVariants({ variant, size, spacing }), className)}
     >
       {(title || description) && (
-        <CardHeader className={sectionHeaderVariants({ variant, size })}>
+        <CardHeader
+          {...headerProps}
+          className={cn(sectionHeaderVariants({ variant, size, spacing }), headerProps?.className)}
+        >
           <CardTitle
             as="h2"
             {...titleProps}
-            className={cn(sectionTitleVariants({ variant, size }), titleProps?.className)}
+            className={cn(sectionTitleVariants({ variant, size, spacing }), titleProps?.className)}
           >
             {title}
           </CardTitle>
@@ -131,7 +166,7 @@ export function Section({
 
       <CardContent
         {...contentProps}
-        className={cn(sectionContentVariants({ variant, size }), contentProps?.className)}
+        className={cn(sectionContentVariants({ variant, size, spacing }), contentProps?.className)}
       >
         {children}
       </CardContent>

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PageAnalytics() {
   return (
-    <div className="relative mt-4 flex flex-1 flex-col gap-8 px-4">
+    <div className="relative mt-6 flex flex-1 flex-col gap-12 px-4">
       <DbInfoSection />
       <QueriesContainer className="flex-1" />
     </div>

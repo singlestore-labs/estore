@@ -43,9 +43,9 @@ export function DbInfoSection({ className, ...props }: DbInfoSectionProps) {
     <Section
       {...props}
       className={cn("", className)}
-      contentProps={{ className: "flex gap-4 items-stretch" }}
+      contentProps={{ className: "flex gap-4 items-stretch pt-0" }}
       variant="secondary"
-      size="xs"
+      spacing="none"
     >
       <div className="relative h-32 w-32 flex-shrink-0">
         {!isPending && (

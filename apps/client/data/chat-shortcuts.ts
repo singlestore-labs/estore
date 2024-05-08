@@ -18,6 +18,6 @@ export const chatShortcuts: ChatShortcut[] = [
   },
   {
     title: "The top product",
-    description: "Displays the top product, based on sales and likes.",
+    description: "Displays the top product based on sales and likes.",
   },
 ];
