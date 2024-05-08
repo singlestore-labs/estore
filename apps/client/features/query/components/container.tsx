@@ -1,61 +1,65 @@
 "use client";
-
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
 import { Stopwatch } from "@/components/stopwatch";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useAction } from "@/action/hooks/use-action";
-import { sleep } from "@/action/lib/sleep";
+import { executeQueryByTitle } from "@/query/actions/execute-by-title";
 import { QueryResultTable, QueryResultTableProps } from "@/query/components/result-table";
+import { formatQueryForUI } from "@/query/lib/format-for-ui";
+import { Query } from "@/query/type";
 import { cn } from "@/ui/lib";
 
-export type QueryContainerProps = ComponentProps<SectionProps>;
+export type QueryContainerProps = ComponentProps<SectionProps, Omit<Query, "getQuery"> & { query: string }>;
 
-export function QueryContainer({ className, ...props }: QueryContainerProps) {
+export function QueryContainer({ className, title, query, ...props }: QueryContainerProps) {
   const [result, setResult] = useState<QueryResultTableProps["data"]>([]);
   const { execute, isPending } = useAction();
   const hasResult = !!result?.length;
 
   const handleRunClick = useCallback(async () => {
     try {
-      await execute(() => sleep(1000));
-      setResult([{ name: "User 123", age: 27 }]);
+      setResult(await execute(() => executeQueryByTitle(title)));
     } catch (error) {
-      console.error(error);
+      setResult([]);
     }
-  }, [execute]);
+  }, [title, execute]);
+
+  const formattedQuery = useMemo(() => formatQueryForUI(query), [query]);
 
   return (
     <Section
       size="sm"
       {...props}
+      title={title}
       className={cn("flex flex-col", className)}
       contentProps={{ className: cn("flex flex-col flex-1 gap-4", props.contentProps?.className) }}
     >
-      <div className="flex flex-1 flex-wrap gap-4">
+      <div className="grid-auto-fit-[calc(50%-theme(spacing.4))] grid flex-1 gap-4">
         <Section
           variant="tertiary"
           size="xs"
           spacing="none"
-          className="flex flex-1 flex-col max-md:basis-full"
           title="Query"
           titleProps={{ as: "h3" }}
-          contentProps={{ className: "overflow-auto h-80 bg-zinc-50 text-sm" }}
+          contentProps={{ className: "h-80 p-0 overflow-hidden" }}
         >
-          MySQL query
+          <Textarea
+            value={formattedQuery}
+            className="h-full w-full resize-none font-mono disabled:bg-zinc-50 disabled:opacity-100"
+            disabled
+          />
         </Section>
         <Section
           variant="tertiary"
           size="xs"
           spacing="none"
-          className="flex flex-1 flex-col max-md:basis-full"
           title="Result"
           titleProps={{ as: "h3" }}
-          contentProps={{
-            className: cn("overflow-hidden bg-transparent text-sm p-0 flex-1", !hasResult && "flex"),
-          }}
+          contentProps={{ className: cn("h-80 p-0 overflow-hidden", !hasResult && "flex") }}
         >
           {hasResult ? (
             <QueryResultTable

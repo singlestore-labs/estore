@@ -17,11 +17,11 @@ export function QueriesList({ className, contentProps, ...props }: QueriesListPr
       className={cn("", className)}
       contentProps={{ ...contentProps, className: cn("flex flex-col gap-8", contentProps?.className) }}
     >
-      {queries.map((query) => (
+      {queries.map(({ getQuery, ...query }) => (
         <QueryContainer
           key={query.title}
-          title={query.title}
-          description={query.description}
+          {...query}
+          query={getQuery()}
         />
       ))}
     </Section>
