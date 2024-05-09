@@ -38,7 +38,7 @@ export function QueryContainer({ className, title, query, ...props }: QueryConta
       className={cn("flex flex-col", className)}
       contentProps={{ className: cn("flex flex-col flex-1 gap-4", props.contentProps?.className) }}
     >
-      <div className="grid-auto-fit-[calc(50%-theme(spacing.4))] grid flex-1 gap-4">
+      <div className="grid-auto-fit-[calc(50%-theme(spacing.4))] max-md:grid-auto-fit-[100%] grid flex-1 gap-4">
         <Section
           variant="tertiary"
           size="xs"
