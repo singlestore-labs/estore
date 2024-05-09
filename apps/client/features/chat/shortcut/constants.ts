@@ -1,6 +1,6 @@
 import { ChatShortcut } from "@/chat/shortcut/types";
 
-export const chatShortcuts: ChatShortcut[] = [
+export const CHAT_SHORTCUTS: ChatShortcut[] = [
   {
     title: "Random products",
     description: "Displays random products.",
@@ -18,6 +18,6 @@ export const chatShortcuts: ChatShortcut[] = [
   },
   {
     title: "The top product",
-    description: "Displays the top product, based on sales and likes.",
+    description: "Displays the top product based on sales and likes.",
   },
 ];

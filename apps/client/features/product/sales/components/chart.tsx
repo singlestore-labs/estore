@@ -1,12 +1,15 @@
 import { ComponentProps } from "@/types";
-import { ChartArea } from "@/components/chart/area";
+import { ChartArea, ChartAreaProps } from "@/components/chart/area";
 import { Card, CardProps } from "@/components/ui/card";
 import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
 
-export type ProductSalesChartProps = ComponentProps<CardProps, { sales: Product["sales"] }>;
+export type ProductSalesChartProps = ComponentProps<
+  CardProps,
+  { sales: Product["sales"]; areaProps?: ChartAreaProps["areaProps"] }
+>;
 
-export function ProductSalesChart({ className, sales, ...props }: ProductSalesChartProps) {
+export function ProductSalesChart({ className, sales, areaProps, ...props }: ProductSalesChartProps) {
   return (
     <Card
       {...props}
@@ -14,7 +17,7 @@ export function ProductSalesChart({ className, sales, ...props }: ProductSalesCh
     >
       <ChartArea
         data={sales}
-        areaProps={{ isAnimationActive: false }}
+        areaProps={areaProps}
       />
     </Card>
   );

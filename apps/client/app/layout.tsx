@@ -13,11 +13,14 @@ import { UserController } from "@/user/components/controller";
 
 import "./globals.css";
 
-const inter = Inter({ weight: ["400", "500", "600", "700"], subsets: ["latin"] });
+const inter = Inter({ weight: ["400", "500", "600"], subsets: ["latin"] });
 
+const title = `SingleStore | ${APP_NAME}`;
 export const metadata: Metadata = {
-  title: `SingleStore | ${APP_NAME}`,
-  description: "",
+  title: {
+    default: title,
+    template: `${title} - %s`,
+  },
 };
 
 export default function RootLayout({

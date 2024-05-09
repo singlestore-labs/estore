@@ -107,6 +107,7 @@ export function ProductDialog({
               <ProductSalesChart
                 className="mt-2"
                 sales={sales}
+                areaProps={{ isAnimationActive: false }}
               />
             </div>
           )}

@@ -1,3 +1,5 @@
+import { differenceInMilliseconds } from "date-fns/differenceInMilliseconds";
+
 export function getRandomArrayItem<T extends any[]>(arr: T): T[number] {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -17,4 +19,44 @@ export function toChunks<T>(array: T[], chunkSize: number): T[][] {
   }
 
   return chunks;
+}
+
+export function formatMs(milliseconds: number) {
+  let formattedTime: string;
+  let unit: string;
+
+  function formatMilliseconds(milliseconds: number): string {
+    return Math.floor((milliseconds % 1000) / 10)
+      .toString()
+      .padStart(2, "0");
+  }
+
+  function formatSeconds(seconds: number): string {
+    return seconds.toString().padStart(2, "0");
+  }
+
+  if (milliseconds < 1000) {
+    formattedTime = milliseconds.toString();
+    unit = "ms";
+  } else if (milliseconds < 60000) {
+    const seconds = Math.floor(milliseconds / 1000);
+    const ms = formatMilliseconds(milliseconds);
+    formattedTime = `${seconds}.${ms}`;
+    unit = "s";
+  } else {
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = formatSeconds(Math.floor((milliseconds % 60000) / 1000));
+    formattedTime = `${minutes}.${seconds}`;
+    unit = "m";
+  }
+
+  return [formattedTime, unit] as const;
+}
+
+export async function withDuration<T extends (...args: any[]) => Promise<any>>(callback: T) {
+  const startTime = performance.now();
+  const result = await callback();
+  const endTime = performance.now();
+  const ms = Math.abs(differenceInMilliseconds(startTime, endTime));
+  return [result, ms, ...formatMs(ms)] satisfies [Awaited<ReturnType<T>>, number, string, string];
 }

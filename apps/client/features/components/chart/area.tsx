@@ -58,6 +58,7 @@ export function ChartArea({ data = [], areaProps }: ChartAreaProps) {
             fillOpacity={1}
             stroke={theme.colors.primary.DEFAULT}
             fill={`url(#chartAreaColor${i})`}
+            animationDuration={1000}
           />
         ))}
 

@@ -7,7 +7,7 @@ import { ComponentProps } from "@/types";
 import { Content } from "@/components/content";
 import { ChatMessageCard, ChatMessageCardProps } from "@/chat/message/components/card";
 import { ChatMessage } from "@/chat/message/types";
-import { chatShortcuts } from "@/data/chat-shortcuts";
+import { CHAT_SHORTCUTS } from "@/chat/shortcut/constants";
 import { cn } from "@/ui/lib";
 
 export type ChatMessageContentCardProps = ComponentProps<
@@ -18,7 +18,7 @@ export type ChatMessageContentCardProps = ComponentProps<
 function parseContent(content: ChatMessageContentCardProps["content"]) {
   if (typeof content !== "string") return content;
 
-  const shortcutMask = chatShortcuts.find((i) => i.prompt === content);
+  const shortcutMask = CHAT_SHORTCUTS.find((i) => i.prompt === content);
   if (shortcutMask) return shortcutMask.title;
 
   return content;

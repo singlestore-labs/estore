@@ -4,7 +4,9 @@
   "main": "./index.ts",
   "private": true,
   "type": "module",
-  "dependencies": {},
+  "dependencies": {
+    "date-fns": "^3.6.0"
+  },
   "devDependencies": {
     "@types/node": "^20.11.17"
   }
