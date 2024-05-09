@@ -4,13 +4,13 @@ import { useCallback, useMemo, useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
-import { Stopwatch } from "@/components/stopwatch";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAction } from "@/action/hooks/use-action";
 import { isDbInfoReadyValue } from "@/db/info/atoms/is-ready";
 import { executeQueryByTitle } from "@/query/actions/execute-by-title";
 import { QueryResultTable, QueryResultTableProps } from "@/query/components/result-table";
+import { QueryStopwatch } from "@/query/components/stopwatch";
 import { formatQueryForUI } from "@/query/lib/format-for-ui";
 import { Query } from "@/query/type";
 import { cn } from "@/ui/lib";
@@ -76,10 +76,7 @@ export function QueryContainer({ className, title, query, ...props }: QueryConta
       </div>
 
       <div className="flex items-center justify-between gap-4">
-        <Stopwatch
-          resultLabel="Executed in "
-          isRunning={isPending}
-        />
+        <QueryStopwatch isRunning={isPending} />
         <Button
           className="ml-auto"
           disabled={!isDbInfoReady || isPending}
