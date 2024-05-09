@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import { ComponentProps } from "@/types";
 import {
   Table,
@@ -10,9 +12,18 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/ui/lib";
 
-export type QueryResultTableProps = ComponentProps<TableProps, { data: Record<string, any>[] }>;
+export type QueryResultTableProps<T extends Record<string, any>[] = Record<string, any>[]> = ComponentProps<
+  TableProps,
+  { data: T } & { renderRow?: (result: T[number], rowNode: ReactNode) => ReactNode }
+>;
 
-export function QueryResultTable({ className, data, wrapperProps, ...props }: QueryResultTableProps) {
+export function QueryResultTable<T extends Record<string, any>[] = Record<string, any>[]>({
+  className,
+  data,
+  wrapperProps,
+  renderRow,
+  ...props
+}: QueryResultTableProps<T>) {
   if (!data?.length) return null;
   const heads = Object.keys(data[0]);
 
@@ -30,13 +41,17 @@ export function QueryResultTable({ className, data, wrapperProps, ...props }: Qu
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((data, i) => (
-          <TableRow key={i}>
-            {Object.values(data).map((value) => (
-              <TableCell key={value}>{value}</TableCell>
-            ))}
-          </TableRow>
-        ))}
+        {data.map((result, i) => {
+          const rowNode = (
+            <TableRow key={i}>
+              {Object.values(result).map((value) => (
+                <TableCell key={value}>{value}</TableCell>
+              ))}
+            </TableRow>
+          );
+
+          return renderRow ? renderRow(result, rowNode) : rowNode;
+        })}
       </TableBody>
     </Table>
   );

@@ -24,7 +24,7 @@ export function QueryStopwatch({ className, isRunning, ...props }: QueryStopwatc
             {!isRunning && <Info className="text-muted-foreground h-4 w-4" />}
           </TooltipTrigger>
           <TooltipContent className="text-xs">
-            Measurement takes place on the client side and covers the component rendering time.
+            The measurement is client-side and includes the rendering time of the component.
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

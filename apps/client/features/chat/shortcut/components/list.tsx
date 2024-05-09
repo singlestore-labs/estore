@@ -6,8 +6,8 @@ import { ComponentProps } from "@/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChatToolbar } from "@/chat/components/toolbar";
 import { ChatShortcutButton } from "@/chat/shortcut/components/button";
+import { CHAT_SHORTCUTS } from "@/chat/shortcut/constants";
 import { ChatShortcut } from "@/chat/shortcut/types";
-import { chatShortcuts } from "@/data/chat-shortcuts";
 import { cn } from "@/ui/lib";
 
 export type ChatShortcutListProps = ComponentProps<
@@ -48,7 +48,7 @@ export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }
               className,
             )}
           >
-            {chatShortcuts.map((shortcut) => (
+            {CHAT_SHORTCUTS.map((shortcut) => (
               <li key={shortcut.title}>
                 <ChatShortcutButton
                   {...shortcut}

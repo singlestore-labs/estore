@@ -3,12 +3,12 @@
 import { db } from "@repo/db";
 
 import { forwardActionError } from "@/action/error/lib/forward";
-import { queries } from "@/data/queries";
+import { QUERY_LIST } from "@/query/constants/list";
 import { parseQueryResult } from "@/query/lib/parse-query-result";
 
-export async function executeQueryByTitle(title: string) {
+export async function executeQueryBySlug(slug: string) {
   try {
-    const query = queries.find((i) => i.title === title);
+    const query = QUERY_LIST.find((i) => i.slug === slug);
     if (!query) throw new Error("Unknown query");
     const result = await db.controllers.query({ query: query.getQuery() });
     return parseQueryResult(result);

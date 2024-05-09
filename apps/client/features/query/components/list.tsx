@@ -1,7 +1,7 @@
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
-import { queries } from "@/data/queries";
 import { QueryContainer } from "@/query/components/container";
+import { QUERY_LIST } from "@/query/constants/list";
 import { cn } from "@/ui/lib";
 
 export type QueriesListProps = ComponentProps<SectionProps>;
@@ -17,7 +17,7 @@ export function QueriesList({ className, contentProps, ...props }: QueriesListPr
       className={cn("", className)}
       contentProps={{ ...contentProps, className: cn("flex flex-col gap-8", contentProps?.className) }}
     >
-      {queries.map(({ getQuery, ...query }) => (
+      {QUERY_LIST.map(({ getQuery, ...query }) => (
         <QueryContainer
           key={query.title}
           {...query}
