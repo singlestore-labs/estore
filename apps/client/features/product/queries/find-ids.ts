@@ -1,6 +1,6 @@
 import { PRODUCT_SKU_TABLE_NAME, PRODUCT_SIZES_TABLE_NAME, PRODUCTS_TABLE_NAME } from "@repo/db/constants";
 
-export function createFindProductsQuery(
+export function createFindProductIdsQuery(
   promptEmbedding: number[] | "",
   filter: {
     color?: string;

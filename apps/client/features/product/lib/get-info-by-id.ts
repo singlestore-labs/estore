@@ -1,6 +1,6 @@
 import { IS_DEV } from "@/constants/config";
 import { getProductLikesById } from "@/product/likes/lib/get-by-id";
-import { getProductSales } from "@/product/sales/lib/get-by-id";
+import { getProductSalesHistory } from "@/product/sales/lib/get-history";
 import { getProductSizesById } from "@/product/size/lib/get-by-id";
 import { Product } from "@/product/types";
 
@@ -23,7 +23,7 @@ const columnsConfig: {
   },
   sales: {
     defaultValue: [],
-    get: (id) => getProductSales({ id }),
+    get: (id) => getProductSalesHistory({ id }),
   },
 };
 

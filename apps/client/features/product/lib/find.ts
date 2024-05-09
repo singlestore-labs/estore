@@ -2,9 +2,11 @@ import { db } from "@repo/db";
 import { ProductRow } from "@repo/db/types";
 
 import { getProductByIds } from "@/product/lib/get-by-ids";
-import { createFindProductsQuery } from "@/product/queries/find";
+import { createFindProductIdsQuery } from "@/product/queries/find-ids";
+import { parseQueryResult } from "@/query/lib/parse-query-result";
+import { QueryResult } from "@/query/type";
 
-type QueryResult = {
+type Result = {
   id: ProductRow["id"];
   ft_score_color: number;
   v_score_image_text: number;
@@ -12,14 +14,10 @@ type QueryResult = {
   score: number;
 };
 
-function isQueryResult(value: any[]): value is QueryResult[] {
-  return typeof value[0] === "object" && "id" in value[0];
-}
-
-export async function findProducts(prompt: string, filter: Parameters<typeof createFindProductsQuery>[1]) {
+export async function findProducts(prompt: string, filter: Parameters<typeof createFindProductIdsQuery>[1]) {
   const promptEmbedding = prompt ? (await db.ai.createEmbedding(prompt))[0] : "";
-  const query = await createFindProductsQuery(promptEmbedding, filter);
-  const result = await db.controllers.query<[object, QueryResult[]] | QueryResult[]>({ query });
-  const productIds = (isQueryResult(result) ? result : result[1]).map((i) => i.id);
+  const query = createFindProductIdsQuery(promptEmbedding, filter);
+  const result = await db.controllers.query<QueryResult<Result>>({ query });
+  const productIds = parseQueryResult(result).map((i) => i.id);
   return getProductByIds(productIds);
 }
