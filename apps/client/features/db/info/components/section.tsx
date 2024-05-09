@@ -1,6 +1,7 @@
 "use client";
 
 import humanNumber from "human-number";
+import { useSetAtom } from "jotai";
 import { useEffect, useMemo, useState } from "react";
 
 import { ComponentProps } from "@/types";
@@ -10,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAction } from "@/action/hooks/use-action";
 import { getDbInfo } from "@/db/info/actions/get";
+import { isDbInfoReadyAtom } from "@/db/info/atoms/is-ready";
 import { getDbInfoTables } from "@/db/info/constants";
 import { getTheme } from "@/ui/get-theme";
 import { cn } from "@/ui/lib";
@@ -31,6 +33,7 @@ export function DbInfoSection({ className, ...props }: DbInfoSectionProps) {
   const [data, setData] = useState<Data>(initialData);
   const { execute, isPending } = useAction(true);
   const totalRows = useMemo(() => data.reduce((acc, { value }) => acc + value, 0), [data]);
+  const setIsDbInfoReady = useSetAtom(isDbInfoReadyAtom);
 
   useEffect(() => {
     (async () => {
@@ -38,6 +41,10 @@ export function DbInfoSection({ className, ...props }: DbInfoSectionProps) {
       setData(result.map((data, i) => ({ ...data, color: colors[i] || theme.colors.zinc[50] })));
     })();
   }, [execute]);
+
+  useEffect(() => {
+    setIsDbInfoReady(!isPending);
+  }, [isPending, setIsDbInfoReady]);
 
   return (
     <Section

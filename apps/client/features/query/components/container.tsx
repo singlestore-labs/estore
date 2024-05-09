@@ -1,4 +1,5 @@
 "use client";
+import { useAtomValue } from "jotai";
 import { useCallback, useMemo, useState } from "react";
 
 import { ComponentProps } from "@/types";
@@ -7,6 +8,7 @@ import { Stopwatch } from "@/components/stopwatch";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAction } from "@/action/hooks/use-action";
+import { isDbInfoReadyValue } from "@/db/info/atoms/is-ready";
 import { executeQueryByTitle } from "@/query/actions/execute-by-title";
 import { QueryResultTable, QueryResultTableProps } from "@/query/components/result-table";
 import { formatQueryForUI } from "@/query/lib/format-for-ui";
@@ -19,6 +21,7 @@ export function QueryContainer({ className, title, query, ...props }: QueryConta
   const [result, setResult] = useState<QueryResultTableProps["data"]>([]);
   const { execute, isPending } = useAction();
   const hasResult = !!result?.length;
+  const isDbInfoReady = useAtomValue(isDbInfoReadyValue);
 
   const handleRunClick = useCallback(async () => {
     try {
@@ -79,7 +82,7 @@ export function QueryContainer({ className, title, query, ...props }: QueryConta
         />
         <Button
           className="ml-auto"
-          disabled={isPending}
+          disabled={!isDbInfoReady || isPending}
           onClick={handleRunClick}
         >
           Run
