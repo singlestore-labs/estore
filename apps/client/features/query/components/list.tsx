@@ -6,7 +6,7 @@ import { cn } from "@/ui/lib";
 
 export type QueriesListProps = ComponentProps<SectionProps>;
 
-export function QueriesList({ className, contentProps, ...props }: QueriesListProps) {
+export function QueriesList({ className, contentProps, headerProps, ...props }: QueriesListProps) {
   return (
     <Section
       variant="secondary"
@@ -16,6 +16,7 @@ export function QueriesList({ className, contentProps, ...props }: QueriesListPr
       {...props}
       className={cn("", className)}
       contentProps={{ ...contentProps, className: cn("flex flex-col gap-8", contentProps?.className) }}
+      headerProps={{ ...headerProps, className: cn("px-5", headerProps?.className) }}
     >
       {QUERY_LIST.map(({ getQuery, ...query }) => (
         <QueryContainer

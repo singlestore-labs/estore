@@ -64,7 +64,7 @@ export function QueryContainer({ className, slug, query, ...props }: QueryContai
         >
           <Textarea
             value={formattedQuery}
-            className="h-full w-full resize-none font-mono disabled:bg-zinc-50 disabled:opacity-100"
+            className="disabled:bg-accent h-full w-full resize-none font-mono disabled:opacity-100"
             disabled
           />
         </Section>
