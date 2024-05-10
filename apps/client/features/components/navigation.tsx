@@ -16,7 +16,7 @@ export function Navigation({ className, ...props }: NavigationProps) {
   return (
     <nav
       {...props}
-      className={cn("flex items-center gap-1", className)}
+      className={cn("flex items-center justify-center gap-1", className)}
     >
       {[
         ["Chat", ROUTES.ROOT],

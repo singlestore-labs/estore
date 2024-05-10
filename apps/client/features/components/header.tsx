@@ -15,7 +15,7 @@ export function Header({ className, ...props }: HeaderProps) {
   return (
     <header
       {...props}
-      className={cn("flex flex-wrap items-center justify-between gap-4 p-4", className)}
+      className={cn("flex flex-wrap items-center justify-between gap-4 p-4 max-md:justify-center", className)}
     >
       <Link
         href={ROUTES.ROOT}
@@ -28,7 +28,7 @@ export function Header({ className, ...props }: HeaderProps) {
         </h1>
       </Link>
 
-      <Navigation />
+      <Navigation className="max-md:basis-full" />
 
       <div className="flex items-center gap-4">
         <ThemeToggle />
