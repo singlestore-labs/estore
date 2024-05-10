@@ -94,7 +94,7 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
               </div>
 
               {!!product.sales.length && (
-                <TooltipProvider>
+                <TooltipProvider delayDuration={400}>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <ProductSalesChart
