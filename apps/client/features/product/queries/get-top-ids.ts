@@ -20,7 +20,7 @@ JOIN (
   FROM ${PRODUCT_LIKES_TABLE_NAME}
   GROUP BY product_id
 ) likes ON products.id = likes.product_id
-ORDER BY score DESC
+ORDER BY score DESC, products.description ASC
 LIMIT ${limit}
 `;
 }
