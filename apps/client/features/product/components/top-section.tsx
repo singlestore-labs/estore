@@ -1,4 +1,5 @@
-import { Heart, ShoppingCart } from "lucide-react";
+import humanNumber from "human-number";
+import { Heart, Receipt, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,6 +32,7 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
       <ul className="flex flex-col text-sm">
         {products.map((product, i) => {
           const href = ROUTES.PRODUCT_BY_ID(product.id);
+          const totalSales = product.price * productSales[i];
 
           return (
             <li
@@ -74,6 +76,17 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
               <div className="flex flex-1 items-center justify-center">
                 <ProductInfoItem
                   className="h-auto"
+                  label="Likes"
+                  icon={Heart}
+                  iconClassName="size-4"
+                >
+                  {product.likes}
+                </ProductInfoItem>
+              </div>
+
+              <div className="flex flex-1 items-center justify-center">
+                <ProductInfoItem
+                  className="h-auto"
                   label="Sales"
                   icon={ShoppingCart}
                   iconClassName="size-4 mb-0.5"
@@ -85,11 +98,11 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
               <div className="flex flex-1 items-center justify-center">
                 <ProductInfoItem
                   className="h-auto"
-                  label="Likes"
-                  icon={Heart}
-                  iconClassName="size-4"
+                  label="Total sales"
+                  icon={Receipt}
+                  iconClassName="size-4 mb-0.5"
                 >
-                  {product.likes}
+                  {humanNumber(totalSales, (v) => v.toFixed(2))}
                 </ProductInfoItem>
               </div>
 
@@ -98,7 +111,7 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <ProductSalesChart
-                        className="h-16 max-w-48 flex-1 max-md:max-w-full max-md:basis-full"
+                        className="h-20 max-w-48 flex-1 max-md:max-w-full max-md:basis-full"
                         sales={product.sales}
                         withTooltip={false}
                       />
