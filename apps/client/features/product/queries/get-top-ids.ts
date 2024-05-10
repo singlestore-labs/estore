@@ -5,7 +5,7 @@ import {
   PRODUCT_SKU_TABLE_NAME,
 } from "@repo/db/constants";
 
-export function createGetTopProductIdsQuery({ limit = 10 }: { limit?: number }) {
+export function createGetTopProductIdsQuery({ limit = 10 }: { limit?: number } = {}) {
   return `\
 SELECT products.id, orders.count + likes.count AS score
 FROM ${PRODUCTS_TABLE_NAME} products

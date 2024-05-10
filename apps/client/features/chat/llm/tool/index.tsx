@@ -8,7 +8,7 @@ import { findProducts } from "@/product/lib/find";
 import { getProducts } from "@/product/lib/get";
 import { getRandomProductIds } from "@/product/lib/get-random-ids";
 import { getRecommendedProducts } from "@/product/lib/get-recommended";
-import { getTopProduct } from "@/product/lib/get-top";
+import { getTopProducts } from "@/product/lib/get-top";
 import { getUserId } from "@/user/lib/get-id";
 
 export const chatLLMTools = {
@@ -83,7 +83,7 @@ export const chatLLMTools = {
     schema: z.object({}),
     node: ChatMessageProductCard,
     call: async ({}) => {
-      const product = await getTopProduct();
+      const product = (await getTopProducts({ limit: 1 }))[0];
       return { name: "get_top_product", props: { product } };
     },
   }),

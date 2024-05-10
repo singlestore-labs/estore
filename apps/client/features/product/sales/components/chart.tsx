@@ -6,10 +6,20 @@ import { cn } from "@/ui/lib";
 
 export type ProductSalesChartProps = ComponentProps<
   CardProps,
-  { sales: Product["sales"]; areaProps?: ChartAreaProps["areaProps"] }
+  {
+    sales: Product["sales"];
+    areaProps?: ChartAreaProps["areaProps"];
+    withTooltip?: ChartAreaProps["withTooltip"];
+  }
 >;
 
-export function ProductSalesChart({ className, sales, areaProps, ...props }: ProductSalesChartProps) {
+export function ProductSalesChart({
+  className,
+  sales,
+  areaProps,
+  withTooltip,
+  ...props
+}: ProductSalesChartProps) {
   return (
     <Card
       {...props}
@@ -18,6 +28,7 @@ export function ProductSalesChart({ className, sales, areaProps, ...props }: Pro
       <ChartArea
         data={sales}
         areaProps={areaProps}
+        withTooltip={withTooltip}
       />
     </Card>
   );

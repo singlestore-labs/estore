@@ -8,12 +8,15 @@ import { getTheme } from "@/ui/get-theme";
 
 export type ChartAreaProps = ComponentProps<
   {},
-  ConstructorParameters<typeof AreaChart>[0] & { areaProps?: Partial<Omit<AreaProps, "ref">> }
+  ConstructorParameters<typeof AreaChart>[0] & {
+    areaProps?: Partial<Omit<AreaProps, "ref">>;
+    withTooltip?: boolean;
+  }
 >;
 
 const theme = getTheme();
 
-export function ChartArea({ data = [], areaProps }: ChartAreaProps) {
+export function ChartArea({ data = [], areaProps, withTooltip = true }: ChartAreaProps) {
   const keys = data.length ? Object.keys(data[0]).filter((key) => !["date"].includes(key)) : [];
 
   return (
@@ -62,10 +65,12 @@ export function ChartArea({ data = [], areaProps }: ChartAreaProps) {
           />
         ))}
 
-        <Tooltip
-          content={ChartTooltip}
-          cursor={false}
-        />
+        {withTooltip && (
+          <Tooltip
+            content={ChartTooltip}
+            cursor={false}
+          />
+        )}
       </AreaChart>
     </ResponsiveContainer>
   );
