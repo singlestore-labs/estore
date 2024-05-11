@@ -39,7 +39,7 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
               key={product.id}
               className="flex flex-wrap items-center gap-4 border-b p-4"
             >
-              <div className="flex flex-grow basis-32 items-center gap-4 max-md:basis-full max-md:flex-wrap max-md:justify-center">
+              <div className="flex shrink-0 flex-grow basis-64 items-center gap-4">
                 <Card className="relative size-20 shrink-0 overflow-hidden">
                   <Image
                     className="object-cover"
@@ -54,7 +54,7 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
                   />
                 </Card>
 
-                <div className="max-md:basis-full max-md:text-center">
+                <div className="">
                   <Link
                     href={href}
                     className="hover:text-primary inline-block transition-colors"
@@ -64,46 +64,45 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
                 </div>
               </div>
 
-              <div className="flex flex-1 items-center justify-center">
-                <ProductInfoItem
-                  className="h-auto"
-                  label="Price"
-                >
-                  {`$${product.price}`}
-                </ProductInfoItem>
-              </div>
-
-              <div className="flex flex-1 items-center justify-center">
-                <ProductInfoItem
-                  className="h-auto"
-                  label="Likes"
-                  icon={Heart}
-                  iconClassName="size-4"
-                >
-                  {product.likes}
-                </ProductInfoItem>
-              </div>
-
-              <div className="flex flex-1 items-center justify-center">
-                <ProductInfoItem
-                  className="h-auto"
-                  label="Sales"
-                  icon={ShoppingCart}
-                  iconClassName="size-4 mb-0.5"
-                >
-                  {productSales[i]}
-                </ProductInfoItem>
-              </div>
-
-              <div className="flex flex-1 items-center justify-center">
-                <ProductInfoItem
-                  className="h-auto"
-                  label="Total sales"
-                  icon={Receipt}
-                  iconClassName="size-4 mb-0.5"
-                >
-                  {humanNumber(totalSales, (v) => v.toFixed(2))}
-                </ProductInfoItem>
+              <div className="flex shrink-[2] flex-grow basis-1/2 gap-4">
+                <div className="flex flex-1 items-center justify-center">
+                  <ProductInfoItem
+                    className="h-auto"
+                    label="Price"
+                  >
+                    {`$${product.price}`}
+                  </ProductInfoItem>
+                </div>
+                <div className="flex flex-1 items-center justify-center">
+                  <ProductInfoItem
+                    className="h-auto"
+                    label="Likes"
+                    icon={Heart}
+                    iconClassName="size-4"
+                  >
+                    {product.likes}
+                  </ProductInfoItem>
+                </div>
+                <div className="flex flex-1 items-center justify-center">
+                  <ProductInfoItem
+                    className="h-auto"
+                    label="Sales"
+                    icon={ShoppingCart}
+                    iconClassName="size-4 mb-0.5"
+                  >
+                    {productSales[i]}
+                  </ProductInfoItem>
+                </div>
+                <div className="flex flex-1 items-center justify-center">
+                  <ProductInfoItem
+                    className="h-auto"
+                    label="Total sales"
+                    icon={Receipt}
+                    iconClassName="size-4 mb-0.5"
+                  >
+                    {humanNumber(totalSales, (v) => v.toFixed(2))}
+                  </ProductInfoItem>
+                </div>
               </div>
 
               {!!product.sales.length && (
@@ -111,7 +110,7 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <ProductSalesChart
-                        className="h-20 max-w-48 flex-1 max-md:max-w-full max-md:basis-full"
+                        className="h-20 flex-1 basis-40"
                         sales={product.sales}
                         withTooltip={false}
                       />
