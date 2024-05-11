@@ -110,7 +110,7 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <ProductSalesChart
-                        className="h-20 flex-1 basis-40"
+                        className="h-20 shrink flex-grow basis-40"
                         sales={product.sales}
                         withTooltip={false}
                       />
