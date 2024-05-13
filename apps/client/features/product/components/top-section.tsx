@@ -1,13 +1,10 @@
 import humanNumber from "human-number";
 import { Heart, Receipt, ShoppingCart } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
-import { Card } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { ROUTES } from "@/constants/routes";
+import { ProductCardSecondary } from "@/product/components/card/secondary";
 import { ProductInfoItem } from "@/product/components/info-item";
 import { countProductSales } from "@/product/lib/count-sales";
 import { getTopProducts } from "@/product/lib/get-top";
@@ -31,7 +28,6 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
     >
       <ul className="flex flex-col text-sm">
         {products.map((product, i) => {
-          const href = ROUTES.PRODUCT_BY_ID(product.id);
           const totalSales = product.price * productSales[i];
 
           return (
@@ -39,32 +35,14 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
               key={product.id}
               className="flex flex-wrap items-center gap-4 border-b p-4"
             >
-              <div className="flex shrink-0 flex-grow basis-64 items-center gap-4">
-                <Card className="relative size-20 shrink-0 overflow-hidden">
-                  <Image
-                    className="object-cover"
-                    src={product.image}
-                    alt="Glasses"
-                    fill
-                    unoptimized
-                  />
-                  <Link
-                    href={href}
-                    className="absolute z-[1] h-full w-full"
-                  />
-                </Card>
+              <ProductCardSecondary
+                id={product.id}
+                description={product.description}
+                image={product.image}
+                className="shrink-0 flex-grow basis-64"
+              />
 
-                <div className="">
-                  <Link
-                    href={href}
-                    className="hover:text-primary inline-block transition-colors"
-                  >
-                    <h4 className="line-clamp-2 text-base font-semibold capitalize">{product.description}</h4>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="flex shrink-[2] flex-grow basis-1/2 gap-4">
+              <div className="flex shrink-[2] flex-grow basis-[24rem] gap-4">
                 <div className="flex flex-1 items-center justify-center">
                   <ProductInfoItem
                     className="h-auto"
