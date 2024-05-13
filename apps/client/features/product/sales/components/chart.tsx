@@ -23,7 +23,7 @@ export function ProductSalesChart({
   return (
     <Card
       {...props}
-      className={cn("relative h-48", className)}
+      className={cn("relative h-48 overflow-hidden", className)}
     >
       <ChartArea
         data={sales}

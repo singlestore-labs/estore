@@ -13,7 +13,7 @@ import { cn } from "@/ui/lib";
 
 export type ProductTopSectionProps = ComponentProps<SectionProps>;
 
-export async function ProductTopSection({ className, ...props }: ProductTopSectionProps) {
+export async function ProductTopSection({ className, contentProps, ...props }: ProductTopSectionProps) {
   const products = await getTopProducts();
   const productSales = await Promise.all(products.map(({ id }) => countProductSales(id)));
 
@@ -24,7 +24,10 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
       title="Top products"
       description="Best selling and most liked products"
       size="sm"
-      contentProps={{ className: "p-0 max-h-[35rem] overflow-auto" }}
+      contentProps={{
+        ...contentProps,
+        className: cn("p-0 overflow-auto", contentProps?.className),
+      }}
     >
       <ul className="flex flex-col text-sm">
         {products.map((product, i) => {
@@ -39,10 +42,10 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
                 id={product.id}
                 description={product.description}
                 image={product.image}
-                className="shrink-0 flex-grow basis-64"
+                className="flex-grow basis-64"
               />
 
-              <div className="flex shrink-[2] flex-grow basis-[24rem] gap-4">
+              <div className="flex-grow-full flex basis-80 gap-4">
                 <div className="flex flex-1 items-center justify-center">
                   <ProductInfoItem
                     className="h-auto"
@@ -88,7 +91,7 @@ export async function ProductTopSection({ className, ...props }: ProductTopSecti
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <ProductSalesChart
-                        className="h-20 shrink flex-grow basis-40"
+                        className="h-20 flex-grow basis-40"
                         sales={product.sales}
                         withTooltip={false}
                       />
