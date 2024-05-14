@@ -15,7 +15,7 @@ export async function OrderRecentSection({ className, contentProps, ...props }: 
     <Section
       {...props}
       className={cn("overflow-hidden", className)}
-      title="Recent orders"
+      title="Recent sales"
       size="sm"
       contentProps={{
         ...contentProps,

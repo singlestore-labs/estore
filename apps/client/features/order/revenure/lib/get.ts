@@ -1,7 +1,7 @@
 import { db } from "@repo/db";
 import { ORDERS_TABLE_NAME, PRODUCTS_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "@repo/db/constants";
 
-export async function getOrdersRevenue() {
+export async function getOrdersRevenueTrend() {
   try {
     const result = await db.controllers.query<{ order_date: Date; value: string }[]>({
       query: `\

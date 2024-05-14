@@ -2,12 +2,12 @@
 
 import { ComponentProps } from "@/types";
 import { ChartArea } from "@/components/chart/area";
-import { getOrdersRevenue } from "@/order/revenure/lib/get";
+import { getOrdersRevenueTrend } from "@/order/revenure/lib/get";
 import { cn } from "@/ui/lib";
 
 export type OrderRevenueChartProps = ComponentProps<
   "div",
-  { data: Awaited<ReturnType<typeof getOrdersRevenue>>["history"] }
+  { data: Awaited<ReturnType<typeof getOrdersRevenueTrend>>["history"] }
 >;
 
 export function OrderRevenueChart({ className, data, ...props }: OrderRevenueChartProps) {

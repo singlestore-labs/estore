@@ -1,19 +1,19 @@
 import { ComponentProps } from "@/types";
-import { ChartBar } from "@/components/chart/bar";
 import { InfoCard, InfoCardProps } from "@/components/info-card";
 import { TrendDirection } from "@/components/trend-direction";
-import { getOrdersTotal } from "@/order/total/lib/get";
+import { OrderRevenueChart } from "@/order/revenure/components/chart";
+import { getOrdersRevenueTrend } from "@/order/revenure/lib/get";
 
-export type OrdersTotalCardProps = ComponentProps<InfoCardProps>;
+export type OrdersRevenueTrendCardProps = ComponentProps<InfoCardProps>;
 
-export async function OrdersTotalCard({ className, ...props }: OrdersTotalCardProps) {
-  const data = await getOrdersTotal();
+export async function OrdersRevenueTrendCard({ className, ...props }: OrdersRevenueTrendCardProps) {
+  const data = await getOrdersRevenueTrend();
 
   return (
     <InfoCard
       {...props}
-      title="Total orders"
-      value={data.total}
+      title="Total revenue"
+      value={`$${data.total}`}
       headerProps={{
         className: "flex items-start justify-between",
         children: (
@@ -25,13 +25,7 @@ export async function OrdersTotalCard({ className, ...props }: OrdersTotalCardPr
         ),
       }}
     >
-      <div className="text-primary h-20 px-4">
-        <ChartBar
-          data={data.history}
-          dataKey="percent"
-          tooltipProps={{ titleKey: "week_start", valueKey: "value" }}
-        />
-      </div>
+      <OrderRevenueChart data={data.history} />
     </InfoCard>
   );
 }
