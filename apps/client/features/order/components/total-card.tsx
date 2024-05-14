@@ -23,7 +23,7 @@ export async function OrdersTotalCard({ className, ...props }: OrdersTotalCardPr
         <ChartBar
           data={orders.history}
           dataKey="value"
-          tooltipProps={{ titleKey: "week_range", valueKey: "value" }}
+          tooltipProps={{ titleKey: "week_start", valueKey: "value" }}
         />
       </div>
     </Card>
