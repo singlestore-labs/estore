@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 
-import { OrderRecentSection } from "@/order/components/recent-section";
-import { OrdersTotalCard } from "@/order/components/total-card";
+import { OrderRecentSection } from "@/order/recent/components/section";
+import { OrdersRevenueCard } from "@/order/revenure/components/card";
+import { OrdersTotalCard } from "@/order/total/components/card";
 import { ProductTopSection } from "@/product/components/top-section";
 
 export const metadata: Metadata = {
@@ -11,7 +12,8 @@ export const metadata: Metadata = {
 export default function PageDashboard() {
   return (
     <div className="relative mt-6 flex flex-1 flex-col gap-4 px-4">
-      <div className="grid-auto-fill-[12rem] grid gap-4">
+      <div className="grid-auto-fill-[25%] grid gap-4">
+        <OrdersRevenueCard />
         <OrdersTotalCard />
       </div>
 

@@ -1,13 +1,13 @@
 import { ComponentProps } from "@/types";
 import { ChartBar } from "@/components/chart/bar";
 import { Card, CardProps } from "@/components/ui/card";
-import { getTotalOrders } from "@/order/lib/get-total";
+import { getOrdersTotal } from "@/order/total/lib/get";
 import { cn } from "@/ui/lib";
 
 export type OrdersTotalCardProps = ComponentProps<CardProps>;
 
 export async function OrdersTotalCard({ className, ...props }: OrdersTotalCardProps) {
-  const orders = await getTotalOrders();
+  const data = await getOrdersTotal();
 
   return (
     <Card
@@ -16,12 +16,12 @@ export async function OrdersTotalCard({ className, ...props }: OrdersTotalCardPr
     >
       <div>
         <h2 className="font-medium">Total orders</h2>
-        <p className="text-xl font-medium">{orders.total}</p>
+        <p className="text-xl font-medium">{data.total}</p>
       </div>
 
-      <div className="text-primary -mx-2 h-20">
+      <div className="text-primary h-20">
         <ChartBar
-          data={orders.history}
+          data={data.history}
           dataKey="value"
           tooltipProps={{ titleKey: "week_start", valueKey: "value" }}
         />

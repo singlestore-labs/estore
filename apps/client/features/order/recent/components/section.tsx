@@ -2,14 +2,14 @@ import { timeAgo } from "@repo/helpers";
 
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
-import { getRecentOrders } from "@/order/lib/get-recent";
+import { getOrdersRecent } from "@/order/recent/lib/get";
 import { ProductCardSecondary } from "@/product/components/card/secondary";
 import { cn } from "@/ui/lib";
 
 export type OrderRecentSectionProps = ComponentProps<SectionProps>;
 
 export async function OrderRecentSection({ className, contentProps, ...props }: OrderRecentSectionProps) {
-  const orders = await getRecentOrders();
+  const data = await getOrdersRecent();
 
   return (
     <Section
@@ -23,7 +23,7 @@ export async function OrderRecentSection({ className, contentProps, ...props }: 
       }}
     >
       <ul className="flex flex-col text-sm">
-        {orders.map((order) => (
+        {data.map((order) => (
           <li
             key={order.id}
             className="flex flex-wrap items-center justify-between gap-4 border-b px-5 py-2"

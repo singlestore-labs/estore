@@ -23,10 +23,11 @@ export function ProductSalesChart({
   return (
     <Card
       {...props}
-      className={cn("relative h-48 overflow-hidden", className)}
+      className={cn("text-primary relative h-48 overflow-hidden", className)}
     >
       <ChartArea
         data={sales}
+        dataKey="value"
         areaProps={areaProps}
         tooltipProps={{ titleKey: "date", valueKey: "value" }}
         withTooltip={withTooltip}

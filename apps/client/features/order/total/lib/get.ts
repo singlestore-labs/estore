@@ -1,7 +1,7 @@
 import { db } from "@repo/db";
 import { ORDERS_TABLE_NAME } from "@repo/db/constants";
 
-export async function getTotalOrders() {
+export async function getOrdersTotal() {
   try {
     const result = await db.controllers.query<{ week_start: Date; value: number }[]>({
       query: `\

@@ -3,7 +3,7 @@ import { ORDERS_TABLE_NAME, PRODUCTS_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "
 
 import { OrderRecent } from "@/order/types";
 
-export async function getRecentOrders(filter: { daysInterval?: number; limit?: number } = {}) {
+export async function getOrdersRecent(filter: { daysInterval?: number; limit?: number } = {}) {
   const { daysInterval = 30, limit = 10 } = filter;
   try {
     const result = await db.controllers.query<OrderRecent[]>({
