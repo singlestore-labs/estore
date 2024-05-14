@@ -5,7 +5,7 @@ import { Product } from "@/product/types";
 
 export type Order = OrderRow;
 
-export type RecentOrder = Override<Order, { created_at: Date }> & {
+export type OrderRecent = Override<Order, { created_at: Date }> & {
   product_id: Product["id"];
   product_description: Product["description"];
   product_image: Product["image"];

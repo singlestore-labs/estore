@@ -1,10 +1,14 @@
 import { TooltipProps } from "recharts";
 
 import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/ui/lib";
 
-export function ChartTooltip({ active, payload }: TooltipProps<any, any>) {
+export type ChartTooltipProps = TooltipProps<any, any> & {
+  titleKey?: string;
+  valueKey?: string;
+};
+
+export function ChartTooltip({ active, payload, titleKey = "date", valueKey = "value" }: ChartTooltipProps) {
   if (!active || !payload || !payload.length) return null;
   const [props] = payload;
 
@@ -16,9 +20,9 @@ export function ChartTooltip({ active, payload }: TooltipProps<any, any>) {
       )}
     >
       <p>
-        <strong>{props.payload.date}</strong>
+        <strong>{props.payload[titleKey]}</strong>
         <br />
-        {props.value}
+        {props.payload[valueKey]}
       </p>
     </Card>
   );

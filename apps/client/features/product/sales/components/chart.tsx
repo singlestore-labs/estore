@@ -28,6 +28,7 @@ export function ProductSalesChart({
       <ChartArea
         data={sales}
         areaProps={areaProps}
+        tooltipProps={{ titleKey: "date", valueKey: "value" }}
         withTooltip={withTooltip}
       />
     </Card>

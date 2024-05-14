@@ -1,33 +1,41 @@
 "use client";
 
-import { Area, AreaChart, ResponsiveContainer, Tooltip, AreaProps } from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, AreaProps, ResponsiveContainerProps } from "recharts";
 
 import { ComponentProps } from "@/types";
-import { ChartTooltip } from "@/components/chart/tooltip";
+import { ChartTooltip, ChartTooltipProps } from "@/components/chart/tooltip";
 import { getTheme } from "@/ui/get-theme";
 
+type AreaChartProps = ConstructorParameters<typeof AreaChart>[0];
+
 export type ChartAreaProps = ComponentProps<
-  {},
-  ConstructorParameters<typeof AreaChart>[0] & {
+  Partial<ResponsiveContainerProps>,
+  Pick<AreaChartProps, "data"> & {
+    chartProps?: Partial<Omit<AreaChartProps, "data">>;
     areaProps?: Partial<Omit<AreaProps, "ref">>;
+    tooltipProps?: ChartTooltipProps;
     withTooltip?: boolean;
   }
 >;
 
 const theme = getTheme();
 
-export function ChartArea({ data = [], areaProps, withTooltip = true }: ChartAreaProps) {
+export function ChartArea({
+  data = [],
+  chartProps,
+  areaProps,
+  tooltipProps,
+  withTooltip = true,
+  ...props
+}: ChartAreaProps) {
   const keys = data.length ? Object.keys(data[0]).filter((key) => !["date"].includes(key)) : [];
 
   return (
-    <ResponsiveContainer
-      width="100%"
-      height="100%"
-    >
+    <ResponsiveContainer {...props}>
       <AreaChart
+        {...chartProps}
         data={data}
-        className="text-sm"
-        margin={{ top: 16, bottom: 0, left: 0, right: 0 }}
+        margin={{ top: 8, bottom: 0, left: 0, right: 0, ...chartProps?.margin }}
       >
         <defs>
           {keys.map((key, i) => (
@@ -67,6 +75,7 @@ export function ChartArea({ data = [], areaProps, withTooltip = true }: ChartAre
 
         {withTooltip && (
           <Tooltip
+            {...tooltipProps}
             content={ChartTooltip}
             cursor={false}
           />

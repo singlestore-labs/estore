@@ -1,12 +1,12 @@
 import { db } from "@repo/db";
 import { ORDERS_TABLE_NAME, PRODUCTS_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "@repo/db/constants";
 
-import { RecentOrder } from "@/order/types";
+import { OrderRecent } from "@/order/types";
 
 export async function getRecentOrders(filter: { daysInterval?: number; limit?: number } = {}) {
   const { daysInterval = 30, limit = 10 } = filter;
   try {
-    const result = await db.controllers.query<RecentOrder[]>({
+    const result = await db.controllers.query<OrderRecent[]>({
       query: `\
         SELECT
           orders.*,
