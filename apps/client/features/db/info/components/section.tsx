@@ -11,8 +11,8 @@ import humanNumber from "human-number";
 
 import { ComponentProps } from "@/types";
 import { ChartPie } from "@/components/chart/pie";
+import { InfoCard } from "@/components/info-card";
 import { Section, SectionProps } from "@/components/section";
-import { Card } from "@/components/ui/card";
 import { getTheme } from "@/ui/get-theme";
 import { cn } from "@/ui/lib";
 
@@ -64,24 +64,19 @@ export async function DbInfoSection({ className, ...props }: DbInfoSectionProps)
         />
       </div>
 
-      <ul className="grid-auto-fit-[9rem] grid flex-1 gap-4 py-2 max-md:basis-full">
+      <ul className="grid-auto-fit-[9rem] grid flex-1 gap-4 max-md:basis-full">
         {data.map((data) => (
           <li key={data.tableName}>
-            <Card className="flex h-full flex-col justify-end p-4">
-              <p
-                className="text-xl font-medium"
-                title={`${data.value}`}
-              >
-                {humanNumber(data.value, (i) => i.toFixed(0))}
-              </p>
-              <h4 className="flex items-center justify-between gap-1 leading-none">
-                {data.tableName}
-                <span
-                  className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: data.color }}
-                />
-              </h4>
-            </Card>
+            <InfoCard
+              title={data.tableName}
+              value={humanNumber(data.value, (i) => i.toFixed(0))}
+              className="h-full"
+            >
+              <span
+                className="mb-4 ml-auto mr-4 mt-auto h-2 w-2 rounded-full"
+                style={{ backgroundColor: data.color }}
+              />
+            </InfoCard>
           </li>
         ))}
       </ul>

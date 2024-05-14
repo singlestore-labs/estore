@@ -1,31 +1,26 @@
 import { ComponentProps } from "@/types";
 import { ChartBar } from "@/components/chart/bar";
-import { Card, CardProps } from "@/components/ui/card";
+import { InfoCard, InfoCardProps } from "@/components/info-card";
 import { getOrdersTotal } from "@/order/total/lib/get";
-import { cn } from "@/ui/lib";
 
-export type OrdersTotalCardProps = ComponentProps<CardProps>;
+export type OrdersTotalCardProps = ComponentProps<InfoCardProps>;
 
 export async function OrdersTotalCard({ className, ...props }: OrdersTotalCardProps) {
   const data = await getOrdersTotal();
 
   return (
-    <Card
+    <InfoCard
       {...props}
-      className={cn("flex flex-col gap-4 overflow-hidden px-4 pt-4", className)}
+      title="Total order"
+      value={data.total}
     >
-      <div>
-        <h2 className="font-medium">Total orders</h2>
-        <p className="text-xl font-medium">{data.total}</p>
-      </div>
-
-      <div className="text-primary h-20">
+      <div className="text-primary h-20 px-4">
         <ChartBar
           data={data.history}
           dataKey="percent"
           tooltipProps={{ titleKey: "week_start", valueKey: "value" }}
         />
       </div>
-    </Card>
+    </InfoCard>
   );
 }
