@@ -15,9 +15,15 @@ export async function getOrdersTotal() {
       `,
     });
 
+    const maxValue = Math.max(...result.map((i) => i.value));
+
     return {
       total: result.reduce((acc, i) => acc + i.value, 0),
-      history: result.map((i) => ({ ...i, week_start: i.week_start.toLocaleDateString() })),
+      history: result.map((i) => ({
+        ...i,
+        week_start: i.week_start.toLocaleDateString(),
+        percent: (i.value / maxValue) * 100,
+      })),
     };
   } catch (error) {
     console.error(error);

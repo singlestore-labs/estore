@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function PageDashboard() {
   return (
     <div className="relative mt-6 flex flex-1 flex-col gap-4 px-4">
-      <div className="grid-auto-fill-[25%] grid gap-4">
+      <div className="grid-auto-fit-[20rem] grid gap-4">
         <OrdersRevenueCard />
         <OrdersTotalCard />
       </div>

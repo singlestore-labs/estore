@@ -12,9 +12,9 @@ export async function OrdersRevenueCard({ className, ...props }: OrdersRevenueCa
   return (
     <Card
       {...props}
-      className={cn("flex flex-col gap-4 p-4", className)}
+      className={cn("flex flex-col gap-4 overflow-hidden", className)}
     >
-      <div>
+      <div className="px-4 pt-4">
         <h2 className="font-medium">Total revenue</h2>
         <p className="text-xl font-medium">${data.total}</p>
       </div>

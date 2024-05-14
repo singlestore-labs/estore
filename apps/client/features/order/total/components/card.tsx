@@ -12,7 +12,7 @@ export async function OrdersTotalCard({ className, ...props }: OrdersTotalCardPr
   return (
     <Card
       {...props}
-      className={cn("flex flex-col gap-4 p-4", className)}
+      className={cn("flex flex-col gap-4 overflow-hidden px-4 pt-4", className)}
     >
       <div>
         <h2 className="font-medium">Total orders</h2>
@@ -22,7 +22,7 @@ export async function OrdersTotalCard({ className, ...props }: OrdersTotalCardPr
       <div className="text-primary h-20">
         <ChartBar
           data={data.history}
-          dataKey="value"
+          dataKey="percent"
           tooltipProps={{ titleKey: "week_start", valueKey: "value" }}
         />
       </div>

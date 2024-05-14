@@ -11,15 +11,21 @@ export async function getOrdersRevenue() {
         FROM ${ORDERS_TABLE_NAME} orders
         JOIN (SELECT id, product_id FROM ${PRODUCT_SKU_TABLE_NAME}) sku ON orders.product_sku_id = sku.id
         JOIN (SELECT id, price FROM ${PRODUCTS_TABLE_NAME}) products ON sku.product_id = products.id
-        WHERE orders.created_at >= NOW() - INTERVAL 14 DAY
+        WHERE orders.created_at >= CURDATE() - INTERVAL 14 DAY
         GROUP BY DATE(orders.created_at)
         ORDER BY DATE(orders.created_at)
       `,
     });
 
+    const maxValue = Math.max(...result.map((i) => +i.value));
+
     return {
-      total: result.reduce((acc, i) => acc + parseFloat(i.value), 0),
-      history: result.map((i) => ({ ...i, order_date: i.order_date.toLocaleDateString() })),
+      total: result.reduce((acc, i) => acc + +i.value, 0),
+      history: result.map((i) => ({
+        ...i,
+        order_date: i.order_date.toLocaleDateString(),
+        percent: (+i.value / maxValue) * 100,
+      })),
     };
   } catch (error) {
     console.error(error);

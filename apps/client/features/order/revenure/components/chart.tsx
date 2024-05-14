@@ -18,7 +18,7 @@ export function OrderRevenueChart({ className, data, ...props }: OrderRevenueCha
     >
       <ChartArea
         data={data}
-        dataKey="value"
+        dataKey="percent"
         tooltipProps={{
           titleKey: "order_date",
           valueKey: "value",
