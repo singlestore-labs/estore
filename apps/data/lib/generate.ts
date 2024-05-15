@@ -134,7 +134,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   console.log(`Generating ${ORDERS_TABLE_NAME}`);
   const orderRows: OrderRow[] = Array.from({ length: UNIQUE_ORDERS_NUMBER }).map((_, i) => ({
     id: i + 1,
-    created_at: serializeDate(getRandomDate(new Date(2024, 0, 1))),
+    created_at: serializeDate(getRandomDate(new Date(2023, 0, 1))),
     user_id: getRandomArrayItem(userRows).id,
     product_sku_id: getRandomArrayItem(prodcutSKURows).id,
   }));

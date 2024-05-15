@@ -6,6 +6,7 @@ import {
   PRODUCT_LIKES_TABLE_NAME,
   PRODUCT_SIZES_TABLE_NAME,
   PRODUCT_SKU_TABLE_NAME,
+  PRODUCT_TYPES_TABLE_NAME,
   TABLE_NAMES,
   USERS_TABLE_NAME,
 } from "@repo/db/constants";
@@ -35,9 +36,17 @@ function createTables() {
         image_text TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
         price DECIMAL(9,2),
         gender VARCHAR(64),
+        type_id BIGINT,
         description_v VECTOR(1536),
         image_text_v VECTOR(1536),
         FULLTEXT KEY(description, image_text)
+      )
+    `),
+
+    db.connection.query(`
+      CREATE TABLE IF NOT EXISTS ${PRODUCT_TYPES_TABLE_NAME} (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        label VARCHAR(64)
       )
     `),
 
