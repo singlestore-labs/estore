@@ -1,0 +1,570 @@
+[
+  {
+    "id": 1,
+    "label": "sandals"
+  },
+  {
+    "id": 2,
+    "label": "dress"
+  },
+  {
+    "id": 3,
+    "label": "sneakers"
+  },
+  {
+    "id": 4,
+    "label": "wallet"
+  },
+  {
+    "id": 5,
+    "label": "heels"
+  },
+  {
+    "id": 6,
+    "label": "purse"
+  },
+  {
+    "id": 7,
+    "label": "bag"
+  },
+  {
+    "id": 8,
+    "label": "blouse"
+  },
+  {
+    "id": 9,
+    "label": "handbag"
+  },
+  {
+    "id": 10,
+    "label": "clutch"
+  },
+  {
+    "id": 11,
+    "label": "scarf"
+  },
+  {
+    "id": 12,
+    "label": "t"
+  },
+  {
+    "id": 13,
+    "label": "trousers"
+  },
+  {
+    "id": 14,
+    "label": "backpack"
+  },
+  {
+    "id": 15,
+    "label": "jeans"
+  },
+  {
+    "id": 16,
+    "label": "accessories"
+  },
+  {
+    "id": 17,
+    "label": "shorts"
+  },
+  {
+    "id": 18,
+    "label": "cap"
+  },
+  {
+    "id": 19,
+    "label": "boots"
+  },
+  {
+    "id": 20,
+    "label": "jacket"
+  },
+  {
+    "id": 21,
+    "label": "skirt"
+  },
+  {
+    "id": 22,
+    "label": "hat"
+  },
+  {
+    "id": 23,
+    "label": "hoodie"
+  },
+  {
+    "id": 24,
+    "label": "shoes"
+  },
+  {
+    "id": 25,
+    "label": "top"
+  },
+  {
+    "id": 26,
+    "label": "coat"
+  },
+  {
+    "id": 27,
+    "label": "swimsuit"
+  },
+  {
+    "id": 28,
+    "label": "bracelet"
+  },
+  {
+    "id": 29,
+    "label": "sweater"
+  },
+  {
+    "id": 30,
+    "label": "sunglasses"
+  },
+  {
+    "id": 31,
+    "label": "pants"
+  },
+  {
+    "id": 32,
+    "label": "earrings"
+  },
+  {
+    "id": 33,
+    "label": "tote"
+  },
+  {
+    "id": 34,
+    "label": "earring"
+  },
+  {
+    "id": 35,
+    "label": "cardigan"
+  },
+  {
+    "id": 36,
+    "label": "mules"
+  },
+  {
+    "id": 37,
+    "label": "sweatshirt"
+  },
+  {
+    "id": 38,
+    "label": "bikini"
+  },
+  {
+    "id": 39,
+    "label": "loafers"
+  },
+  {
+    "id": 40,
+    "label": "poncho"
+  },
+  {
+    "id": 41,
+    "label": "shirt"
+  },
+  {
+    "id": 42,
+    "label": "skort"
+  },
+  {
+    "id": 43,
+    "label": "pumps"
+  },
+  {
+    "id": 44,
+    "label": "necklace"
+  },
+  {
+    "id": 45,
+    "label": "belt"
+  },
+  {
+    "id": 46,
+    "label": "bra"
+  },
+  {
+    "id": 47,
+    "label": "eyeglasses"
+  },
+  {
+    "id": 48,
+    "label": "bodysuit"
+  },
+  {
+    "id": 49,
+    "label": "gown"
+  },
+  {
+    "id": 50,
+    "label": "headband"
+  },
+  {
+    "id": 51,
+    "label": "robe"
+  },
+  {
+    "id": 52,
+    "label": "sports"
+  },
+  {
+    "id": 53,
+    "label": "flats"
+  },
+  {
+    "id": 54,
+    "label": "jumpsuit"
+  },
+  {
+    "id": 55,
+    "label": "sling"
+  },
+  {
+    "id": 56,
+    "label": "polo"
+  },
+  {
+    "id": 57,
+    "label": "blazer"
+  },
+  {
+    "id": 58,
+    "label": "gloves"
+  },
+  {
+    "id": 59,
+    "label": "boot"
+  },
+  {
+    "id": 60,
+    "label": "ring"
+  },
+  {
+    "id": 61,
+    "label": "pouch"
+  },
+  {
+    "id": 62,
+    "label": "strap"
+  },
+  {
+    "id": 63,
+    "label": "glasses"
+  },
+  {
+    "id": 64,
+    "label": "accessory"
+  },
+  {
+    "id": 65,
+    "label": "leggings"
+  },
+  {
+    "id": 66,
+    "label": "jumper"
+  },
+  {
+    "id": 67,
+    "label": "charm"
+  },
+  {
+    "id": 68,
+    "label": "cape"
+  },
+  {
+    "id": 69,
+    "label": "socks"
+  },
+  {
+    "id": 70,
+    "label": "hairbrush"
+  },
+  {
+    "id": 71,
+    "label": "tank"
+  },
+  {
+    "id": 72,
+    "label": "hairclip"
+  },
+  {
+    "id": 73,
+    "label": "outfit"
+  },
+  {
+    "id": 74,
+    "label": "slipper"
+  },
+  {
+    "id": 75,
+    "label": "joggers"
+  },
+  {
+    "id": 76,
+    "label": "stuffedanimal"
+  },
+  {
+    "id": 77,
+    "label": "brooch"
+  },
+  {
+    "id": 78,
+    "label": "tights"
+  },
+  {
+    "id": 79,
+    "label": "beret"
+  },
+  {
+    "id": 80,
+    "label": "vest"
+  },
+  {
+    "id": 81,
+    "label": "trench"
+  },
+  {
+    "id": 82,
+    "label": "set"
+  },
+  {
+    "id": 83,
+    "label": "slippers"
+  },
+  {
+    "id": 84,
+    "label": "pendant"
+  },
+  {
+    "id": 85,
+    "label": "sandal"
+  },
+  {
+    "id": 86,
+    "label": "locket"
+  },
+  {
+    "id": 87,
+    "label": "beanie"
+  },
+  {
+    "id": 88,
+    "label": "underwear"
+  },
+  {
+    "id": 89,
+    "label": "lingerie"
+  },
+  {
+    "id": 90,
+    "label": "swimwear"
+  },
+  {
+    "id": 91,
+    "label": "briefcase"
+  },
+  {
+    "id": 92,
+    "label": "pin"
+  },
+  {
+    "id": 93,
+    "label": "frames"
+  },
+  {
+    "id": 94,
+    "label": "crossbody"
+  },
+  {
+    "id": 95,
+    "label": "tunic"
+  },
+  {
+    "id": 96,
+    "label": "loafer"
+  },
+  {
+    "id": 97,
+    "label": "kimono"
+  },
+  {
+    "id": 98,
+    "label": "satchel"
+  },
+  {
+    "id": 99,
+    "label": "booties"
+  },
+  {
+    "id": 100,
+    "label": "scarves"
+  },
+  {
+    "id": 101,
+    "label": "keychain"
+  },
+  {
+    "id": 102,
+    "label": "phonecase"
+  },
+  {
+    "id": 103,
+    "label": "visor"
+  },
+  {
+    "id": 104,
+    "label": "fragrance"
+  },
+  {
+    "id": 105,
+    "label": "shacket"
+  },
+  {
+    "id": 106,
+    "label": "tray"
+  },
+  {
+    "id": 107,
+    "label": "coasters"
+  },
+  {
+    "id": 108,
+    "label": "hairpiece"
+  },
+  {
+    "id": 109,
+    "label": "tuxedo"
+  },
+  {
+    "id": 110,
+    "label": "case"
+  },
+  {
+    "id": 111,
+    "label": "bottoms"
+  },
+  {
+    "id": 112,
+    "label": "suit"
+  },
+  {
+    "id": 113,
+    "label": "skirts"
+  },
+  {
+    "id": 114,
+    "label": "cropped"
+  },
+  {
+    "id": 115,
+    "label": "watch"
+  },
+  {
+    "id": 116,
+    "label": "nightgown"
+  },
+  {
+    "id": 117,
+    "label": "tanktop"
+  },
+  {
+    "id": 118,
+    "label": "cargo"
+  },
+  {
+    "id": 119,
+    "label": "barrette"
+  },
+  {
+    "id": 120,
+    "label": "platforms"
+  },
+  {
+    "id": 121,
+    "label": "mask"
+  },
+  {
+    "id": 122,
+    "label": "suitcase"
+  },
+  {
+    "id": 123,
+    "label": "decor"
+  },
+  {
+    "id": 124,
+    "label": "sweatpants"
+  },
+  {
+    "id": 125,
+    "label": "apron"
+  },
+  {
+    "id": 126,
+    "label": "shawl"
+  },
+  {
+    "id": 127,
+    "label": "toy"
+  },
+  {
+    "id": 128,
+    "label": "action"
+  },
+  {
+    "id": 129,
+    "label": "umbrella"
+  },
+  {
+    "id": 130,
+    "label": "bangle"
+  },
+  {
+    "id": 131,
+    "label": "maxi"
+  },
+  {
+    "id": 132,
+    "label": "hair"
+  },
+  {
+    "id": 133,
+    "label": "luggage"
+  },
+  {
+    "id": 134,
+    "label": "romper"
+  },
+  {
+    "id": 135,
+    "label": "choker"
+  },
+  {
+    "id": 136,
+    "label": "clogs"
+  },
+  {
+    "id": 137,
+    "label": "phone"
+  },
+  {
+    "id": 138,
+    "label": "plush"
+  },
+  {
+    "id": 139,
+    "label": "travel"
+  },
+  {
+    "id": 140,
+    "label": "overalls"
+  },
+  {
+    "id": 141,
+    "label": "jewelry"
+  },
+  {
+    "id": 142,
+    "label": "eyewear"
+  }
+]
