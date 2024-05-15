@@ -4,9 +4,9 @@ import { TrendDirection } from "@/components/trend-direction";
 import { OrderRevenueChart } from "@/order/revenure/components/chart";
 import { getOrdersRevenueTrend } from "@/order/revenure/lib/get";
 
-export type OrdersRevenueTrendCardProps = ComponentProps<InfoCardProps>;
+export type OrdersRevenueTrendInfoCardProps = ComponentProps<InfoCardProps>;
 
-export async function OrdersRevenueTrendCard({ className, ...props }: OrdersRevenueTrendCardProps) {
+export async function OrdersRevenueTrendInfoCard({ className, ...props }: OrdersRevenueTrendInfoCardProps) {
   const data = await getOrdersRevenueTrend();
 
   return (

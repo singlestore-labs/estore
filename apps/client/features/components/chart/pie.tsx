@@ -1,19 +1,43 @@
 "use client";
 
-import { Pie, PieChart, ResponsiveContainer, ResponsiveContainerProps, PieProps, Cell } from "recharts";
+import {
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  ResponsiveContainerProps,
+  PieProps,
+  Cell,
+  Tooltip,
+} from "recharts";
 
 import { ComponentProps } from "@/types";
+import { ChartTooltip, ChartTooltipProps } from "@/components/chart/tooltip";
 import { cn } from "@/ui/lib";
+
+export type ChartPieData = ({ [K: string]: any } & { color?: string })[];
 
 export type ChartPieProps = ComponentProps<
   Partial<ResponsiveContainerProps>,
-  Pick<PieProps, "data" | "dataKey"> & {
+  Pick<PieProps, "dataKey"> & {
+    data?: ChartPieData;
+    colors?: string[];
     chartProps?: ConstructorParameters<typeof PieChart>[0];
     pieProps?: Partial<Omit<PieProps, "ref" | "data" | "dataKey">>;
+    tooltipProps?: ChartTooltipProps;
+    withTooltip?: boolean;
   }
 >;
 
-export function ChartPie({ data, dataKey, chartProps, pieProps, ...props }: ChartPieProps) {
+export function ChartPie({
+  data,
+  dataKey,
+  chartProps,
+  pieProps,
+  colors = [],
+  tooltipProps,
+  withTooltip,
+  ...props
+}: ChartPieProps) {
   return (
     <ResponsiveContainer {...props}>
       <PieChart
@@ -31,11 +55,19 @@ export function ChartPie({ data, dataKey, chartProps, pieProps, ...props }: Char
           {data?.map((data, i) => (
             <Cell
               key={`cell-${i}`}
-              fill={data.color}
+              fill={data.color || colors[i]}
               stroke={"transparent"}
             />
           ))}
         </Pie>
+
+        {withTooltip && (
+          <Tooltip
+            {...tooltipProps}
+            content={ChartTooltip}
+            cursor={false}
+          />
+        )}
       </PieChart>
     </ResponsiveContainer>
   );
