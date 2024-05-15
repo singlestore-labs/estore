@@ -5,3 +5,6 @@
 
 /export/*
 !/export/products-*
+!/export/product_types.json
+
+/dev.ts

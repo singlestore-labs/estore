@@ -9,8 +9,13 @@ export type ProductRow = RowWithCreatedAt<{
   image_text: string;
   price: number;
   gender: string;
+  type_id?: ProductTypeRow["id"];
   description_v: string;
   image_text_v: string;
+}>;
+
+export type ProductTypeRow = Row<{
+  label: string;
 }>;
 
 export type ProductSizeRow = Row<{

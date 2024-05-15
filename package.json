@@ -6,6 +6,7 @@
     "start": "dotenv -- turbo start --filter='./apps/client'",
     "start:data": "dotenv -- turbo start --filter='./apps/data'",
     "dev": "dotenv -- turbo dev --filter='./apps/client'",
+    "dev:data": "dotenv -- turbo dev --filter='./apps/data'",
     "prettify": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "devDependencies": {

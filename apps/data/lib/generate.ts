@@ -6,9 +6,18 @@ import {
   PRODUCT_LIKES_TABLE_NAME,
   PRODUCT_SIZES_TABLE_NAME,
   PRODUCT_SKU_TABLE_NAME,
+  PRODUCT_TYPES_TABLE_NAME,
   USERS_TABLE_NAME,
 } from "@repo/db/constants";
-import { OrderRow, ProductLikeRow, ProductRow, ProductSKURow, ProductSizeRow, UserRow } from "@repo/db/types";
+import {
+  OrderRow,
+  ProductLikeRow,
+  ProductRow,
+  ProductSKURow,
+  ProductSizeRow,
+  ProductTypeRow,
+  UserRow,
+} from "@repo/db/types";
 import { getRandomArrayItem, getRandomDate, toChunks } from "@repo/helpers";
 import { readFile, readdir } from "fs/promises";
 import path from "path";
@@ -17,6 +26,7 @@ import { getImageBase64ByName } from "@/lib/get-image-base64";
 import randomInteger from "random-int";
 import { serializeDate } from "@repo/db/lib/serialize-date";
 import { vectorizeImages } from "@repo/ai/lib/vectorize-images";
+import { createProductType } from "@/lib/create-product-type";
 
 const USERS_NUMBER = 5_000_000;
 const PRODUCT_LIKES_NUMBER = 5_000_000;
@@ -37,7 +47,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   const userRows: UserRow[] = Array.from({ length: USERS_NUMBER }).map((_, i) => ({ id: i + 1, created_at }));
   await writeDataset(USERS_TABLE_NAME, userRows);
 
-  let productRows: ProductRow[] = [];
+  let productRows: (ProductRow & { [K: string]: any })[] = [];
   const productExportFileNames = exportFileNames.filter((i) => i.startsWith(PRODUCTS_TABLE_NAME));
   if (productExportFileNames.length) {
     console.log(`Loading ${PRODUCTS_TABLE_NAME}`);
@@ -55,6 +65,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
       );
 
       const imageVs = await vectorizeImages(images);
+      const types = await Promise.all(chunk.map((i) => createProductType(i.description)));
 
       productRows = [
         ...productRows,
@@ -62,6 +73,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
           id: productId++,
           created_at,
           description: product.description,
+          type: types[i],
           image: product.image,
           image_text: imageVs[i][0],
           price: product.price,
@@ -71,6 +83,17 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
         })),
       ];
     }
+
+    console.log(`Generating ${PRODUCT_TYPES_TABLE_NAME}`);
+    const productTypeRows: ProductTypeRow[] = [...new Set(productRows.map((i) => i.type))].map((label, i) => {
+      return { id: i + 1, label };
+    });
+    await writeDataset(PRODUCT_TYPES_TABLE_NAME, productTypeRows);
+
+    productRows = productRows.map(({ type, ...i }) => {
+      return { ...i, type_id: productTypeRows.find(({ label }) => label === type)?.id };
+    });
+
     await writeDataset(PRODUCTS_TABLE_NAME, productRows, 2500);
   }
 
