@@ -21,6 +21,7 @@ export async function OrdersRevenueTrendCard({ className, ...props }: OrdersReve
             className="flex flex-col items-end"
             value={+data.history[data.history.length - 1].value}
             prevValue={+data.history[data.history.length - 2].value}
+            legend="Compared to yesterday"
           />
         ),
       }}
