@@ -5,9 +5,9 @@ import { Stopwatch, StopwatchProps } from "@/components/stopwatch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/ui/lib";
 
-export type QueryStopwatchProps = ComponentProps<"div", Pick<StopwatchProps, "isRunning">>;
+export type AnalyticsQueryStopwatchProps = ComponentProps<"div", Pick<StopwatchProps, "isRunning">>;
 
-export function QueryStopwatch({ className, isRunning, ...props }: QueryStopwatchProps) {
+export function AnalyticsQueryStopwatch({ className, isRunning, ...props }: AnalyticsQueryStopwatchProps) {
   return (
     <div
       {...props}

@@ -1,4 +1,4 @@
-import { QueryResult } from "@/query/type";
+import { QueryResult } from "@/query/types";
 
 export function parseQueryResult<T>(result: QueryResult<T>) {
   let _result: T[];

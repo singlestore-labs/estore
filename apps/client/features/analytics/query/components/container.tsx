@@ -6,39 +6,45 @@ import { Section, SectionProps } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAction } from "@/action/hooks/use-action";
-import { executeQueryBySlug } from "@/query/actions/execute-by-slug";
-import { QueryResultTable, QueryResultTableProps } from "@/query/components/result-table";
-import { QueryResultTableRow } from "@/query/components/result-table-row";
-import { QueryStopwatch } from "@/query/components/stopwatch";
-import { formatQueryForUI } from "@/query/lib/format-for-ui";
-import { Query } from "@/query/type";
+import { executeAnalyticsQueryBySlug } from "@/analytics/query/actions/execute-by-slug";
+import {
+  AnalyticsQueryResultTable,
+  AnalyticsQueryResultTableProps,
+} from "@/analytics/query/components/result-table";
+import { AnalyticsQueryResultTableRow } from "@/analytics/query/components/result-table-row";
+import { AnalyticsQueryStopwatch } from "@/analytics/query/components/stopwatch";
+import { formatAnalyticsQueryForUI } from "@/analytics/query/lib/format-for-ui";
+import { AnalyticsQuery } from "@/analytics/query/type";
 import { cn } from "@/ui/lib";
 
-export type QueryContainerProps = ComponentProps<SectionProps, Omit<Query, "getQuery"> & { query: string }>;
+export type AnalyticsQueryContainerProps = ComponentProps<
+  SectionProps,
+  Omit<AnalyticsQuery, "getQuery"> & { query: string }
+>;
 
-export function QueryContainer({ className, slug, query, ...props }: QueryContainerProps) {
-  const [result, setResult] = useState<QueryResultTableProps["data"]>([]);
+export function AnalyticsQueryContainer({ className, slug, query, ...props }: AnalyticsQueryContainerProps) {
+  const [result, setResult] = useState<AnalyticsQueryResultTableProps["data"]>([]);
   const { execute, isPending } = useAction();
   const hasResult = !!result?.length;
 
   const handleRunClick = useCallback(async () => {
     try {
-      setResult(await execute(() => executeQueryBySlug(slug)));
+      setResult(await execute(() => executeAnalyticsQueryBySlug(slug)));
     } catch (error) {
       setResult([]);
     }
   }, [slug, execute]);
 
-  const formattedQuery = useMemo(() => formatQueryForUI(query), [query]);
+  const formattedQuery = useMemo(() => formatAnalyticsQueryForUI(query), [query]);
 
-  const renderRow = useCallback<Defined<QueryResultTableProps["renderRow"]>>(
+  const renderRow = useCallback<Defined<AnalyticsQueryResultTableProps["renderRow"]>>(
     (result, rowNode) => (
-      <QueryResultTableRow
+      <AnalyticsQueryResultTableRow
         querySlug={slug}
         result={result}
       >
         {rowNode}
-      </QueryResultTableRow>
+      </AnalyticsQueryResultTableRow>
     ),
     [slug],
   );
@@ -74,7 +80,7 @@ export function QueryContainer({ className, slug, query, ...props }: QueryContai
           contentProps={{ className: cn("h-80 p-0 overflow-hidden", !hasResult && "flex") }}
         >
           {hasResult ? (
-            <QueryResultTable
+            <AnalyticsQueryResultTable
               wrapperProps={{ className: "max-h-full" }}
               data={result}
               renderRow={renderRow}
@@ -86,7 +92,7 @@ export function QueryContainer({ className, slug, query, ...props }: QueryContai
       </div>
 
       <div className="flex items-center justify-between gap-4">
-        <QueryStopwatch isRunning={isPending} />
+        <AnalyticsQueryStopwatch isRunning={isPending} />
         <Button
           className="ml-auto"
           disabled={isPending}

@@ -12,18 +12,19 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/ui/lib";
 
-export type QueryResultTableProps<T extends Record<string, any>[] = Record<string, any>[]> = ComponentProps<
-  TableProps,
-  { data: T } & { renderRow?: (result: T[number], rowNode: ReactNode) => ReactNode }
->;
+export type AnalyticsQueryResultTableProps<T extends Record<string, any>[] = Record<string, any>[]> =
+  ComponentProps<
+    TableProps,
+    { data: T } & { renderRow?: (result: T[number], rowNode: ReactNode) => ReactNode }
+  >;
 
-export function QueryResultTable<T extends Record<string, any>[] = Record<string, any>[]>({
+export function AnalyticsQueryResultTable<T extends Record<string, any>[] = Record<string, any>[]>({
   className,
   data,
   wrapperProps,
   renderRow,
   ...props
-}: QueryResultTableProps<T>) {
+}: AnalyticsQueryResultTableProps<T>) {
   if (!data?.length) return null;
   const heads = Object.keys(data[0]);
 
