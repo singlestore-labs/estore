@@ -10,7 +10,7 @@ export function createGetTopProductIdsQuery({ limit = 10 }: { limit?: number } =
 SELECT products.id, orders.count + likes.count AS score
 FROM ${PRODUCTS_TABLE_NAME} products
 JOIN (
-  SELECT sku.product_id, COUNT(*) AS count
+  SELECT sku.product_id, sku.stock, COUNT(*) AS count
   FROM ${ORDERS_TABLE_NAME} orders
   JOIN ${PRODUCT_SKU_TABLE_NAME} sku ON orders.product_sku_id = sku.id
   GROUP BY sku.product_id

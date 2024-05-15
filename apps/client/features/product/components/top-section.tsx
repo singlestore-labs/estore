@@ -1,5 +1,5 @@
 import humanNumber from "human-number";
-import { Heart, Receipt, ShoppingCart } from "lucide-react";
+import { Heart, Layers, Receipt, ShoppingCart } from "lucide-react";
 
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
@@ -7,6 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { ProductCardSecondary } from "@/product/components/card/secondary";
 import { ProductInfoItem } from "@/product/components/info-item";
 import { countProductSales } from "@/product/lib/count-sales";
+import { countProductStock } from "@/product/lib/count-stock";
 import { getTopProducts } from "@/product/lib/get-top";
 import { ProductSalesChart } from "@/product/sales/components/chart";
 import { cn } from "@/ui/lib";
@@ -15,7 +16,9 @@ export type ProductTopSectionProps = ComponentProps<SectionProps>;
 
 export async function ProductTopSection({ className, contentProps, ...props }: ProductTopSectionProps) {
   const products = await getTopProducts();
-  const productSales = await Promise.all(products.map(({ id }) => countProductSales(id)));
+  const productSales = await Promise.all(
+    products.map(({ id }) => Promise.all([countProductSales(id), countProductStock(id)])),
+  );
 
   return (
     <Section
@@ -31,7 +34,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
     >
       <ul className="flex flex-col text-sm">
         {products.map((product, i) => {
-          const totalSales = product.price * productSales[i];
+          const totalSales = product.price * productSales[i][0];
 
           return (
             <li
@@ -57,6 +60,16 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
                 <div className="flex flex-1 items-center justify-center">
                   <ProductInfoItem
                     className="h-auto"
+                    label="In stock"
+                    icon={Layers}
+                    iconClassName="size-4 mb-0.5"
+                  >
+                    {productSales[i][1]}
+                  </ProductInfoItem>
+                </div>
+                <div className="flex flex-1 items-center justify-center">
+                  <ProductInfoItem
+                    className="h-auto"
                     label="Likes"
                     icon={Heart}
                     iconClassName="size-4"
@@ -71,7 +84,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
                     icon={ShoppingCart}
                     iconClassName="size-4 mb-0.5"
                   >
-                    {productSales[i]}
+                    {productSales[i][0]}
                   </ProductInfoItem>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
