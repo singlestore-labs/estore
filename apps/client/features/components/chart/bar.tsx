@@ -1,8 +1,10 @@
 "use client";
 
+import { useId } from "react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, BarProps, ResponsiveContainerProps } from "recharts";
 
 import { ComponentProps } from "@/types";
+import { ChartGradient } from "@/components/chart/gradient";
 import { ChartTooltip, ChartTooltipProps } from "@/components/chart/tooltip";
 
 type BarChartProps = ConstructorParameters<typeof BarChart>[0];
@@ -27,6 +29,8 @@ export function ChartBar({
   withTooltip = true,
   ...props
 }: ChartBarProps) {
+  const gradientId = useId();
+
   return (
     <ResponsiveContainer {...props}>
       <BarChart
@@ -34,9 +38,16 @@ export function ChartBar({
         data={data}
         margin={{ top: 0, bottom: 0, left: 0, right: 0, ...chartProps?.margin }}
       >
+        <defs>
+          <ChartGradient
+            id={gradientId}
+            dataKey={dataKey}
+          />
+        </defs>
+
         <Bar
           animationDuration={1000}
-          fill="currentColor"
+          fill={`url(#${gradientId}${dataKey})`}
           {...barProps}
           dataKey={dataKey}
         />

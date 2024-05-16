@@ -1,8 +1,10 @@
 "use client";
 
+import { useId } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, AreaProps, ResponsiveContainerProps } from "recharts";
 
 import { ComponentProps } from "@/types";
+import { ChartGradient } from "@/components/chart/gradient";
 import { ChartTooltip, ChartTooltipProps } from "@/components/chart/tooltip";
 
 type AreaChartProps = ConstructorParameters<typeof AreaChart>[0];
@@ -27,6 +29,8 @@ export function ChartArea({
   withTooltip = true,
   ...props
 }: ChartAreaProps) {
+  const gradientId = useId();
+
   return (
     <ResponsiveContainer {...props}>
       <AreaChart
@@ -35,24 +39,10 @@ export function ChartArea({
         margin={{ top: 8, bottom: 0, left: 0, right: 0, ...chartProps?.margin }}
       >
         <defs>
-          <linearGradient
-            id={`chartAreaColor${dataKey}`}
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="1"
-          >
-            <stop
-              offset="5%"
-              stopColor="currentColor"
-              stopOpacity={0.8}
-            />
-            <stop
-              offset="95%"
-              stopColor="currentColor"
-              stopOpacity={0}
-            />
-          </linearGradient>
+          <ChartGradient
+            id={gradientId}
+            dataKey={dataKey}
+          />
         </defs>
 
         <Area
@@ -61,7 +51,7 @@ export function ChartArea({
           dataKey={dataKey}
           fillOpacity={1}
           stroke="currentColor"
-          fill={`url(#chartAreaColor${dataKey})`}
+          fill={`url(#${gradientId}${dataKey})`}
           animationDuration={1000}
         />
 
