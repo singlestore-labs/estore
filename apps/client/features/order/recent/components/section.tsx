@@ -1,4 +1,4 @@
-import { timeAgo } from "@repo/helpers";
+import { timeAgo, toCurrency } from "@repo/helpers";
 
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
@@ -36,7 +36,7 @@ export async function OrderRecentSection({ className, contentProps, ...props }: 
               className="flex-1 basis-1/3"
             />
             <div className="flex-1 text-right">
-              <p>${order.product_price}</p>
+              <p>{toCurrency(order.product_price)}</p>
               <p className="text-muted-foreground text-xs">{timeAgo(order.created_at)}</p>
             </div>
           </li>

@@ -1,7 +1,9 @@
+import { withCommas } from "@repo/helpers";
+
 import { ComponentProps } from "@/types";
-import { ChartBar } from "@/components/chart/bar";
 import { InfoCard, InfoCardProps } from "@/components/info-card";
 import { TrendDirection } from "@/components/trend-direction";
+import { OrderTrendInfoChart } from "@/order/components/trend-info/chart";
 import { getOrdersTrend } from "@/order/lib/get-trend";
 
 export type OrdersTrendInfoCardProps = ComponentProps<InfoCardProps>;
@@ -13,7 +15,7 @@ export async function OrdersTrendInfoCard({ className, ...props }: OrdersTrendIn
     <InfoCard
       {...props}
       title="Sales"
-      value={data.total}
+      value={withCommas(data.total)}
       headerProps={{
         className: "flex items-start justify-between",
         children: (
@@ -26,13 +28,7 @@ export async function OrdersTrendInfoCard({ className, ...props }: OrdersTrendIn
         ),
       }}
     >
-      <div className="text-primary mt-auto h-20 px-4">
-        <ChartBar
-          data={data.history}
-          dataKey="percent"
-          tooltipProps={{ titleKey: "week_start", valueKey: "value" }}
-        />
-      </div>
+      <OrderTrendInfoChart data={data} />
     </InfoCard>
   );
 }

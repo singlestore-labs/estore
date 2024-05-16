@@ -1,5 +1,7 @@
 "use client";
 
+import { toCurrency } from "@repo/helpers";
+
 import { ComponentProps } from "@/types";
 import { ChartPie, ChartPieProps } from "@/components/chart/pie";
 import { cn } from "@/ui/lib";
@@ -20,7 +22,7 @@ export function ProductTypeRevenueSplitInfoChart({
           titleKey: "label",
           valueKey: "revenue",
           renderTitle: (v) => <span className="inline-block first-letter:uppercase">{v}</span>,
-          renderValue: (v) => `$${v}`,
+          renderValue: (v) => toCurrency(+v),
         }}
         pieProps={{ innerRadius: "50%" }}
       />

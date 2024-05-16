@@ -11,7 +11,7 @@ import { userProdcutLikesAtom } from "@/user/product/atoms/likes";
 
 export type ProductLikesInfoProps = ComponentProps<
   ProductInfoItemProps,
-  { value: Product["likes"]; productId: Product["id"] }
+  { value: Product["likes"] | string; productId: Product["id"] }
 >;
 
 export function ProductLikesInfo({ className, value, productId, ...props }: ProductLikesInfoProps) {

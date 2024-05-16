@@ -1,3 +1,4 @@
+import { toCurrency, withCommas } from "@repo/helpers";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -52,7 +53,7 @@ export function ProductCard({
             <h4 className="line-clamp-2 text-base font-semibold capitalize">{description}</h4>
           </Link>
 
-          <p className="text-end text-base font-semibold">${price}</p>
+          <p className="text-end text-base font-semibold">{toCurrency(price)}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -62,7 +63,7 @@ export function ProductCard({
             value={sales}
           />
           <ProductLikesInfo
-            value={likes}
+            value={withCommas(likes)}
             productId={id}
           />
         </div>

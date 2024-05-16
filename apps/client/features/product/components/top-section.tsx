@@ -1,3 +1,4 @@
+import { toCurrency, withCommas } from "@repo/helpers";
 import humanNumber from "human-number";
 import { Heart, Layers, Receipt, ShoppingCart } from "lucide-react";
 
@@ -54,7 +55,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
                     className="h-auto"
                     label="Price"
                   >
-                    {`$${product.price}`}
+                    {toCurrency(product.price)}
                   </ProductInfoItem>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
@@ -64,7 +65,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
                     icon={Layers}
                     iconClassName="size-4 mb-0.5"
                   >
-                    {productSales[i][1]}
+                    {withCommas(+productSales[i][1])}
                   </ProductInfoItem>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
@@ -74,7 +75,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
                     icon={Heart}
                     iconClassName="size-4"
                   >
-                    {product.likes}
+                    {withCommas(product.likes)}
                   </ProductInfoItem>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
@@ -84,7 +85,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
                     icon={ShoppingCart}
                     iconClassName="size-4 mb-0.5"
                   >
-                    {productSales[i][0]}
+                    {withCommas(productSales[i][0])}
                   </ProductInfoItem>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
@@ -111,7 +112,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
                     </TooltipTrigger>
                     <TooltipContent className="text-center text-xs">
                       <p>
-                        {product.sales.reduce((acc, i) => acc + i.value, 0)}
+                        {withCommas(product.sales.reduce((acc, i) => acc + i.value, 0))}
                         {` sales for the last ${product.sales.length} days`}
                       </p>
                     </TooltipContent>

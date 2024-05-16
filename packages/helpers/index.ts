@@ -74,3 +74,15 @@ export function formatDate(date: Date) {
 export function timeAgo(date: Date) {
   return new TimeAgo("en-US").format(date, "round");
 }
+
+export function toCurrency(number: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(number);
+}
+
+export function withCommas(number: number) {
+  return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(number);
+}

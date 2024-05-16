@@ -1,3 +1,5 @@
+import { toCurrency } from "@repo/helpers";
+
 import { ComponentProps } from "@/types";
 import { InfoCard, InfoCardProps } from "@/components/info-card";
 import { TrendDirection } from "@/components/trend-direction";
@@ -13,7 +15,7 @@ export async function OrdersRevenueTrendInfoCard({ className, ...props }: Orders
     <InfoCard
       {...props}
       title="Total revenue"
-      value={`$${data.total}`}
+      value={toCurrency(data.total)}
       headerProps={{
         className: "flex items-start justify-between",
         children: (

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { OrdersTrendInfoCard } from "@/order/components/trend-info-card";
+import { OrdersTrendInfoCard } from "@/order/components/trend-info/card";
 import { OrderRecentSection } from "@/order/recent/components/section";
 import { OrdersRevenueTrendInfoCard } from "@/order/revenure/components/trend-info-card";
 import { ProductTopSection } from "@/product/components/top-section";

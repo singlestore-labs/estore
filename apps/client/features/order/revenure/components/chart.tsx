@@ -1,5 +1,7 @@
 "use client";
 
+import { toCurrency } from "@repo/helpers";
+
 import { ComponentProps } from "@/types";
 import { ChartArea } from "@/components/chart/area";
 import { getOrdersRevenueTrend } from "@/order/revenure/lib/get";
@@ -22,7 +24,7 @@ export function OrderRevenueChart({ className, data, ...props }: OrderRevenueCha
         tooltipProps={{
           titleKey: "order_date",
           valueKey: "value",
-          renderValue: (value) => `$${parseInt(value)}`,
+          renderValue: (value) => toCurrency(+value),
         }}
       />
     </div>
