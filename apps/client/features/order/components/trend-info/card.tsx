@@ -8,7 +8,7 @@ import { getOrdersTrend } from "@/order/lib/get-trend";
 
 export type OrdersTrendInfoCardProps = ComponentProps<InfoCardProps>;
 
-export async function OrdersTrendInfoCard({ className, ...props }: OrdersTrendInfoCardProps) {
+export async function OrdersTrendInfoCard({ ...props }: OrdersTrendInfoCardProps) {
   const data = await getOrdersTrend();
 
   return (

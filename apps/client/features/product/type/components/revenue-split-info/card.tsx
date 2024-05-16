@@ -26,7 +26,7 @@ export async function ProductTypesRevenueSplitInfoCard({ ...props }: ProductType
           colors={colors}
         />
         <div className="relative flex-1">
-          <ul className="grid-auto-fit-[3.25rem] grid max-h-24 gap-x-4 gap-y-2 overflow-auto py-1">
+          <ul className="grid-auto-fit-[3.5rem] grid max-h-24 gap-x-4 gap-y-2 overflow-auto py-1 pr-4">
             {data.map((data, i) => (
               <li
                 className=""

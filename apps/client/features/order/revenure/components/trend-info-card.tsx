@@ -8,7 +8,7 @@ import { getOrdersRevenueTrend } from "@/order/revenure/lib/get";
 
 export type OrdersRevenueTrendInfoCardProps = ComponentProps<InfoCardProps>;
 
-export async function OrdersRevenueTrendInfoCard({ className, ...props }: OrdersRevenueTrendInfoCardProps) {
+export async function OrdersRevenueTrendInfoCard({ ...props }: OrdersRevenueTrendInfoCardProps) {
   const data = await getOrdersRevenueTrend();
 
   return (
