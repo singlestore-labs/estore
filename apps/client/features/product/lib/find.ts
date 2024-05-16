@@ -4,7 +4,7 @@ import { ProductRow } from "@repo/db/types";
 import { getProductByIds } from "@/product/lib/get-by-ids";
 import { createFindProductIdsQuery } from "@/product/queries/find-ids";
 import { parseQueryResult } from "@/query/lib/parse-query-result";
-import { QueryResult } from "@/query/type";
+import { QueryResult } from "@/query/types";
 
 type Result = {
   id: ProductRow["id"];

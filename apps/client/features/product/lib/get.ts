@@ -10,8 +10,9 @@ export async function getProducts({
   where,
   columns = PRODUCT_COLUMNS,
   limit,
+  extra,
   metaColumns,
-}: Pick<Parameters<typeof db.controllers.findMany>[0], "limit" | "where" | "columns"> & {
+}: Pick<Parameters<typeof db.controllers.findMany>[0], "limit" | "where" | "columns" | "extra"> & {
   metaColumns?: Parameters<typeof getProductInfoById>[1];
 }): Promise<Product[]> {
   try {
@@ -20,6 +21,7 @@ export async function getProducts({
       columns,
       where,
       limit,
+      extra,
     });
 
     return await Promise.all(

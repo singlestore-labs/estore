@@ -1,4 +1,10 @@
 import { differenceInMilliseconds } from "date-fns/differenceInMilliseconds";
+import { format } from "date-fns/format";
+
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+
+TimeAgo.addLocale(en);
 
 export function getRandomArrayItem<T extends any[]>(arr: T): T[number] {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -59,4 +65,12 @@ export async function withDuration<T extends (...args: any[]) => Promise<any>>(c
   const endTime = performance.now();
   const ms = Math.abs(differenceInMilliseconds(startTime, endTime));
   return [result, ms, ...formatMs(ms)] satisfies [Awaited<ReturnType<T>>, number, string, string];
+}
+
+export function formatDate(date: Date) {
+  return format(date, "yyyy-MM-dd HH:mm:ss");
+}
+
+export function timeAgo(date: Date) {
+  return new TimeAgo("en-US").format(date, "round");
 }

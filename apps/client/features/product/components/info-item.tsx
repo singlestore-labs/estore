@@ -11,6 +11,7 @@ export type ProductInfoItemProps = ComponentProps<
     children?: string | number;
     label?: ReactNode;
     icon?: ElementType;
+    iconClassName?: string;
   }
 >;
 
@@ -19,10 +20,11 @@ export function ProductInfoItem({
   className,
   label,
   icon: Icon,
+  iconClassName,
   onClick,
   ...props
 }: ProductInfoItemProps) {
-  const _Icon = Icon ? <Icon className="w-5" /> : undefined;
+  const _Icon = Icon ? <Icon className={cn("w-5", iconClassName)} /> : undefined;
 
   const content = (
     <>

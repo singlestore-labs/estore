@@ -6,6 +6,7 @@
   "type": "module",
   "dependencies": {
     "@repo/ai": "*",
+    "@repo/helpers": "*",
     "@singlestore/elegance-sdk": "^0.0.21"
   },
   "devDependencies": {

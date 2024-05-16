@@ -2,21 +2,25 @@ import { ReactNode } from "react";
 
 import { ComponentProps } from "@/types";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AnalyticsQuerySlugs } from "@/analytics/query/type";
 import { ProductTooltipCard } from "@/product/components/tooltip-card";
-import { QuerySlugs } from "@/query/type";
 
-export type QueryResultTableRowProps = ComponentProps<{
+export type AnalyticsQueryResultTableRowProps = ComponentProps<{
   children?: ReactNode;
-  querySlug: QuerySlugs;
+  querySlug: AnalyticsQuerySlugs;
   result: Record<string, any>;
 }>;
 
-const nodes: Partial<Record<QuerySlugs, (...args: any[]) => ReactNode>> = {
+const nodes: Partial<Record<AnalyticsQuerySlugs, (...args: any[]) => ReactNode>> = {
   find_products: ({ id }) => <ProductTooltipCard id={id} />,
   top_products: ({ id }) => <ProductTooltipCard id={id} />,
 };
 
-export function QueryResultTableRow({ children, querySlug, result }: QueryResultTableRowProps) {
+export function AnalyticsQueryResultTableRow({
+  children,
+  querySlug,
+  result,
+}: AnalyticsQueryResultTableRowProps) {
   const node = nodes[querySlug]?.(result);
   if (!node) return children;
 

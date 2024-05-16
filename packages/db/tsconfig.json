@@ -17,9 +17,10 @@
     "baseUrl": ".",
     "paths": {
       "@repo/db/*": ["./*"],
-      "@repo/ai/*": ["../ai/*"]
+      "@repo/ai/*": ["../ai/*"],
+      "@repo/helpers/*": ["../helpers/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "../ai/**/*"],
+  "include": ["**/*.ts", "**/*.tsx", "../ai/**/*", "../helpers/**/*"],
   "exclude": ["node_modules"]
 }

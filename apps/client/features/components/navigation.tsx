@@ -20,6 +20,7 @@ export function Navigation({ className, ...props }: NavigationProps) {
     >
       {[
         ["Chat", ROUTES.ROOT],
+        ["Dashboard", ROUTES.DASHBOARD],
         ["Analytics", ROUTES.ANALYTICS],
       ].map(([label, href]) => (
         <Button

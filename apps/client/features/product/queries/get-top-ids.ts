@@ -5,12 +5,12 @@ import {
   PRODUCT_SKU_TABLE_NAME,
 } from "@repo/db/constants";
 
-export function createGetTopProductIdsQuery({ limit = 10 }: { limit?: number }) {
+export function createGetTopProductIdsQuery({ limit = 10 }: { limit?: number } = {}) {
   return `\
 SELECT products.id, orders.count + likes.count AS score
 FROM ${PRODUCTS_TABLE_NAME} products
 JOIN (
-  SELECT sku.product_id, COUNT(*) AS count
+  SELECT sku.product_id, sku.stock, COUNT(*) AS count
   FROM ${ORDERS_TABLE_NAME} orders
   JOIN ${PRODUCT_SKU_TABLE_NAME} sku ON orders.product_sku_id = sku.id
   GROUP BY sku.product_id
@@ -20,7 +20,7 @@ JOIN (
   FROM ${PRODUCT_LIKES_TABLE_NAME}
   GROUP BY product_id
 ) likes ON products.id = likes.product_id
-ORDER BY score DESC
+ORDER BY score DESC, products.description ASC
 LIMIT ${limit}
 `;
 }

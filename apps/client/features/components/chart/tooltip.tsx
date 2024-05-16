@@ -1,12 +1,28 @@
+import { ReactNode } from "react";
 import { TooltipProps } from "recharts";
 
 import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/ui/lib";
 
-export function ChartTooltip({ active, payload }: TooltipProps<any, any>) {
+export type ChartTooltipProps = TooltipProps<any, any> & {
+  titleKey?: string;
+  valueKey?: string;
+  renderTitle?: (title: string) => ReactNode;
+  renderValue?: (value: string) => ReactNode;
+};
+
+export function ChartTooltip({
+  active,
+  payload,
+  titleKey = "date",
+  valueKey = "value",
+  renderTitle,
+  renderValue,
+}: ChartTooltipProps) {
   if (!active || !payload || !payload.length) return null;
   const [props] = payload;
+  const title = props.payload[titleKey];
+  const value = props.payload[valueKey];
 
   return (
     <Card
@@ -16,9 +32,9 @@ export function ChartTooltip({ active, payload }: TooltipProps<any, any>) {
       )}
     >
       <p>
-        <strong>{props.payload.date}</strong>
+        <strong>{renderTitle?.(title) || title}</strong>
         <br />
-        {props.value}
+        {renderValue?.(value) || value}
       </p>
     </Card>
   );
