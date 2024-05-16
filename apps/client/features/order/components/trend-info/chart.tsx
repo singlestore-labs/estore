@@ -21,7 +21,7 @@ export function OrderTrendInfoChart({ className, data, ...props }: OrderTrendInf
       <ChartBar
         data={data.history}
         dataKey="percent"
-        tooltipProps={{ titleKey: "week_start", valueKey: "value", renderValue: (v) => withCommas(v) }}
+        tooltipProps={{ titleKey: "week_start", valueKey: "value", renderValue: (v) => withCommas(+v) }}
       />
     </div>
   );
