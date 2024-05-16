@@ -47,11 +47,11 @@ export async function ProductTypesRevenueSplitInfoCard({ ...props }: ProductType
             ))}
           </ul>
           <Fade
-            className="left-0 top-0 z-[2] h-2 w-full"
+            className="dark:bg-card left-0 top-0 z-[2] h-2 w-full"
             direction="b"
           />
           <Fade
-            className="bottom-0 left-0 z-[2] h-2 w-full"
+            className="dark:bg-card bottom-0 left-0 z-[2] h-2 w-full"
             direction="t"
           />
         </div>
