@@ -11,12 +11,17 @@ export function ProductTypeRevenueSplitInfoChart({
   ...props
 }: ProductTypeRevenueSplitInfoChartProps) {
   return (
-    <div className={cn("mx-4 mb-4 size-24", className)}>
+    <div className={cn("size-28", className)}>
       <ChartPie
         {...props}
         dataKey="revenue"
         withTooltip
-        tooltipProps={{ titleKey: "label", valueKey: "revenue", renderValue: (v) => `$${v}` }}
+        tooltipProps={{
+          titleKey: "label",
+          valueKey: "revenue",
+          renderTitle: (v) => <span className="inline-block first-letter:uppercase">{v}</span>,
+          renderValue: (v) => `$${v}`,
+        }}
         pieProps={{ innerRadius: "50%" }}
       />
     </div>

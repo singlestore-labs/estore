@@ -26,7 +26,10 @@ export async function OrdersRevenueTrendInfoCard({ className, ...props }: Orders
         ),
       }}
     >
-      <OrderRevenueChart data={data.history} />
+      <OrderRevenueChart
+        className="mt-auto"
+        data={data.history}
+      />
     </InfoCard>
   );
 }

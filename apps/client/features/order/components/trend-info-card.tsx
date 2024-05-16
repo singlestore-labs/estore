@@ -26,7 +26,7 @@ export async function OrdersTrendInfoCard({ className, ...props }: OrdersTrendIn
         ),
       }}
     >
-      <div className="text-primary h-20 px-4">
+      <div className="text-primary mt-auto h-20 px-4">
         <ChartBar
           data={data.history}
           dataKey="percent"
