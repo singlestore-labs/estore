@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ComponentProps } from "@/types";
+import { useResizeObserver } from "@/hooks/use-resize-observer";
 import { Button } from "@/components/ui/button";
 import { Card, CardProps } from "@/components/ui/card";
 import { getTheme } from "@/ui/get-theme";
@@ -15,6 +16,7 @@ const theme = getTheme();
 export function AdminChatContrainer({ className, ...props }: AdminChatContrainerProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isTriggerVisible, setIsTriggerVisible] = useState(false);
 
   const setSize = useCallback(() => {
     if (!rootRef.current) return;
@@ -23,11 +25,13 @@ export function AdminChatContrainer({ className, ...props }: AdminChatContrainer
   }, []);
 
   useEffect(() => {
+    setSize();
+    setIsTriggerVisible(true);
     global.document?.addEventListener("scroll", setSize);
     return () => global.document?.removeEventListener("scroll", setSize);
   }, [setSize]);
 
-  useEffect(setSize, [setSize]);
+  useResizeObserver(rootRef, setSize);
 
   return (
     <Card
@@ -40,7 +44,10 @@ export function AdminChatContrainer({ className, ...props }: AdminChatContrainer
       )}
     >
       <Button
-        className="absolute -left-8 top-1/2 h-8 origin-[50%_0] -translate-x-1/2 -translate-y-1/2 -rotate-90 overflow-visible rounded-bl-none rounded-br-none"
+        className={cn(
+          "absolute left-0 top-1/2 h-8 origin-[50%_0] -translate-x-1/2 -translate-y-1/2 -rotate-90 overflow-visible rounded-bl-none rounded-br-none",
+          isTriggerVisible && "animate-[admin-chat-trigger_0.7s_ease-out_forwards]",
+        )}
         onClick={() => setIsOpen((i) => !i)}
       >
         Talk to the data

@@ -84,6 +84,14 @@ const config = {
             opacity: "0",
           },
         },
+        "admin-chat-trigger": {
+          from: {
+            left: "0px",
+          },
+          to: {
+            left: "-2rem",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
