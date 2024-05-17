@@ -9,11 +9,11 @@ import { Card, CardProps } from "@/components/ui/card";
 import { getTheme } from "@/ui/get-theme";
 import { cn } from "@/ui/lib";
 
-export type AdminChatContrainerProps = ComponentProps<CardProps>;
+export type DashboardChatContrainerProps = ComponentProps<CardProps>;
 
 const theme = getTheme();
 
-export function AdminChatContrainer({ className, ...props }: AdminChatContrainerProps) {
+export function DashboardChatContrainer({ className, ...props }: DashboardChatContrainerProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isTriggerVisible, setIsTriggerVisible] = useState(false);
