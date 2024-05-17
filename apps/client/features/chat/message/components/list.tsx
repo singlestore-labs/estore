@@ -1,10 +1,8 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { useRef } from "react";
 
 import { ComponentProps } from "@/types";
-import { useSetScrollbarWidth } from "@/hooks/use-set-scrollbar-width";
 import { Fade } from "@/components/fade";
 import { chatMessagesAtom } from "@/chat/message/atoms/messages";
 import { cn } from "@/ui/lib";
@@ -12,9 +10,6 @@ import { cn } from "@/ui/lib";
 export type ChatMessageListProps = ComponentProps<"div", { listProps?: ComponentProps<"ul"> }>;
 
 export function ChatMessageList({ className, listProps, ...props }: ChatMessageListProps) {
-  const scrollbarRef = useRef<HTMLDivElement>(null);
-  useSetScrollbarWidth(scrollbarRef);
-
   const messages = useAtomValue(chatMessagesAtom);
   if (!messages.length) return null;
 
@@ -23,10 +18,7 @@ export function ChatMessageList({ className, listProps, ...props }: ChatMessageL
       {...props}
       className={cn("relative w-full max-w-full", className)}
     >
-      <div
-        ref={scrollbarRef}
-        className="absolute left-0 top-0 flex h-full w-full max-w-full flex-col-reverse overflow-x-hidden overflow-y-scroll py-8 "
-      >
+      <div className="absolute left-0 top-0 flex h-full w-full max-w-full flex-col-reverse overflow-x-hidden overflow-y-scroll py-8 ">
         <ul
           {...listProps}
           className={cn(

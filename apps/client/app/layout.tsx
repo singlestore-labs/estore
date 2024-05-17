@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { ScrollbarWidthController } from "@/components/scrollbar-width-controller";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_NAME } from "@/constants/config";
 import { StoreProvider } from "@/store/components/provider";
@@ -46,6 +47,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <UserController />
+            <ScrollbarWidthController />
             <Header />
             <main className="flex flex-1 flex-col">
               {children}
