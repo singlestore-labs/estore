@@ -71,6 +71,19 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "puslating-dot": {
+          "0%": {
+            transform: "translate(-50%, -50%) scale(0.1, 0.1)",
+            opacity: "0",
+          },
+          "50%": {
+            opacity: "1",
+          },
+          "100%": {
+            transform: "translate(-50%, -50%) scale(1.2, 1.2)",
+            opacity: "0",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

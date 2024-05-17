@@ -32,7 +32,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className)}>
+      <body
+        className={cn(
+          inter.className,
+          "flex h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto overflow-x-hidden",
+        )}
+      >
         <StoreProvider>
           <ThemeProvider
             attribute="class"
@@ -41,15 +46,13 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <UserController />
-            <div className="flex min-h-screen w-full min-w-80 max-w-full flex-col overflow-hidden">
-              <Header />
-              <main className="flex flex-1 flex-col">
-                {children}
-                {product}
-              </main>
-              <Footer />
-              <Toaster position="bottom-center" />
-            </div>
+            <Header />
+            <main className="flex flex-1 flex-col">
+              {children}
+              {product}
+            </main>
+            <Footer />
+            <Toaster position="bottom-center" />
           </ThemeProvider>
         </StoreProvider>
       </body>
