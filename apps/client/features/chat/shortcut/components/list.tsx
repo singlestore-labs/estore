@@ -1,21 +1,23 @@
 "use client";
 
+import { useAtomValue } from "jotai";
 import { useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChatToolbar } from "@/chat/components/toolbar";
+import { chatShortcutsAtom } from "@/chat/shortcut/atoms/shortcuts";
 import { ChatShortcutButton } from "@/chat/shortcut/components/button";
-import { CHAT_SHORTCUTS } from "@/chat/shortcut/constants";
 import { ChatShortcut } from "@/chat/shortcut/types";
 import { cn } from "@/ui/lib";
 
 export type ChatShortcutListProps = ComponentProps<
   "ul",
-  { isDisabled?: boolean; onShortcut?: (shortcut: ChatShortcut) => Promise<void> | void }
+  { isDisabled?: boolean; onShortcut?: (shortcut: ChatShortcut) => Promise<void> }
 >;
 
 export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }: ChatShortcutListProps) {
+  const shortcuts = useAtomValue(chatShortcutsAtom);
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const handleShortcut = async (shortcut: ChatShortcut) => {
@@ -36,6 +38,7 @@ export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }
       >
         <AccordionTrigger
           className="justify-start gap-1 p-0 text-sm"
+          withTrigger={!!shortcuts.length}
           headerChildren={<ChatToolbar className="ml-auto" />}
         >
           Shortcuts
@@ -48,7 +51,7 @@ export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }
               className,
             )}
           >
-            {CHAT_SHORTCUTS.map((shortcut) => (
+            {shortcuts.map((shortcut) => (
               <li key={shortcut.title}>
                 <ChatShortcutButton
                   {...shortcut}

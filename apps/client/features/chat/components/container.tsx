@@ -1,11 +1,11 @@
 import { ComponentProps } from "@/types";
-import { ChatInputCard } from "@/chat/input/components/card";
+import { ChatInputCard, ChatInputCardProps } from "@/chat/input/components/card";
 import { ChatMessageList } from "@/chat/message/components/list";
 import { cn } from "@/ui/lib";
 
-export type ChatContainerProps = ComponentProps<"div">;
+export type ChatContainerProps = ComponentProps<"div", Partial<Pick<ChatInputCardProps, "placeholder">>>;
 
-export function ChatContainer({ className, ...props }: ChatContainerProps) {
+export function ChatContainer({ className, placeholder, ...props }: ChatContainerProps) {
   return (
     <div
       {...props}
@@ -15,7 +15,10 @@ export function ChatContainer({ className, ...props }: ChatContainerProps) {
         className="flex-1"
         listProps={{ className: "max-w-5xl px-4" }}
       />
-      <ChatInputCard className="z-[3] max-w-5xl px-4" />
+      <ChatInputCard
+        className="z-[3] max-w-5xl px-4"
+        placeholder={placeholder}
+      />
     </div>
   );
 }

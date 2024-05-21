@@ -1,13 +1,15 @@
 "use client";
 
 import { readStreamableValue } from "ai/rsc";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Content } from "@/components/content";
 import { ChatMessageCard, ChatMessageCardProps } from "@/chat/message/components/card";
 import { ChatMessage } from "@/chat/message/types";
-import { CHAT_SHORTCUTS } from "@/chat/shortcut/constants";
+import { chatShortcutsAtom } from "@/chat/shortcut/atoms/shortcuts";
+import { ChatShortcut } from "@/chat/shortcut/types";
 import { cn } from "@/ui/lib";
 
 export type ChatMessageContentCardProps = ComponentProps<
@@ -15,10 +17,10 @@ export type ChatMessageContentCardProps = ComponentProps<
   Omit<ChatMessage, "node"> & { withAuthor?: boolean }
 >;
 
-function parseContent(content: ChatMessageContentCardProps["content"]) {
+function parseContent(content: ChatMessageContentCardProps["content"], shortcuts: ChatShortcut[]) {
   if (typeof content !== "string") return content;
 
-  const shortcutMask = CHAT_SHORTCUTS.find((i) => i.prompt === content);
+  const shortcutMask = shortcuts.find((i) => i.prompt === content);
   if (shortcutMask) return shortcutMask.title;
 
   return content;
@@ -33,7 +35,8 @@ export function ChatMessageContentCard({
   withAuthor = true,
   ...props
 }: ChatMessageContentCardProps) {
-  const _content = role === "user" ? parseContent(content) : content;
+  const shortcuts = useAtomValue(chatShortcutsAtom);
+  const _content = role === "user" ? parseContent(content, shortcuts) : content;
   const [activeContent, setActiveContent] = useState<string>(typeof _content === "string" ? _content : "");
 
   useEffect(() => {

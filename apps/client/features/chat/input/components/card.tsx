@@ -5,28 +5,24 @@ import { useCallback } from "react";
 
 import { ComponentProps, Defined } from "@/types";
 import { ChatInputForm, ChatInputFormProps } from "@/chat/input/components/form";
-import { hasMessagesAtom } from "@/chat/message/atoms/messages";
+import { hasChatMessagesAtom } from "@/chat/message/atoms/messages";
 import { useSubmitMessage } from "@/chat/message/hooks/use-submit";
 import { ChatShortcutList, ChatShortcutListProps } from "@/chat/shortcut/components/list";
 import { cn } from "@/ui/lib";
 
-export type ChatInputCardProps = ComponentProps<"div">;
+export type ChatInputCardProps = ComponentProps<"div", Pick<ChatInputFormProps, "placeholder">>;
 
-export function ChatInputCard({ className, ...props }: ChatInputCardProps) {
-  const hasMessages = useAtomValue(hasMessagesAtom);
+export function ChatInputCard({ className, placeholder, ...props }: ChatInputCardProps) {
+  const hasMessages = useAtomValue(hasChatMessagesAtom);
   const { submit, isLoading } = useSubmitMessage();
 
   const handleFormSubmit = useCallback<Defined<ChatInputFormProps["onSubmit"]>>(
-    async (values) => {
-      await submit(values.content);
-    },
+    async (values) => await submit(values.content),
     [submit],
   );
 
   const handleShortcut = useCallback<Defined<ChatShortcutListProps["onShortcut"]>>(
-    async (shortcut) => {
-      await submit(shortcut.prompt || shortcut.title);
-    },
+    async (shortcut) => await submit(shortcut.prompt || shortcut.title),
     [submit],
   );
 
@@ -40,7 +36,7 @@ export function ChatInputCard({ className, ...props }: ChatInputCardProps) {
         onShortcut={handleShortcut}
       />
       <ChatInputForm
-        placeholder={hasMessages ? "Message" : "Describe the product you wish to buy"}
+        placeholder={hasMessages ? "Message" : placeholder}
         onSubmit={handleFormSubmit}
         isLoading={isLoading}
         isDisabled={isLoading}
