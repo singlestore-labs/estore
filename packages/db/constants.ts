@@ -10,6 +10,7 @@ export const PRODUCT_SIZES_TABLE_NAME = "product_sizes";
 export const PRODUCT_TYPES_TABLE_NAME = "product_types";
 export const PRODUCT_LIKES_TABLE_NAME = "product_likes";
 export const ORDERS_TABLE_NAME = "orders";
+export const CHATS_TABLE_NAME = "chats";
 export const CHAT_MESSAGES_TABLE_NAME = "chat_messages";
 
 export const TABLE_NAMES = [
@@ -20,5 +21,6 @@ export const TABLE_NAMES = [
   PRODUCT_TYPES_TABLE_NAME,
   PRODUCT_LIKES_TABLE_NAME,
   ORDERS_TABLE_NAME,
+  CHATS_TABLE_NAME,
   CHAT_MESSAGES_TABLE_NAME,
 ] as const;

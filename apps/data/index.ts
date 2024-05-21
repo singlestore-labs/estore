@@ -1,5 +1,6 @@
 import { db } from "@repo/db";
 import {
+  CHATS_TABLE_NAME,
   CHAT_MESSAGES_TABLE_NAME,
   ORDERS_TABLE_NAME,
   PRODUCTS_TABLE_NAME,
@@ -85,9 +86,17 @@ function createTables() {
     `),
 
     db.connection.query(`
+      CREATE TABLE IF NOT EXISTS ${CHATS_TABLE_NAME} (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(128)
+      )
+    `),
+
+    db.connection.query(`
       CREATE TABLE IF NOT EXISTS ${CHAT_MESSAGES_TABLE_NAME} (
           id BIGINT AUTO_INCREMENT PRIMARY KEY,
           created_at BIGINT,
+          chat_id BIGINT,
           user_id BIGINT,
           role VARCHAR(64),
           content JSON
@@ -111,7 +120,7 @@ async function insertValues() {
         await db.controllers.insertMany({ collection: tableName, values: chunk });
       }
     } else {
-      await db.controllers.insertMany({ collection: tableName, values: values });
+      await db.controllers.insertMany({ collection: tableName, values });
     }
   }
 }

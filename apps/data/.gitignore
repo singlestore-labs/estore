@@ -6,5 +6,6 @@
 /export/*
 !/export/products-*
 !/export/product_types.json
+!/export/chats.json
 
 /dev.ts
