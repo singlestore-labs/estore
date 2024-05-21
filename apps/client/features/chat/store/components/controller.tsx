@@ -2,22 +2,22 @@
 
 import { useHydrateAtoms } from "jotai/utils";
 
-import { chatNameAtom } from "@/chat/atoms/name";
+import { chatConfigAtom } from "@/chat/atoms/config";
 import { chatMessagesAtom } from "@/chat/message/atoms/messages";
 import { ChatMessage } from "@/chat/message/types";
 import { chatShortcutsAtom } from "@/chat/shortcut/atoms/shortcuts";
 import { ChatShortcut } from "@/chat/shortcut/types";
-import { ChatName } from "@/chat/types";
+import { ChatConfig } from "@/chat/types";
 
 export type ChatStoreControllerProps = {
-  name: ChatName;
+  config: ChatConfig;
   messages: ChatMessage[];
   shortcuts: ChatShortcut[];
 };
 
-export function ChatStoreController({ name, messages, shortcuts }: ChatStoreControllerProps) {
+export function ChatStoreController({ config, messages, shortcuts }: ChatStoreControllerProps) {
   useHydrateAtoms([
-    [chatNameAtom, name],
+    [chatConfigAtom, config],
     [chatMessagesAtom, messages],
     [chatShortcutsAtom, shortcuts],
   ]);

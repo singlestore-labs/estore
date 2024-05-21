@@ -11,7 +11,12 @@ export async function DashboardChatContainer({ ...props }: DashboardChatContaine
 
   return (
     <ChatStoreProvider
-      name="dashboard"
+      config={{
+        name: "dashboard",
+        deleteUserLikesOnClear: false,
+        deleteUserOrdersOnClear: false,
+        affectedDataOnClear: ["messages"],
+      }}
       messages={messages}
       shortcuts={DASHBOARD_CHAT_SHORTCUTS}
     >
