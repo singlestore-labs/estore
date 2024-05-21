@@ -11,7 +11,6 @@ import { StoreProvider } from "@/store/components/provider";
 import { ThemeProvider } from "@/theme/components/provider";
 import { cn } from "@/ui/lib";
 import { UserController } from "@/user/components/controller";
-import { getUserProductLikes } from "@/user/product/lib/get-likes";
 
 import "./globals.css";
 
@@ -32,8 +31,6 @@ export default async function RootLayout({
   children: React.ReactNode;
   product: React.ReactNode;
 }) {
-  const [userProductLikes] = await Promise.all([getUserProductLikes()]);
-
   return (
     <html lang="en">
       <body
@@ -42,7 +39,7 @@ export default async function RootLayout({
           "flex h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto overflow-x-hidden",
         )}
       >
-        <StoreProvider userProductLikes={userProductLikes}>
+        <StoreProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
