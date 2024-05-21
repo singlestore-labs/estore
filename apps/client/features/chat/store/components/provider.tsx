@@ -9,7 +9,7 @@ export type ChatStoreProviderProps = {
   children: ReactNode;
 } & ChatStoreHydrateProps;
 
-export async function ChatStoreProvider({ children, store, ...props }: ChatStoreProviderProps) {
+export function ChatStoreProvider({ children, store, ...props }: ChatStoreProviderProps) {
   return (
     <Provider store={store}>
       <ChatStoreHydrate
