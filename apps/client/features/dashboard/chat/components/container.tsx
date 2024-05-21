@@ -6,13 +6,15 @@ import { DASHBOARD_CHAT_SHORTCUTS } from "@/dashboard/chat/constants/shortcuts";
 
 export type DashboardChatContainerProps = ComponentProps<ChatContainerProps>;
 
+const chatName = "dashboard";
+
 export async function DashboardChatContainer({ ...props }: DashboardChatContainerProps) {
-  const messages = await getChatMessages();
+  const messages = await getChatMessages(chatName);
 
   return (
     <ChatStoreProvider
       config={{
-        name: "dashboard",
+        name: chatName,
         deleteUserLikesOnClear: false,
         deleteUserOrdersOnClear: false,
         affectedDataOnClear: ["messages"],

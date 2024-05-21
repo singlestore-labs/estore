@@ -5,10 +5,11 @@ import { createStreamableUI, createStreamableValue } from "ai/rsc";
 import { forwardActionError } from "@/action/error/lib/forward";
 import { createChatLLM } from "@/chat/llm/lib/create";
 import { createChatMessage } from "@/chat/message/lib/create";
+import { Chat } from "@/chat/types";
 
-export async function submitChatMessage(content: string) {
+export async function submitChatMessage(chatName: Chat["name"], content: string) {
   try {
-    const chatLLM = await createChatLLM();
+    const chatLLM = await createChatLLM(chatName);
     let isLoading = true;
 
     const textStream: ReturnType<typeof createStreamableValue<string>> = createStreamableValue("");

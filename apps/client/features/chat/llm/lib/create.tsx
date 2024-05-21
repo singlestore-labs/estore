@@ -4,22 +4,23 @@ import { CHAT_MESSAGES_TABLE_NAME } from "@repo/db/constants";
 import { ReactNode } from "react";
 import zodToJsonSchema from "zod-to-json-schema";
 
+import { getChatByName } from "@/chat/lib/get-by-name";
 import { createChatLLMMessage } from "@/chat/llm/message/lib/create";
 import { normalizeChatLLMMessage } from "@/chat/llm/message/lib/normalize";
 import { ChatLLMMessage } from "@/chat/llm/message/types";
 import { chatLLMTools } from "@/chat/llm/tool";
 import { createChatLLMToolHandler } from "@/chat/llm/tool/lib/create-handler";
-import { ChatName } from "@/chat/types";
+import { Chat } from "@/chat/types";
 import { IS_DEV } from "@/constants/config";
 import { getUserId } from "@/user/lib/get-id";
 
-export async function createChatLLM(name: ChatName = "main") {
-  const userId = await getUserId();
+export async function createChatLLM(name: Chat["name"] = "main") {
+  const [userId, chat] = await Promise.all([getUserId(), getChatByName(name)]);
 
   async function getMessages() {
     const chatLLMMessage = await db.controllers.findMany<ChatLLMMessage[]>({
       collection: CHAT_MESSAGES_TABLE_NAME,
-      where: `user_id = ${userId}`,
+      where: `user_id = ${userId} AND chat_id = ${chat.id}`,
       extra: "ORDER BY created_at ASC",
     });
     return chatLLMMessage.map(normalizeChatLLMMessage);
@@ -28,7 +29,7 @@ export async function createChatLLM(name: ChatName = "main") {
   function clearMessages() {
     return db.controllers.deleteMany({
       collection: CHAT_MESSAGES_TABLE_NAME,
-      where: `user_id = ${userId}`,
+      where: `user_id = ${userId} AND chat_id = ${chat.id}`,
     });
   }
 
@@ -61,7 +62,12 @@ export async function createChatLLM(name: ChatName = "main") {
         })),
       }),
 
-      createChatLLMMessage({ role: "user", user_id: userId, content: JSON.stringify(content) }),
+      createChatLLMMessage({
+        role: "user",
+        user_id: userId,
+        chat_id: chat.id,
+        content: JSON.stringify(content),
+      }),
     ]);
 
     const { handleDeltaTool, callTool } = createChatLLMToolHandler();
@@ -84,13 +90,19 @@ export async function createChatLLM(name: ChatName = "main") {
           return createChatLLMMessage({
             role: "assistant",
             user_id: userId,
+            chat_id: chat.id,
             content: JSON.stringify(llmContent),
           });
         })(),
         callTool({
           onNode,
           onResult: async (result) => {
-            await createChatLLMMessage({ role: "function", user_id: userId, content: JSON.stringify(result) });
+            await createChatLLMMessage({
+              role: "function",
+              user_id: userId,
+              chat_id: chat.id,
+              content: JSON.stringify(result),
+            });
           },
         }),
       ]);
