@@ -1,19 +1,28 @@
-import { useAtom, useSetAtom } from "jotai";
+"use client";
+
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Trash2 } from "lucide-react";
 
 import { ComponentProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverProps, PopoverTrigger } from "@/components/ui/popover";
+import { ActionError } from "@/action/error/types";
 import { useAction } from "@/action/hooks/use-action";
+import { chatNameAtom } from "@/chat/atoms/name";
 import { clearChatMessages } from "@/chat/message/actions/clear";
 import { isChatMessageSubmittingAtom } from "@/chat/message/atoms/is-submitting";
 import { chatMessagesAtom } from "@/chat/message/atoms/messages";
 import { deleteUserLikes } from "@/user/action/delete-likes";
 import { deleteUserOrders } from "@/user/action/delete-orders";
 
-export type ChatMessageActionClearProps = ComponentProps<PopoverProps>;
+export type ChatActionClearProps = ComponentProps<PopoverProps>;
 
-export function ChatMessageActionClear({ className, ...props }: ChatMessageActionClearProps) {
+const ACTIONS_BY_CHAT_NAME: Record<string, (() => Promise<void | ActionError>)[]> = {
+  main: [deleteUserLikes, deleteUserOrders],
+};
+
+export function ChatActionClear({ className, ...props }: ChatActionClearProps) {
+  const chatName = useAtomValue(chatNameAtom);
   const setMessages = useSetAtom(chatMessagesAtom);
   const { execute, isPending } = useAction();
   const [isChatMessageSubmitting, setIsChatMessageSubmitting] = useAtom(isChatMessageSubmittingAtom);
@@ -21,7 +30,8 @@ export function ChatMessageActionClear({ className, ...props }: ChatMessageActio
   const handleClearClick = async () => {
     try {
       setIsChatMessageSubmitting(true);
-      await execute(() => Promise.all([clearChatMessages(), deleteUserLikes(), deleteUserOrders()]));
+      const actions = ACTIONS_BY_CHAT_NAME[chatName] || [];
+      await execute(() => Promise.all([() => clearChatMessages(chatName), ...actions].map((fn) => fn())));
       setMessages([]);
     } finally {
       setIsChatMessageSubmitting(false);
@@ -48,7 +58,7 @@ export function ChatMessageActionClear({ className, ...props }: ChatMessageActio
         <p className="mt-1 text-sm">
           The following data will be deleted:
           <br />
-          messages, shopping history, likes.
+          {chatName === "main" ? "messages, shopping history, likes." : "messages."}
         </p>
         <Button
           variant="destructive"

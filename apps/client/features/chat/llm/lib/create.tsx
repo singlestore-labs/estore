@@ -9,10 +9,11 @@ import { normalizeChatLLMMessage } from "@/chat/llm/message/lib/normalize";
 import { ChatLLMMessage } from "@/chat/llm/message/types";
 import { chatLLMTools } from "@/chat/llm/tool";
 import { createChatLLMToolHandler } from "@/chat/llm/tool/lib/create-handler";
+import { ChatName } from "@/chat/types";
 import { IS_DEV } from "@/constants/config";
 import { getUserId } from "@/user/lib/get-id";
 
-export async function createChatLLM() {
+export async function createChatLLM(name: ChatName = "main") {
   const userId = await getUserId();
 
   async function getMessages() {

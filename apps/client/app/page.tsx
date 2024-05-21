@@ -10,14 +10,12 @@ export default async function Home() {
   return (
     <div className="relative flex w-full max-w-full flex-1 flex-col items-center justify-center gap-16">
       <ChatStoreProvider
+        name="main"
         messages={messages}
         shortcuts={MAIN_CHAT_SHORTCUTS}
       >
         <Hero />
-        <ChatContainer
-          placeholder="Describe the product you wish to buy"
-          shortcuts={MAIN_CHAT_SHORTCUTS}
-        />
+        <ChatContainer placeholder="Describe the product you wish to buy" />
       </ChatStoreProvider>
     </div>
   );

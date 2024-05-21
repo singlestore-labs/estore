@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ChatToolbar } from "@/chat/components/toolbar";
+import { ChatToolbar, ChatToolbarProps } from "@/chat/components/toolbar";
 import { chatShortcutsAtom } from "@/chat/shortcut/atoms/shortcuts";
 import { ChatShortcutButton } from "@/chat/shortcut/components/button";
 import { ChatShortcut } from "@/chat/shortcut/types";
@@ -13,7 +13,10 @@ import { cn } from "@/ui/lib";
 
 export type ChatShortcutListProps = ComponentProps<
   "ul",
-  { isDisabled?: boolean; onShortcut?: (shortcut: ChatShortcut) => Promise<void> }
+  {
+    isDisabled?: boolean;
+    onShortcut?: (shortcut: ChatShortcut) => Promise<void>;
+  }
 >;
 
 export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }: ChatShortcutListProps) {

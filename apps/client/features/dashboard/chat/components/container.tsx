@@ -11,6 +11,7 @@ export async function DashboardChatContainer({ ...props }: DashboardChatContaine
 
   return (
     <ChatStoreProvider
+      name="dashboard"
       messages={messages}
       shortcuts={DASHBOARD_CHAT_SHORTCUTS}
     >
