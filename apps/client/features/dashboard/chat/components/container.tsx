@@ -1,8 +1,8 @@
 import { ComponentProps } from "@/types";
 import { ChatContainer, ChatContainerProps } from "@/chat/components/container";
 import { getChatMessages } from "@/chat/message/lib/get-list";
-import { ChatStoreProvider } from "@/chat/store/components/provider";
 import { DASHBOARD_CHAT_SHORTCUTS } from "@/dashboard/chat/constants/shortcuts";
+import { DashboardChatStoreProvider } from "@/dashboard/chat/store/components/provider";
 
 export type DashboardChatContainerProps = ComponentProps<ChatContainerProps>;
 
@@ -12,7 +12,7 @@ export async function DashboardChatContainer({ ...props }: DashboardChatContaine
   const messages = await getChatMessages(chatName);
 
   return (
-    <ChatStoreProvider
+    <DashboardChatStoreProvider
       config={{
         name: chatName,
         deleteUserLikesOnClear: false,
@@ -26,6 +26,6 @@ export async function DashboardChatContainer({ ...props }: DashboardChatContaine
         placeholder="Message"
         {...props}
       />
-    </ChatStoreProvider>
+    </DashboardChatStoreProvider>
   );
 }

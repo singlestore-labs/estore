@@ -1,19 +1,22 @@
-import { Provider } from "jotai";
+"use client";
+
+import { Provider, createStore } from "jotai";
 import { ReactNode } from "react";
 
-import { StoreController } from "@/store/components/controller";
-import { getUserProductLikes } from "@/user/product/lib/get-likes";
+import { ComponentProps } from "@/types";
+import { StoreHydrate, StoreHydrateProps } from "@/store/components/hydrate";
 
-export type StoreProviderProps = {
-  children: ReactNode;
-};
+export type StoreProviderProps = ComponentProps<{ children?: ReactNode } & Omit<StoreHydrateProps, "store">>;
 
-export async function StoreProvider({ children }: StoreProviderProps) {
-  const [userProductLikes] = await Promise.all([getUserProductLikes()]);
+const store = createStore();
 
+export function StoreProvider({ children, ...props }: StoreProviderProps) {
   return (
-    <Provider>
-      <StoreController userProductLikes={userProductLikes} />
+    <Provider store={store}>
+      <StoreHydrate
+        {...props}
+        store={store}
+      />
       {children}
     </Provider>
   );

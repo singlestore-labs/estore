@@ -1,16 +1,21 @@
+"use client";
+
 import { Provider } from "jotai";
 import { ReactNode } from "react";
 
-import { ChatStoreController, ChatStoreControllerProps } from "@/chat/store/components/controller";
+import { ChatStoreHydrate, ChatStoreHydrateProps } from "@/chat/store/components/hydrate";
 
 export type ChatStoreProviderProps = {
   children: ReactNode;
-} & ChatStoreControllerProps;
+} & ChatStoreHydrateProps;
 
-export async function ChatStoreProvider({ children, ...props }: ChatStoreProviderProps) {
+export async function ChatStoreProvider({ children, store, ...props }: ChatStoreProviderProps) {
   return (
-    <Provider>
-      <ChatStoreController {...props} />
+    <Provider store={store}>
+      <ChatStoreHydrate
+        {...props}
+        store={store}
+      />
       {children}
     </Provider>
   );
