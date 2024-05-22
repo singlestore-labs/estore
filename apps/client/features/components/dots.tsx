@@ -8,7 +8,7 @@ export function Dots({ className, ...props }: DotsProps) {
     <span
       {...props}
       className={cn(
-        "absolute left-1/2 top-1/2 -z-10 w-full -translate-x-1/2 -translate-y-1/2 overflow-hidden text-black/10 after:pointer-events-none after:block after:pt-[100%] dark:text-white/10",
+        "absolute left-1/2 top-1/2 -z-10 h-full w-full -translate-x-1/2 -translate-y-1/2 overflow-hidden text-black/10 after:pointer-events-none after:block after:pt-[100%] dark:text-white/10",
         className,
       )}
     >

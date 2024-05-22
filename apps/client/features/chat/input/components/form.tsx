@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { VariantProps, cva } from "class-variance-authority";
 import { SendHorizonal } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -17,6 +18,45 @@ const chatInputFormSchema = z.object({
   content: z.string().min(1).max(1024),
 });
 
+export const chatInputFormVariants = cva("relative w-full max-w-full", {
+  variants: {
+    size: {
+      default: "",
+      sm: "",
+    },
+  },
+  defaultVariants: {
+    size: "default",
+  },
+});
+
+export const chatInputFormTextareaVariants = cva(
+  "w-full rounded-none border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0",
+  {
+    variants: {
+      size: {
+        default: "h-14 min-h-14 px-5 py-3.5 pr-16 text-xl",
+        sm: "h-12 min-h-12 px-5 py-3 pr-16 text-base",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+    },
+  },
+);
+
+export const chatInputFormButtonVariants = cva("absolute px-3 z-[1]", {
+  variants: {
+    size: {
+      default: "text-2xl bottom-2 right-2",
+      sm: "text-lg bottom-1 right-1",
+    },
+  },
+  defaultVariants: {
+    size: "default",
+  },
+});
+
 export type ChatInputFormSchema = z.infer<typeof chatInputFormSchema>;
 
 export type ChatInputFormProps = ComponentProps<
@@ -26,11 +66,12 @@ export type ChatInputFormProps = ComponentProps<
     isLoading?: boolean;
     isDisabled?: boolean;
     onSubmit?: SubmitHandler<ChatInputFormSchema>;
-  }
+  } & VariantProps<typeof chatInputFormVariants>
 >;
 
 export function ChatInputForm({
   className,
+  size,
   placeholder,
   isLoading = false,
   isDisabled = false,
@@ -69,7 +110,7 @@ export function ChatInputForm({
     <Card
       {...props}
       className={cn(
-        "relative w-full max-w-full",
+        chatInputFormVariants({ size }),
         isFocused && "ring-ring ring-offset-background outline-none ring-2 ring-offset-2",
         className,
       )}
@@ -83,7 +124,7 @@ export function ChatInputForm({
               <FormItem>
                 <FormControl>
                   <Textarea
-                    className="h-14 min-h-14 w-full rounded-none border-none bg-transparent px-5 py-3.5 pr-16 text-xl focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className={chatInputFormTextareaVariants({ size })}
                     placeholder={placeholder}
                     {...field}
                     disabled={_isDisabled || field.disabled}
@@ -99,13 +140,13 @@ export function ChatInputForm({
             )}
           />
           <Button
-            className="absolute bottom-2 right-2 z-[1] px-3"
+            className={chatInputFormButtonVariants({ size })}
             ref={buttonRef}
             type="submit"
             disabled={_isDisabled}
             isLoading={_isLoading}
           >
-            <SendHorizonal className="w-6" />
+            <SendHorizonal className="w-[1em]" />
           </Button>
         </form>
       </Form>

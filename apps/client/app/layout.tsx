@@ -4,9 +4,10 @@ import type { Metadata } from "next";
 
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { ScrollbarWidthController } from "@/components/scrollbar-width-controller";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_NAME } from "@/constants/config";
-import { StoreProvider } from "@/store/components/provider";
+import { Store } from "@/store/components/store";
 import { ThemeProvider } from "@/theme/components/provider";
 import { cn } from "@/ui/lib";
 import { UserController } from "@/user/components/controller";
@@ -32,8 +33,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className)}>
-        <StoreProvider>
+      <body
+        className={cn(
+          inter.className,
+          "flex h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto overflow-x-hidden",
+        )}
+      >
+        <Store>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -41,17 +47,16 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <UserController />
-            <div className="flex min-h-screen w-full min-w-80 max-w-full flex-col overflow-hidden">
-              <Header />
-              <main className="flex flex-1 flex-col">
-                {children}
-                {product}
-              </main>
-              <Footer />
-              <Toaster position="bottom-center" />
-            </div>
+            <ScrollbarWidthController />
+            <Header />
+            <main className="flex flex-1 flex-col">
+              {children}
+              {product}
+            </main>
+            <Footer />
+            <Toaster position="bottom-center" />
           </ThemeProvider>
-        </StoreProvider>
+        </Store>
       </body>
     </html>
   );

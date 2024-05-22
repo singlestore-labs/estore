@@ -5,17 +5,29 @@ import { useState } from "react";
 import { ComponentProps } from "@/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChatToolbar } from "@/chat/components/toolbar";
+import { CHAT_SHORTCUTS } from "@/chat/constants/shortcuts";
 import { ChatShortcutButton } from "@/chat/shortcut/components/button";
-import { CHAT_SHORTCUTS } from "@/chat/shortcut/constants";
 import { ChatShortcut } from "@/chat/shortcut/types";
+import { Chat } from "@/chat/types";
 import { cn } from "@/ui/lib";
 
 export type ChatShortcutListProps = ComponentProps<
   "ul",
-  { isDisabled?: boolean; onShortcut?: (shortcut: ChatShortcut) => Promise<void> | void }
+  {
+    chatName: Chat["name"];
+    isDisabled?: boolean;
+    onShortcut?: (shortcut: ChatShortcut) => Promise<void>;
+  }
 >;
 
-export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }: ChatShortcutListProps) {
+export function ChatShortcutList({
+  className,
+  chatName,
+  isDisabled,
+  onShortcut,
+  ...props
+}: ChatShortcutListProps) {
+  const shortcuts = CHAT_SHORTCUTS[chatName];
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const handleShortcut = async (shortcut: ChatShortcut) => {
@@ -36,7 +48,13 @@ export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }
       >
         <AccordionTrigger
           className="justify-start gap-1 p-0 text-sm"
-          headerChildren={<ChatToolbar className="ml-auto" />}
+          withTrigger={!!shortcuts.length}
+          headerChildren={
+            <ChatToolbar
+              chatName={chatName}
+              className="ml-auto"
+            />
+          }
         >
           Shortcuts
         </AccordionTrigger>
@@ -44,11 +62,11 @@ export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }
           <ul
             {...props}
             className={cn(
-              "grid-auto-fill-[24rem,1fr] grid max-h-36 w-full max-w-full flex-wrap gap-2 overflow-y-auto overflow-x-hidden",
+              "grid-auto-fit-[24rem,1fr] grid max-h-36 w-full max-w-full flex-wrap gap-2 overflow-y-auto overflow-x-hidden",
               className,
             )}
           >
-            {CHAT_SHORTCUTS.map((shortcut) => (
+            {shortcuts.map((shortcut) => (
               <li key={shortcut.title}>
                 <ChatShortcutButton
                   {...shortcut}

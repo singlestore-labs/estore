@@ -1,14 +1,15 @@
 import { useAtomValue } from "jotai";
 
 import { ComponentProps } from "@/types";
-import { hasMessagesAtom } from "@/chat/message/atoms/messages";
-import { ChatMessageActionClear } from "@/chat/message/components/action/clear";
+import { ChatActionClear } from "@/chat/components/action/clear";
+import { useHasChatMessagesAtomValue } from "@/chat/message/atoms/messages";
+import { Chat } from "@/chat/types";
 import { cn } from "@/ui/lib";
 
-export type ChatToolbarProps = ComponentProps<"div">;
+export type ChatToolbarProps = ComponentProps<"div", { chatName: Chat["name"] }>;
 
-export function ChatToolbar({ className, ...props }: ChatToolbarProps) {
-  const hasMessages = useAtomValue(hasMessagesAtom);
+export function ChatToolbar({ className, chatName, ...props }: ChatToolbarProps) {
+  const hasMessages = useAtomValue(useHasChatMessagesAtomValue(chatName));
   if (!hasMessages) return null;
 
   return (
@@ -16,7 +17,7 @@ export function ChatToolbar({ className, ...props }: ChatToolbarProps) {
       {...props}
       className={cn("flex flex-wrap items-center gap-2", className)}
     >
-      <ChatMessageActionClear />
+      <ChatActionClear chatName={chatName} />
     </div>
   );
 }
