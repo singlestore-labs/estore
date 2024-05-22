@@ -6,13 +6,21 @@ import { cn } from "@/ui/lib";
 export type ChatContainerProps = ComponentProps<
   "div",
   {
+    emptyChildren?: ChatMessageListProps["emptyChildren"];
     listProps?: ChatMessageListProps["listProps"];
     inputProps?: Omit<ChatInputCardProps, "formProps">;
     formProps?: ChatInputCardProps["formProps"];
   }
 >;
 
-export function ChatContainer({ className, listProps, inputProps, formProps, ...props }: ChatContainerProps) {
+export function ChatContainer({
+  className,
+  emptyChildren,
+  listProps,
+  inputProps,
+  formProps,
+  ...props
+}: ChatContainerProps) {
   return (
     <div
       {...props}
@@ -20,6 +28,7 @@ export function ChatContainer({ className, listProps, inputProps, formProps, ...
     >
       <ChatMessageList
         className={cn("flex-1")}
+        emptyChildren={emptyChildren}
         listProps={{
           ...listProps,
           className: cn("max-w-5xl px-4", listProps?.className),

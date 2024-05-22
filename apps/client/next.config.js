@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
-
   images: {
     remotePatterns: [{ hostname: "cdn-images.farfetch-contents.com" }],
   },

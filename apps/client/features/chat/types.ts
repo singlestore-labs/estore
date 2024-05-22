@@ -7,5 +7,5 @@ export type ChatConfig = {
 
 export type Chat = {
   id: number;
-  name: string;
+  name: "main" | "dashboard";
 };
