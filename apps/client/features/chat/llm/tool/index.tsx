@@ -1,3 +1,5 @@
+import { createLLMChatCompletion, llm } from "@repo/ai";
+import { db } from "@repo/db";
 import { z } from "zod";
 
 import { createChatLLMTool } from "@/chat/llm/tool/lib/create";
@@ -5,6 +7,7 @@ import { ChatMessageProductCard } from "@/chat/message/product/components/card";
 import { ChatMessageProductController } from "@/chat/message/product/components/controller";
 import { ChatMessageProdcutSalesChart } from "@/chat/message/product/components/sales-chart";
 import { Chat } from "@/chat/types";
+import { getOrdersSummary } from "@/order/lib/get-summary";
 import { findProducts } from "@/product/lib/find";
 import { getProducts } from "@/product/lib/get";
 import { getRandomProductIds } from "@/product/lib/get-random-ids";
@@ -99,10 +102,22 @@ export const chatLLMTools: ChatLLMToolsMap = {
       name: "get_orders_summary",
       description: "Useful when you need to get a summary of orders",
       schema: z.object({
-        interval: z.number().optional(),
+        interval: z.number().describe("Interval").optional(),
+        intervalUnit: z.enum(["DAY", "WEEK", "MONTH"]).describe("Interval unit").optional(),
       }),
-      call: async ({ interval }) => {
-        return { name: "get_orders_summary", props: { content: interval } };
+      call: async ({ interval = 1, intervalUnit = "MONTH" }) => {
+        const result = await getOrdersSummary({ interval, intervalUnit });
+
+        const stream = await createLLMChatCompletion(
+          `
+            Write an e-commerce markdown summary based on the following context:
+            For the last ${interval} ${intervalUnit}.
+            ${JSON.stringify(result)}
+          `,
+          { stream: true },
+        );
+
+        return { name: "get_orders_summary", props: { stream } };
       },
     }),
   },

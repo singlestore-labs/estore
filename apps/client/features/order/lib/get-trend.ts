@@ -9,7 +9,7 @@ export async function getOrdersTrend() {
           DATE_SUB(DATE(created_at), INTERVAL WEEKDAY(created_at) DAY) AS week_start,
           COUNT(*) AS value
         FROM ${ORDERS_TABLE_NAME}
-        WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 12 WEEK)
+        WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
         GROUP BY week_start
         ORDER BY week_start ASC
       `,
