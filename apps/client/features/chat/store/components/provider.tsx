@@ -10,8 +10,7 @@ export type ChatStoreProviderProps = {
 export function ChatStoreProvider({ children, ...props }: ChatStoreProviderProps) {
   return (
     <Provider>
-      <ChatStoreHydrate {...props} />
-      {children}
+      <ChatStoreHydrate {...props}>{children}</ChatStoreHydrate>
     </Provider>
   );
 }
