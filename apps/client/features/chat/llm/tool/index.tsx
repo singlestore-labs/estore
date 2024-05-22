@@ -1,5 +1,4 @@
-import { createLLMChatCompletion, llm } from "@repo/ai";
-import { db } from "@repo/db";
+import { createLLMChatCompletion } from "@repo/ai";
 import { z } from "zod";
 
 import { createChatLLMTool } from "@/chat/llm/tool/lib/create";
