@@ -8,3 +8,5 @@ export const chatConfigAtom = atom<ChatConfig>({
   deleteUserOrdersOnClear: false,
   affectedDataOnClear: [],
 });
+
+export const chatNameAtom = atom<ChatConfig["name"]>((get) => get(chatConfigAtom).name);

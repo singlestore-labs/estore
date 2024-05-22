@@ -4,15 +4,18 @@ import { useAtomValue } from "jotai";
 
 import { ComponentProps } from "@/types";
 import { Dots } from "@/components/dots";
-import { hasChatMessagesAtom } from "@/chat/message/atoms/messages";
+import { chatNameAtom } from "@/chat/atoms/config";
+import { useHasChatMessagesAtomValue } from "@/chat/message/atoms/messages";
+import { store } from "@/store";
 import { cn } from "@/ui/lib";
 
 export type HeroProps = ComponentProps<"h1">;
 
 export function Hero({ className, ...props }: HeroProps) {
-  const hasMessages = useAtomValue(hasChatMessagesAtom);
+  const chatName = useAtomValue(chatNameAtom);
+  const messages = useAtomValue(useHasChatMessagesAtomValue(chatName), { store });
 
-  if (hasMessages) return null;
+  if (messages) return null;
 
   return (
     <h1

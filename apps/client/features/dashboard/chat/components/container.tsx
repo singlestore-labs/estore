@@ -1,6 +1,5 @@
 import { ComponentProps } from "@/types";
 import { ChatContainer } from "@/chat/components/container";
-import { getChatMessages } from "@/chat/message/lib/get-list";
 import { ChatStoreProvider } from "@/chat/store/components/provider";
 import { Chat } from "@/chat/types";
 import { DashboardChatCard, DashboardChatCardProps } from "@/dashboard/chat/components/card";
@@ -11,8 +10,6 @@ export type DashboardChatContainerProps = ComponentProps<DashboardChatCardProps>
 const chatName: Chat["name"] = "dashboard";
 
 export async function DashboardChatContainer({ ...props }: DashboardChatContainerProps) {
-  const messages = await getChatMessages(chatName);
-
   return (
     <DashboardChatCard {...props}>
       <ChatStoreProvider
@@ -22,7 +19,6 @@ export async function DashboardChatContainer({ ...props }: DashboardChatContaine
           deleteUserOrdersOnClear: false,
           affectedDataOnClear: ["messages"],
         }}
-        messages={messages}
         shortcuts={DASHBOARD_CHAT_SHORTCUTS}
       >
         <ChatContainer

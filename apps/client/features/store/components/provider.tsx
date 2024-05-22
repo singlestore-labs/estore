@@ -7,17 +7,12 @@ import { ComponentProps } from "@/types";
 import { store } from "@/store";
 import { StoreHydrate, StoreHydrateProps } from "@/store/components/hydrate";
 
-export type StoreProviderProps = ComponentProps<{ children?: ReactNode } & Omit<StoreHydrateProps, "store">>;
+export type StoreProviderProps = ComponentProps<{ children?: ReactNode } & StoreHydrateProps>;
 
-export async function StoreProvider({ children, ...props }: StoreProviderProps) {
+export function StoreProvider({ children, ...props }: StoreProviderProps) {
   return (
     <Provider store={store}>
-      <StoreHydrate
-        {...props}
-        store={store}
-      >
-        {children}
-      </StoreHydrate>
+      <StoreHydrate {...props}>{children}</StoreHydrate>
     </Provider>
   );
 }

@@ -11,7 +11,8 @@ import { useAction } from "@/action/hooks/use-action";
 import { chatConfigAtom } from "@/chat/atoms/config";
 import { clearChatMessages } from "@/chat/message/actions/clear";
 import { isChatMessageSubmittingAtom } from "@/chat/message/atoms/is-submitting";
-import { chatMessagesAtom } from "@/chat/message/atoms/messages";
+import { useSetChatMessagesAtom } from "@/chat/message/atoms/messages";
+import { store } from "@/store";
 import { deleteUserLikes } from "@/user/action/delete-likes";
 import { deleteUserOrders } from "@/user/action/delete-orders";
 
@@ -19,7 +20,7 @@ export type ChatActionClearProps = ComponentProps<PopoverProps>;
 
 export function ChatActionClear({ className, ...props }: ChatActionClearProps) {
   const chatConfig = useAtomValue(chatConfigAtom);
-  const setMessages = useSetAtom(chatMessagesAtom);
+  const setMessages = useSetAtom(useSetChatMessagesAtom(chatConfig.name), { store });
   const { execute, isPending } = useAction();
   const [isChatMessageSubmitting, setIsChatMessageSubmitting] = useAtom(isChatMessageSubmittingAtom);
   const { refresh } = useRouter();
@@ -36,7 +37,7 @@ export function ChatActionClear({ className, ...props }: ChatActionClearProps) {
           ].map((fn) => (typeof fn === "function" ? fn() : fn)),
         ),
       );
-      setMessages([]);
+      setMessages(() => []);
     } finally {
       refresh();
       setIsChatMessageSubmitting(false);

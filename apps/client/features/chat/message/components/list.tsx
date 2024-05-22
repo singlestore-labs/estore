@@ -5,7 +5,9 @@ import { ReactNode } from "react";
 
 import { ComponentProps } from "@/types";
 import { Fade } from "@/components/fade";
-import { chatMessagesAtom } from "@/chat/message/atoms/messages";
+import { chatNameAtom } from "@/chat/atoms/config";
+import { useChatMessagesAtomValue } from "@/chat/message/atoms/messages";
+import { store } from "@/store";
 import { cn } from "@/ui/lib";
 
 export type ChatMessageListProps = ComponentProps<
@@ -14,7 +16,8 @@ export type ChatMessageListProps = ComponentProps<
 >;
 
 export function ChatMessageList({ className, emptyChildren, listProps, ...props }: ChatMessageListProps) {
-  const messages = useAtomValue(chatMessagesAtom);
+  const chatName = useAtomValue(chatNameAtom);
+  const messages = useAtomValue(useChatMessagesAtomValue(chatName), { store });
 
   return (
     <div
