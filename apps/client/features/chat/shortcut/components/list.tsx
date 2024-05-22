@@ -1,12 +1,11 @@
 "use client";
 
-import { useAtomValue } from "jotai";
 import { useState } from "react";
 
 import { ComponentProps } from "@/types";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChatToolbar } from "@/chat/components/toolbar";
-import { useChatShortcutsAtomValue } from "@/chat/shortcut/atoms/shortcuts";
+import { CHAT_SHORTCUTS } from "@/chat/constants/shortcuts";
 import { ChatShortcutButton } from "@/chat/shortcut/components/button";
 import { ChatShortcut } from "@/chat/shortcut/types";
 import { Chat } from "@/chat/types";
@@ -28,7 +27,7 @@ export function ChatShortcutList({
   onShortcut,
   ...props
 }: ChatShortcutListProps) {
-  const shortcuts = useAtomValue(useChatShortcutsAtomValue(chatName));
+  const shortcuts = CHAT_SHORTCUTS[chatName];
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const handleShortcut = async (shortcut: ChatShortcut) => {

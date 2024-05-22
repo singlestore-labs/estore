@@ -1,6 +1,6 @@
 "use client";
 
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +8,7 @@ import { ComponentProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverProps, PopoverTrigger } from "@/components/ui/popover";
 import { useAction } from "@/action/hooks/use-action";
-import { useChatConfigAtomValue } from "@/chat/atoms/config";
+import { CHAT_CONFIGS } from "@/chat/constants/configs";
 import { clearChatMessages } from "@/chat/message/actions/clear";
 import { isChatMessageSubmittingAtom } from "@/chat/message/atoms/is-submitting";
 import { useSetChatMessagesAtom } from "@/chat/message/atoms/messages";
@@ -19,7 +19,7 @@ import { deleteUserOrders } from "@/user/action/delete-orders";
 export type ChatActionClearProps = ComponentProps<PopoverProps, { chatName: Chat["name"] }>;
 
 export function ChatActionClear({ className, chatName, ...props }: ChatActionClearProps) {
-  const chatConfig = useAtomValue(useChatConfigAtomValue(chatName));
+  const chatConfig = CHAT_CONFIGS[chatName];
   const setMessages = useSetAtom(useSetChatMessagesAtom(chatName));
   const { execute, isPending } = useAction();
   const [isChatMessageSubmitting, setIsChatMessageSubmitting] = useAtom(isChatMessageSubmittingAtom);
