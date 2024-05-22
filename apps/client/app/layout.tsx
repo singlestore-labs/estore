@@ -7,7 +7,7 @@ import { Header } from "@/components/header";
 import { ScrollbarWidthController } from "@/components/scrollbar-width-controller";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_NAME } from "@/constants/config";
-import { StoreProvider } from "@/store/components/provider";
+import { Store } from "@/store/components/store";
 import { ThemeProvider } from "@/theme/components/provider";
 import { cn } from "@/ui/lib";
 import { UserController } from "@/user/components/controller";
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
   product,
 }: {
@@ -39,7 +39,7 @@ export default async function RootLayout({
           "flex h-screen w-full min-w-80 max-w-full flex-col overflow-y-auto overflow-x-hidden",
         )}
       >
-        <StoreProvider>
+        <Store>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -56,7 +56,7 @@ export default async function RootLayout({
             <Footer />
             <Toaster position="bottom-center" />
           </ThemeProvider>
-        </StoreProvider>
+        </Store>
       </body>
     </html>
   );
