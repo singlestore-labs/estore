@@ -4,7 +4,6 @@ export type Chat = {
 };
 
 export type ChatConfig = {
-  name: Chat["name"];
   deleteUserLikesOnClear?: boolean;
   deleteUserOrdersOnClear?: boolean;
   affectedDataOnClear?: string[];

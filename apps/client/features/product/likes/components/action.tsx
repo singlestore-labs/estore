@@ -8,14 +8,13 @@ import { useAction } from "@/action/hooks/use-action";
 import { createProductLike } from "@/product/likes/actions/create";
 import { deleteProductLike } from "@/product/likes/actions/delete";
 import { Product } from "@/product/types";
-import { store } from "@/store";
 import { cn } from "@/ui/lib";
 import { userProdcutLikesAtom } from "@/user/product/atoms/likes";
 
 export type ProductLikesActionProps = ComponentProps<ButtonProps, { productId: Product["id"] }>;
 
 export function ProductLikesAction({ className, productId, ...props }: ProductLikesActionProps) {
-  const [likes, setLikes] = useAtom(userProdcutLikesAtom, { store });
+  const [likes, setLikes] = useAtom(userProdcutLikesAtom);
   const isLiked = likes.find((i) => i.product_id === productId);
   const { execute, isPending } = useAction();
 

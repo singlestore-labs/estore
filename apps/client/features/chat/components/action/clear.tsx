@@ -8,19 +8,19 @@ import { ComponentProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverProps, PopoverTrigger } from "@/components/ui/popover";
 import { useAction } from "@/action/hooks/use-action";
-import { chatConfigAtom } from "@/chat/atoms/config";
+import { useChatConfigAtomValue } from "@/chat/atoms/config";
 import { clearChatMessages } from "@/chat/message/actions/clear";
 import { isChatMessageSubmittingAtom } from "@/chat/message/atoms/is-submitting";
 import { useSetChatMessagesAtom } from "@/chat/message/atoms/messages";
-import { store } from "@/store";
+import { Chat } from "@/chat/types";
 import { deleteUserLikes } from "@/user/action/delete-likes";
 import { deleteUserOrders } from "@/user/action/delete-orders";
 
-export type ChatActionClearProps = ComponentProps<PopoverProps>;
+export type ChatActionClearProps = ComponentProps<PopoverProps, { chatName: Chat["name"] }>;
 
-export function ChatActionClear({ className, ...props }: ChatActionClearProps) {
-  const chatConfig = useAtomValue(chatConfigAtom);
-  const setMessages = useSetAtom(useSetChatMessagesAtom(chatConfig.name), { store });
+export function ChatActionClear({ className, chatName, ...props }: ChatActionClearProps) {
+  const chatConfig = useAtomValue(useChatConfigAtomValue(chatName));
+  const setMessages = useSetAtom(useSetChatMessagesAtom(chatName));
   const { execute, isPending } = useAction();
   const [isChatMessageSubmitting, setIsChatMessageSubmitting] = useAtom(isChatMessageSubmittingAtom);
   const { refresh } = useRouter();
@@ -31,7 +31,7 @@ export function ChatActionClear({ className, ...props }: ChatActionClearProps) {
       await execute(() =>
         Promise.all(
           [
-            () => clearChatMessages(chatConfig.name),
+            () => clearChatMessages(chatName),
             chatConfig.deleteUserLikesOnClear && deleteUserLikes,
             chatConfig.deleteUserOrdersOnClear && deleteUserOrders,
           ].map((fn) => (typeof fn === "function" ? fn() : fn)),

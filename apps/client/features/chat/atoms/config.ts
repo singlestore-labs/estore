@@ -1,12 +1,23 @@
 import { atom } from "jotai";
+import { useMemo } from "react";
 
-import { ChatConfig } from "@/chat/types";
+import { Chat, ChatConfig } from "@/chat/types";
 
-export const chatConfigAtom = atom<ChatConfig>({
-  name: "main",
-  deleteUserLikesOnClear: false,
-  deleteUserOrdersOnClear: false,
-  affectedDataOnClear: [],
+export type ChatConfigAtomValue = Record<Chat["name"], ChatConfig>;
+
+export const chatConfigAtom = atom<ChatConfigAtomValue>({
+  main: {
+    deleteUserLikesOnClear: true,
+    deleteUserOrdersOnClear: true,
+    affectedDataOnClear: ["messages", "shopping history", "likes"],
+  },
+  dashboard: {
+    deleteUserLikesOnClear: false,
+    deleteUserOrdersOnClear: false,
+    affectedDataOnClear: ["messages"],
+  },
 });
 
-export const chatNameAtom = atom<ChatConfig["name"]>((get) => get(chatConfigAtom).name);
+export function useChatConfigAtomValue(chatName: Chat["name"]) {
+  return useMemo(() => atom((get) => get(chatConfigAtom)[chatName]), [chatName]);
+}

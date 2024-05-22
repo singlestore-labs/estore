@@ -1,17 +1,15 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useCallback } from "react";
 
 import { useAction } from "@/action/hooks/use-action";
-import { chatNameAtom } from "@/chat/atoms/config";
 import { submitChatMessage } from "@/chat/message/actions/submit";
 import { isChatMessageSubmittingAtom } from "@/chat/message/atoms/is-submitting";
 import { useSetChatMessagesAtom } from "@/chat/message/atoms/messages";
 import { createChatMessage } from "@/chat/message/lib/create";
-import { store } from "@/store";
+import { Chat } from "@/chat/types";
 
-export function useSubmitMessage() {
-  const chatName = useAtomValue(chatNameAtom);
-  const setMessages = useSetAtom(useSetChatMessagesAtom(chatName), { store });
+export function useSubmitMessage(chatName: Chat["name"]) {
+  const setMessages = useSetAtom(useSetChatMessagesAtom(chatName));
   const [isChatMessageSubmitting, setIsChatMessageSubmitting] = useAtom(isChatMessageSubmittingAtom);
   const { execute } = useAction();
 
