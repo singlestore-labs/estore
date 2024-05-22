@@ -48,15 +48,19 @@ export function ChatMessageList({ className, emptyChildren, listProps, ...props 
         )}
       </div>
 
-      <Fade
-        className="left-0 top-0 z-[2] h-8 w-full"
-        direction="b"
-      />
+      {!!messages.length && (
+        <>
+          <Fade
+            className="left-0 top-0 z-[2] h-8 w-full"
+            direction="b"
+          />
 
-      <Fade
-        className="bottom-0 left-0 z-[2] h-8 w-full"
-        direction="t"
-      />
+          <Fade
+            className="bottom-0 left-0 z-[2] h-8 w-full"
+            direction="t"
+          />
+        </>
+      )}
     </div>
   );
 }

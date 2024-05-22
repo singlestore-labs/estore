@@ -2,6 +2,7 @@
 
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { ComponentProps } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ export function ChatActionClear({ className, ...props }: ChatActionClearProps) {
   const setMessages = useSetAtom(chatMessagesAtom);
   const { execute, isPending } = useAction();
   const [isChatMessageSubmitting, setIsChatMessageSubmitting] = useAtom(isChatMessageSubmittingAtom);
+  const { refresh } = useRouter();
 
   const handleClearClick = async () => {
     try {
@@ -36,6 +38,7 @@ export function ChatActionClear({ className, ...props }: ChatActionClearProps) {
       );
       setMessages([]);
     } finally {
+      refresh();
       setIsChatMessageSubmitting(false);
     }
   };
