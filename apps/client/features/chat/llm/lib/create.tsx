@@ -13,6 +13,28 @@ import { Chat } from "@/chat/types";
 import { IS_DEV } from "@/constants/config";
 import { getUserId } from "@/user/lib/get-id";
 
+async function handleSteram(
+  stream: any,
+  {
+    onTextToken,
+    onToolCall,
+  }: { onTextToken?: (contnet: string) => Promise<void>; onToolCall?: (tool: any) => void },
+) {
+  let text = "";
+
+  for await (const chunk of stream) {
+    const tool = chunk.choices[0].delta.tool_calls?.[0]?.function;
+    const textToken = chunk.choices[0].delta.content || "";
+    if (tool) onToolCall?.(tool);
+    if (textToken) {
+      text += textToken;
+      await onTextToken?.(textToken);
+    }
+  }
+
+  return text;
+}
+
 export async function createChatLLM(name: Chat["name"] = "main") {
   const [userId, chat] = await Promise.all([getUserId(), getChatByName(name)]);
   const tools = chatLLMTools[name];
@@ -36,12 +58,12 @@ export async function createChatLLM(name: Chat["name"] = "main") {
   async function sendMessage(
     content: string,
     {
-      onContent,
-      onResult,
+      onTextToken,
+      onToolCall,
       onError,
     }: {
-      onContent?: (content: string) => Promise<void>;
-      onResult?: Parameters<ReturnType<typeof createChatLLMToolHandler>["callTool"]>[0];
+      onTextToken?: (content: string) => Promise<void>;
+      onToolCall?: Parameters<ReturnType<typeof createChatLLMToolHandler>["callTool"]>[0];
       onError?: (error: Error | unknown) => Promise<void>;
     } = {},
   ) {
@@ -72,38 +94,43 @@ export async function createChatLLM(name: Chat["name"] = "main") {
 
     const { handleDeltaTool, callTool } = createChatLLMToolHandler(tools);
 
-    let llmContent = "";
-    for await (const chunk of stream) {
-      const tool = chunk.choices[0].delta.tool_calls?.[0]?.function;
-      const content = chunk.choices[0].delta.content || "";
-      if (tool) handleDeltaTool(tool);
-      if (content) {
-        llmContent += content;
-        await onContent?.(content);
-      }
-    }
+    const responseText = await handleSteram(stream, {
+      onTextToken,
+      onToolCall: handleDeltaTool,
+    });
 
     try {
       await Promise.all([
         (async () => {
-          if (!llmContent) return;
+          if (!responseText) return;
           return createChatLLMMessage({
             role: "assistant",
             user_id: userId,
             chat_id: chat.id,
-            content: JSON.stringify(llmContent),
+            content: JSON.stringify(responseText),
           });
         })(),
+
         callTool(async (node, result) => {
-          await Promise.all([
-            onResult?.(node, result),
-            createChatLLMMessage({
-              role: "function",
+          if (result?.props && "stream" in result.props) {
+            const responseText = await handleSteram(result.props.stream, { onTextToken });
+            await createChatLLMMessage({
+              role: "assistant",
               user_id: userId,
               chat_id: chat.id,
-              content: JSON.stringify(result),
-            }),
-          ]);
+              content: JSON.stringify(responseText),
+            });
+          } else {
+            await Promise.all([
+              onToolCall?.(node, result),
+              createChatLLMMessage({
+                role: "function",
+                user_id: userId,
+                chat_id: chat.id,
+                content: JSON.stringify(result),
+              }),
+            ]);
+          }
         }),
       ]);
     } catch (error) {

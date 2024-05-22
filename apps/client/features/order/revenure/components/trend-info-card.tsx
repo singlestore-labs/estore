@@ -14,7 +14,7 @@ export async function OrdersRevenueTrendInfoCard({ ...props }: OrdersRevenueTren
   return (
     <InfoCard
       {...props}
-      title="Total revenue"
+      title="Last month revenue"
       value={toCurrency(data.total)}
       headerProps={{
         className: "flex items-start justify-between",

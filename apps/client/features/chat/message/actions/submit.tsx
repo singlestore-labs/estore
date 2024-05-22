@@ -20,15 +20,15 @@ export async function submitChatMessage(chatName: Chat["name"], content: string)
     (async () => {
       try {
         await chatLLM.sendMessage(content, {
-          onContent: async (content) => {
-            if (content && isLoading) {
+          onTextToken: async (textToken) => {
+            if (textToken && isLoading) {
               isLoading = false;
               nodeStream.done(createChatMessage({ ...message, isLoading }).node);
             }
-            textStream.update(content);
+            textStream.update(textToken);
           },
 
-          onResult: async (node) => {
+          onToolCall: async (node) => {
             isLoading = false;
             nodeStream.done(createChatMessage({ ...message, isLoading, node }).node);
           },
