@@ -28,9 +28,9 @@ export async function submitChatMessage(chatName: Chat["name"], content: string)
             textStream.update(content);
           },
 
-          onNode: async (node) => {
+          onResult: async (node) => {
             isLoading = false;
-            if (node) nodeStream.done(createChatMessage({ ...message, isLoading, node }).node);
+            nodeStream.done(createChatMessage({ ...message, isLoading, node }).node);
           },
 
           onError: async (error) => {

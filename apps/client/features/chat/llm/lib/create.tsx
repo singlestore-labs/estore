@@ -1,7 +1,6 @@
 import { llm } from "@repo/ai";
 import { db } from "@repo/db";
 import { CHAT_MESSAGES_TABLE_NAME } from "@repo/db/constants";
-import { ReactNode } from "react";
 import zodToJsonSchema from "zod-to-json-schema";
 
 import { getChatByName } from "@/chat/lib/get-by-name";
@@ -16,6 +15,7 @@ import { getUserId } from "@/user/lib/get-id";
 
 export async function createChatLLM(name: Chat["name"] = "main") {
   const [userId, chat] = await Promise.all([getUserId(), getChatByName(name)]);
+  const tools = chatLLMTools[name];
 
   async function getMessages() {
     const chatLLMMessage = await db.controllers.findMany<ChatLLMMessage[]>({
@@ -23,7 +23,7 @@ export async function createChatLLM(name: Chat["name"] = "main") {
       where: `user_id = ${userId} AND chat_id = ${chat.id}`,
       extra: "ORDER BY created_at ASC",
     });
-    return chatLLMMessage.map(normalizeChatLLMMessage);
+    return chatLLMMessage.map((message) => normalizeChatLLMMessage(message, tools));
   }
 
   function clearMessages() {
@@ -36,13 +36,13 @@ export async function createChatLLM(name: Chat["name"] = "main") {
   async function sendMessage(
     content: string,
     {
-      onNode,
-      onError,
       onContent,
+      onResult,
+      onError,
     }: {
-      onNode?: (node: ReactNode) => Promise<void>;
-      onError?: (error: Error | unknown) => Promise<void>;
       onContent?: (content: string) => Promise<void>;
+      onResult?: Parameters<ReturnType<typeof createChatLLMToolHandler>["callTool"]>[0];
+      onError?: (error: Error | unknown) => Promise<void>;
     } = {},
   ) {
     if (!userId) throw new Error("userId is undefined");
@@ -56,7 +56,7 @@ export async function createChatLLM(name: Chat["name"] = "main") {
           { role: "system", content: "You are a helpful assistant." },
           { role: "user", content },
         ],
-        tools: Object.values(chatLLMTools).map(({ name, description, schema }) => ({
+        tools: Object.values(tools).map(({ name, description, schema }) => ({
           type: "function",
           function: { name, description, parameters: zodToJsonSchema(schema) },
         })),
@@ -70,7 +70,7 @@ export async function createChatLLM(name: Chat["name"] = "main") {
       }),
     ]);
 
-    const { handleDeltaTool, callTool } = createChatLLMToolHandler();
+    const { handleDeltaTool, callTool } = createChatLLMToolHandler(tools);
 
     let llmContent = "";
     for await (const chunk of stream) {
@@ -94,16 +94,16 @@ export async function createChatLLM(name: Chat["name"] = "main") {
             content: JSON.stringify(llmContent),
           });
         })(),
-        callTool({
-          onNode,
-          onResult: async (result) => {
-            await createChatLLMMessage({
+        callTool(async (node, result) => {
+          await Promise.all([
+            onResult?.(node, result),
+            createChatLLMMessage({
               role: "function",
               user_id: userId,
               chat_id: chat.id,
               content: JSON.stringify(result),
-            });
-          },
+            }),
+          ]);
         }),
       ]);
     } catch (error) {

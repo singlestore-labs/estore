@@ -1,15 +1,18 @@
 import { isChatLLMMessageTool } from "@/chat/llm/message/lib/is-tool";
 import { ChatLLMMessage, ChatLLMMessageTool } from "@/chat/llm/message/types";
-import { chatLLMTools } from "@/chat/llm/tool";
+import { ChatLLMTools } from "@/chat/llm/tool";
 import { createChatMessage } from "@/chat/message/lib/create";
 import { ChatMessage } from "@/chat/message/types";
 
-export function normalizeChatLLMMessage(message: ChatLLMMessage | ChatLLMMessageTool): ChatMessage {
+export function normalizeChatLLMMessage(
+  message: ChatLLMMessage | ChatLLMMessageTool,
+  tools: ChatLLMTools,
+): ChatMessage {
   let content: ChatMessage["content"] | undefined = undefined;
   let node: ChatMessage["node"] | undefined = undefined;
 
   if (isChatLLMMessageTool(message)) {
-    const tool = chatLLMTools[message.content.name];
+    const tool = tools[message.content.name];
     if (tool.node) node = <tool.node {...message.content.props} />;
   } else {
     content = message.content;
