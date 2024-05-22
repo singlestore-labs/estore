@@ -22,7 +22,7 @@ export default async function Home() {
         shortcuts={MAIN_CHAT_SHORTCUTS}
       >
         <Hero />
-        <ChatContainer placeholder="Describe the product you wish to buy" />
+        <ChatContainer formProps={{ placeholder: "Describe the product you wish to buy" }} />
       </ChatStoreProvider>
     </div>
   );

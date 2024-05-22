@@ -50,7 +50,7 @@ export function ChatShortcutList({ className, isDisabled, onShortcut, ...props }
           <ul
             {...props}
             className={cn(
-              "grid-auto-fill-[24rem,1fr] grid max-h-36 w-full max-w-full flex-wrap gap-2 overflow-y-auto overflow-x-hidden",
+              "grid-auto-fit-[24rem,1fr] grid max-h-36 w-full max-w-full flex-wrap gap-2 overflow-y-auto overflow-x-hidden",
               className,
             )}
           >

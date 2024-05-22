@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 
 import { ComponentProps } from "@/types";
 import { useResizeObserver } from "@/hooks/use-resize-observer";
@@ -9,14 +9,14 @@ import { Card, CardProps } from "@/components/ui/card";
 import { getTheme } from "@/ui/get-theme";
 import { cn } from "@/ui/lib";
 
-export type DashboardChatWrapperProps = ComponentProps<CardProps>;
+export type DashboardChatCardProps = ComponentProps<CardProps>;
 
 const theme = getTheme();
 
-export function DashboardChatWrapper({ children, className, ...props }: DashboardChatWrapperProps) {
+export function DashboardChatCard({ children, className }: DashboardChatCardProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isTriggerVisible, setIsTriggerVisible] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const setSize = useCallback(() => {
     if (!rootRef.current) return;
@@ -26,7 +26,7 @@ export function DashboardChatWrapper({ children, className, ...props }: Dashboar
 
   useEffect(() => {
     setSize();
-    setIsTriggerVisible(true);
+    setIsReady(true);
     global.document?.addEventListener("scroll", setSize);
     return () => global.document?.removeEventListener("scroll", setSize);
   }, [setSize]);
@@ -35,24 +35,25 @@ export function DashboardChatWrapper({ children, className, ...props }: Dashboar
 
   return (
     <Card
-      {...props}
       ref={rootRef}
       className={cn(
-        "sticky top-4 z-[2] h-screen rounded-br-none rounded-tr-none border-r-0 transition-[flex] duration-700",
-        isOpen ? "-mr-4 ml-4 flex-1" : "translate-x-5",
+        "sticky top-4 z-[2] ml-4 h-screen flex-1 transition-[margin-right] duration-700",
+        isOpen ? "mr-0" : "mr-[-100vw]",
+        !isReady && "hidden",
         className,
       )}
     >
       <Button
         className={cn(
           "absolute left-0 top-1/2 h-8 origin-[50%_0] -translate-x-1/2 -translate-y-1/2 -rotate-90 overflow-visible rounded-bl-none rounded-br-none",
-          isTriggerVisible && "animate-[admin-chat-trigger_0.7s_ease-out_forwards]",
+          isReady && "animate-[admin-chat-trigger_0.7s_ease-out_forwards]",
         )}
         onClick={() => setIsOpen((i) => !i)}
       >
         Talk to the data
       </Button>
-      <div className="relative h-full w-full max-w-full overflow-hidden rounded-lg">{children}</div>
+
+      {children}
     </Card>
   );
 }

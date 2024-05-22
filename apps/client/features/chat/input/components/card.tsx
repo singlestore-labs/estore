@@ -10,9 +10,9 @@ import { useSubmitMessage } from "@/chat/message/hooks/use-submit";
 import { ChatShortcutList, ChatShortcutListProps } from "@/chat/shortcut/components/list";
 import { cn } from "@/ui/lib";
 
-export type ChatInputCardProps = ComponentProps<"div", Pick<ChatInputFormProps, "placeholder">>;
+export type ChatInputCardProps = ComponentProps<"div", { formProps?: ChatInputFormProps }>;
 
-export function ChatInputCard({ className, placeholder, ...props }: ChatInputCardProps) {
+export function ChatInputCard({ className, formProps, ...props }: ChatInputCardProps) {
   const hasMessages = useAtomValue(hasChatMessagesAtom);
   const { submit, isLoading } = useSubmitMessage();
 
@@ -36,7 +36,8 @@ export function ChatInputCard({ className, placeholder, ...props }: ChatInputCar
         onShortcut={handleShortcut}
       />
       <ChatInputForm
-        placeholder={hasMessages ? "Message" : placeholder}
+        {...formProps}
+        placeholder={hasMessages ? "Message" : formProps?.placeholder}
         onSubmit={handleFormSubmit}
         isLoading={isLoading}
         isDisabled={isLoading}

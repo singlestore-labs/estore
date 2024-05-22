@@ -12,7 +12,7 @@ export function DashboardContainer({ className, ...props }: DashboardContainerPr
   return (
     <div
       {...props}
-      className={cn("flex flex-1 flex-col gap-4", className)}
+      className={cn("flex max-w-full flex-1 flex-col gap-4", className)}
     >
       <div className="flex flex-wrap gap-4">
         <OrdersRevenueTrendInfoCard className="flex-1 basis-80" />
