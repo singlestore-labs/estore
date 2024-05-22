@@ -1,12 +1,9 @@
 import { FunctionToolCallDelta } from "openai/resources/beta/threads/runs/steps.mjs";
-import { ReactNode } from "react";
 
-import { chatLLMTools } from "@/chat/llm/tool";
+import { ChatLLMTools } from "@/chat/llm/tool";
 import { isLLMToolKey } from "@/chat/llm/tool/lib/is-key";
 
-type ToolCallResults = Awaited<ReturnType<(typeof chatLLMTools)[keyof typeof chatLLMTools]["call"]>>;
-
-export function createChatLLMToolHandler() {
+export function createChatLLMToolHandler(tools: ChatLLMTools) {
   let name = "";
   let args = "";
 
@@ -15,18 +12,17 @@ export function createChatLLMToolHandler() {
     if (tool?.arguments) args += tool.arguments;
   }
 
-  async function callTool({
-    onResult,
-    onNode,
-  }: {
-    onResult?: (result: ToolCallResults) => Promise<void>;
-    onNode?: (node: ReactNode) => Promise<void>;
-  }) {
+  async function callTool(
+    callback?: (
+      node: ReturnType<ChatLLMTools[keyof ChatLLMTools]["getNode"]>,
+      result: ReturnType<ChatLLMTools[keyof ChatLLMTools]["getResult"]>,
+    ) => Promise<void>,
+  ) {
     if (isLLMToolKey(name)) {
-      const tool = chatLLMTools[name];
+      const tool = tools[name];
       tool.setArgs(args);
       await tool.call();
-      await Promise.all([onResult?.(tool.getResult()), onNode?.(tool.getNode())]);
+      await callback?.(tool.getNode(), tool.getResult());
     }
   }
 

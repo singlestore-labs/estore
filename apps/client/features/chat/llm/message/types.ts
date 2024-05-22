@@ -1,5 +1,5 @@
 import { Override } from "@/types";
-import { chatLLMTools } from "@/chat/llm/tool";
+import { ChatLLMTools } from "@/chat/llm/tool";
 import { Chat } from "@/chat/types";
 import { User } from "@/user/types";
 
@@ -14,5 +14,5 @@ export type ChatLLMMessage = {
 
 export type ChatLLMMessageTool = Override<
   ChatLLMMessage,
-  { content: { name: keyof typeof chatLLMTools; props: any } }
+  { content: { name: keyof ChatLLMTools; props: any } }
 >;
