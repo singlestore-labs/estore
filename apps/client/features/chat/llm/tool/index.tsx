@@ -158,9 +158,9 @@ export const chatLLMTools: ChatLLMToolsMap = {
             systemRole: `\
               You are a MySQL database expert.
               You must write MySQL query to answer the user's prompt.
-              If the query selects column names that contain "_v" at the end, those columns must be removed from the query select.
               If the user request relates to a CREATE or DELETE or UPDATE operation, your response must contain "${queryNotAllowedKey}".
               Else your response must contain the MySQL query only without any formatting.
+              Columns ending in "_v" are forbidden and must be removed from the query.
             `,
           },
         );
