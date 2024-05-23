@@ -31,7 +31,7 @@ export async function OrderRecentSection({ className, contentProps, ...props }: 
             <ProductCardSecondary
               id={order.product_id}
               image={order.product_image}
-              description={order.product_description}
+              title={order.product_title}
               size="sm"
               className="flex-1 basis-1/3"
             />

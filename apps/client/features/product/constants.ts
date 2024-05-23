@@ -1,11 +1,11 @@
 import { ProductRow } from "@repo/db/types";
 
-export const PRODUCT_COLUMNS: Exclude<keyof ProductRow, "description_v" | "image_text_v">[] = [
+export const PRODUCT_COLUMNS: Exclude<keyof ProductRow, "title_v" | "description_v">[] = [
   "id",
   "created_at",
+  "title",
   "description",
   "image",
-  "image_text",
   "price",
   "gender",
 ] as const;

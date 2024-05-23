@@ -37,15 +37,14 @@ export const productCardSecondaryTitleVariants = cva("line-clamp-2 font-semibold
 
 export type ProductCardSecondaryProps = ComponentProps<
   "div",
-  Optional<Pick<Product, "id" | "image" | "description">, "image"> &
-    VariantProps<typeof productCardSecondaryVariants>
+  Optional<Pick<Product, "id" | "image" | "title">, "image"> & VariantProps<typeof productCardSecondaryVariants>
 >;
 
 export function ProductCardSecondary({
   className,
   id,
+  title,
   image,
-  description,
   size,
   ...props
 }: ProductCardSecondaryProps) {
@@ -76,7 +75,7 @@ export function ProductCardSecondary({
         href={href}
         className="hover:text-primary inline-block transition-colors"
       >
-        <h4 className={productCardSecondaryTitleVariants({ size })}>{description}</h4>
+        <h4 className={productCardSecondaryTitleVariants({ size })}>{title}</h4>
       </Link>
     </div>
   );

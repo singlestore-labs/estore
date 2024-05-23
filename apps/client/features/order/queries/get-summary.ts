@@ -41,13 +41,13 @@ ORDER BY DATE(created_at) ASC;
 -- Top-selling products
 SELECT
     products.id,
-    products.description,
+    products.title,
     COUNT(orders.id) AS orders_count
 FROM ${ORDERS_TABLE_NAME} orders
 JOIN ${PRODUCT_SKU_TABLE_NAME} sku ON orders.product_sku_id = sku.id
 JOIN ${PRODUCTS_TABLE_NAME} products ON sku.product_id = products.id
 WHERE orders.created_at >= NOW() - ${intervalDef}
-GROUP BY products.id, products.description
+GROUP BY products.id, products.title
 ORDER BY orders_count DESC
 LIMIT 10;
 

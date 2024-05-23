@@ -1,7 +1,7 @@
 import { db } from "@repo/db";
 
-export async function createProductType(description?: string) {
-  if (!description) return "";
+export async function createProductType(title?: string) {
+  if (!title) return "";
 
   async function create() {
     try {
@@ -9,11 +9,11 @@ export async function createProductType(description?: string) {
         model: "gpt-3.5-turbo",
         systemRole: `\
         You are a sales assistant in a store.
-        Write the type of a product in one word based on its description.
+        Write the type of a product in one word based on its title.
         Examples of types: dress, shorts, jeans, pants, sneakers, boots, purse, bag, wallet, etc.
         Respond with one word only.
       `,
-        prompt: `Product description: ${description}`,
+        prompt: `Product title: ${title}`,
       });
 
       return (

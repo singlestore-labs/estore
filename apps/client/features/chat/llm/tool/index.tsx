@@ -1,4 +1,4 @@
-import { createLLMChatCompletion } from "@repo/ai";
+import { createLLMChatCompletion } from "@repo/ai/lib/create-chat-completion";
 import { db } from "@repo/db";
 import {
   ORDERS_TABLE_NAME,
@@ -81,10 +81,10 @@ export const chatLLMTools: ChatLLMToolsMap = {
     get_product_sales: createChatLLMTool({
       name: "get_product_sales",
       description: "Useful when you to get a product sales history chart",
-      schema: z.object({ title: z.string().describe("Product title or description").optional() }),
+      schema: z.object({ title: z.string().describe("Product title").optional() }),
       node: ChatMessageProdcutSalesChart,
-      call: async ({ title: description }) => {
-        const filter = description ? { description } : { id: (await getRandomProductIds())[0] };
+      call: async ({ title }) => {
+        const filter = title ? { title } : { id: (await getRandomProductIds())[0] };
         const [[key, value]] = Object.entries(filter);
         const result = await getProducts({
           where: `LOWER(${key}) = '${value}'`,

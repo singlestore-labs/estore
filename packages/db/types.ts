@@ -4,14 +4,14 @@ export type RowWithCreatedAt<T extends object = object> = Row<T> & { created_at:
 export type UserRow = RowWithCreatedAt;
 
 export type ProductRow = RowWithCreatedAt<{
+  title: string;
   description: string;
   image: string;
-  image_text: string;
   price: number;
   gender: string;
   type_id?: ProductTypeRow["id"];
+  title_v: string;
   description_v: string;
-  image_text_v: string;
 }>;
 
 export type ProductTypeRow = Row<{

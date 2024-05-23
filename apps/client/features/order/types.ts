@@ -7,7 +7,7 @@ export type Order = OrderRow;
 
 export type OrderRecent = Override<Order, { created_at: Date }> & {
   product_id: Product["id"];
-  product_description: Product["description"];
+  product_title: Product["title"];
   product_image: Product["image"];
   product_price: Product["price"];
 };
