@@ -14,7 +14,7 @@ type Result = {
   score: number;
 };
 
-export async function findProducts(prompt: string, filter: Parameters<typeof createFindProductIdsQuery>[1]) {
+export async function findProducts(prompt: string, filter?: Parameters<typeof createFindProductIdsQuery>[1]) {
   const promptEmbedding = prompt ? (await db.ai.createEmbedding(prompt))[0] : "";
   const query = createFindProductIdsQuery(promptEmbedding, filter);
   const result = await db.controllers.query<QueryResult<Result>>({ query });

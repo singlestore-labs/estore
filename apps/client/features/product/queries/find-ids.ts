@@ -7,10 +7,10 @@ export function createFindProductIdsQuery(
     price?: number;
     priceMin?: number;
     priceMax?: number;
-    gender?: "women" | "unisex";
-    size?: "xxxs" | "xxs" | "xs" | "s" | "m" | "l" | "xl" | "xxl" | "oneSize";
+    gender?: (string & {}) | "women" | "unisex";
+    size?: (string & {}) | "xxxs" | "xxs" | "xs" | "s" | "m" | "l" | "xl" | "xxl" | "oneSize";
     limit?: number;
-  },
+  } = {},
 ) {
   const { color, price, priceMin, priceMax, gender, size, limit = 5 } = filter;
   const promptEmbeddingJSON = promptEmbedding ? JSON.stringify(promptEmbedding) : "";
