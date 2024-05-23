@@ -16,7 +16,7 @@ export type ProductCardProps = ComponentProps<CardProps, Product>;
 export function ProductCard({
   className,
   id,
-  description,
+  title,
   price,
   image,
   sizes,
@@ -50,7 +50,7 @@ export function ProductCard({
             href={ROUTES.PRODUCT_BY_ID(id)}
             className="hover:text-primary transition-colors"
           >
-            <h4 className="line-clamp-2 text-base font-semibold capitalize">{description}</h4>
+            <h4 className="line-clamp-2 text-base font-semibold capitalize">{title}</h4>
           </Link>
 
           <p className="text-end text-base font-semibold">{toCurrency(price)}</p>

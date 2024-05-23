@@ -28,7 +28,7 @@ export function ChatMessageProdcutSalesChart({
           href={ROUTES.PRODUCT_BY_ID(product.id)}
           className="capitalize"
         >
-          {product.description}
+          {product.title}
         </Link>
       </Button>{" "}
       for the last {product.sales?.length} days:

@@ -9,7 +9,7 @@ import { QueryResult } from "@/query/types";
 type Result = {
   id: ProductRow["id"];
   ft_score_color: number;
-  v_score_image_text: number;
+  v_score_title: number;
   v_score_description: number;
   score: number;
 };

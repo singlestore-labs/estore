@@ -72,14 +72,14 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
         ...chunk.map((product, i) => ({
           id: productId++,
           created_at,
-          description: product.description,
+          title: product.description,
+          description: imageVs[i][0],
           type: types[i],
           image: product.image,
-          image_text: imageVs[i][0],
           price: product.price,
           gender: product.gender,
-          description_v: JSON.stringify(descriptionVs[i]),
-          image_text_v: JSON.stringify(imageVs[i][1]),
+          title_v: JSON.stringify(descriptionVs[i]),
+          description_v: JSON.stringify(imageVs[i][1]),
         })),
       ];
     }

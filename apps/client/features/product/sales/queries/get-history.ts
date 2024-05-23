@@ -3,7 +3,7 @@ import { ORDERS_TABLE_NAME, PRODUCT_SKU_TABLE_NAME, PRODUCTS_TABLE_NAME } from "
 import { Product } from "@/product/types";
 
 export function createGetProductSalesHistoryQuery(
-  where: Pick<Product, "id"> | Pick<Product, "description">,
+  where: Pick<Product, "id"> | Pick<Product, "title">,
   { interval = 1, intervalUnit = "MONTH" }: { interval?: number; intervalUnit?: "DAY" | "WEEK" | "MONTH" } = {},
 ) {
   const [[key, value]] = Object.entries(where).map(([key, value]) => [

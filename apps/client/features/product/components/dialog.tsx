@@ -21,12 +21,12 @@ export type ProductDialogProps = ComponentProps<DialogProps, Product>;
 
 export function ProductDialog({
   id,
+  title,
   description,
   price,
   image,
   sizes,
   sales,
-  image_text,
   ...props
 }: ProductDialogProps) {
   const unmountTimeoutRef = useRef<NodeJS.Timeout>();
@@ -63,7 +63,7 @@ export function ProductDialog({
   if (isPurchased) {
     content = (
       <ProductPurchaseCardSuccess
-        productName={description}
+        productTitle={title}
         onSubmit={() => handleToggle(false)}
       />
     );
@@ -81,11 +81,11 @@ export function ProductDialog({
 
         <div className="flex w-full max-w-full flex-col gap-4">
           <div className="flex items-start justify-between gap-4">
-            <h2 className="text-2xl font-semibold capitalize">{description}</h2>
+            <h2 className="text-2xl font-semibold capitalize">{title}</h2>
             <p className="text-2xl font-semibold">${price}</p>
           </div>
 
-          {image_text && <p className="text-muted-foreground">{image_text}</p>}
+          {description && <p className="text-muted-foreground">{description}</p>}
 
           <div className="flex flex-wrap items-center gap-4">
             <ProductSizeSelect

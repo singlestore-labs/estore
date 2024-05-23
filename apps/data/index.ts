@@ -32,15 +32,15 @@ function createTables() {
       CREATE TABLE IF NOT EXISTS ${PRODUCTS_TABLE_NAME} (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         created_at DATETIME,
+        title TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
         description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
         image VARCHAR(256),
-        image_text TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
         price DECIMAL(9,2),
         gender VARCHAR(64),
         type_id BIGINT,
+        title_v VECTOR(1536),
         description_v VECTOR(1536),
-        image_text_v VECTOR(1536),
-        FULLTEXT KEY(description, image_text)
+        FULLTEXT KEY(title, description)
       )
     `),
 

@@ -17,7 +17,7 @@ export async function getOrdersSummary(...args: Parameters<typeof createGetOrder
       { total_revenue: string }[],
       { unique_customers: number }[],
       { order_date: Date; orders_count: number }[],
-      { id: number; description: string; orders_count: number }[],
+      { id: number; title: string; orders_count: number }[],
       { label: string; orders_count: number }[],
       { user_kd: number; total_spent: string }[],
     ]

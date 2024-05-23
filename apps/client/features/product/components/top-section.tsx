@@ -44,7 +44,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
             >
               <ProductCardSecondary
                 id={product.id}
-                description={product.description}
+                title={product.title}
                 image={product.image}
                 className="flex-grow basis-64"
               />
