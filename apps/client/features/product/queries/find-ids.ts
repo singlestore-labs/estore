@@ -58,8 +58,8 @@ FROM (
 ) ft_result FULL OUTER JOIN (
   SELECT
     products.id,
-    ${promptEmbeddingJSON ? `products.title_v <*> @promptEmbedding` : "1"} AS v_score_title
-    ${promptEmbeddingJSON ? `products.description_v <*> @promptEmbedding` : "1"} AS v_score_description,
+    ${promptEmbeddingJSON ? `products.title_v <*> @promptEmbedding` : "1"} AS v_score_title,
+    ${promptEmbeddingJSON ? `products.description_v <*> @promptEmbedding` : "1"} AS v_score_description
   FROM ${PRODUCTS_TABLE_NAME} products
   ${join ? `JOIN ${join}` : ""}
   WHERE v_score_title >= 0.75 OR v_score_description >= 0.75

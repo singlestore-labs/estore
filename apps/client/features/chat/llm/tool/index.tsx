@@ -1,4 +1,4 @@
-import { createLLMChatCompletion } from "@repo/ai";
+import { createLLMChatCompletion } from "@repo/ai/lib/create-chat-completion";
 import { db } from "@repo/db";
 import {
   ORDERS_TABLE_NAME,
