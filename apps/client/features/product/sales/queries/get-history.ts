@@ -4,7 +4,7 @@ import { Product } from "@/product/types";
 
 export function createGetProductSalesHistoryQuery(
   where: Pick<Product, "id"> | Pick<Product, "description">,
-  { daysInterval = 30 }: { daysInterval?: number } = {},
+  { interval = 1, intervalUnit = "MONTH" }: { interval?: number; intervalUnit?: "DAY" | "WEEK" | "MONTH" } = {},
 ) {
   const [[key, value]] = Object.entries(where).map(([key, value]) => [
     key.toLowerCase(),
@@ -17,7 +17,7 @@ FROM ${ORDERS_TABLE_NAME} orders
 JOIN ${PRODUCT_SKU_TABLE_NAME} sku ON orders.product_sku_id = sku.id
 JOIN ${PRODUCTS_TABLE_NAME} products ON sku.product_id = products.id
 WHERE products.${key} = ${value}
-  AND orders.created_at >= (SELECT CURDATE() - INTERVAL ${daysInterval} DAY)
+  AND orders.created_at >= (SELECT CURDATE() - INTERVAL ${interval} ${intervalUnit})
 GROUP BY DATE(orders.created_at)
 ORDER BY DATE(orders.created_at)
 `;

@@ -113,7 +113,7 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
                     <TooltipContent className="text-center text-xs">
                       <p>
                         {withCommas(product.sales.reduce((acc, i) => acc + i.value, 0))}
-                        {` sales for the last ${product.sales.length} days`}
+                        {` sales in the last month.`}
                       </p>
                     </TooltipContent>
                   </Tooltip>

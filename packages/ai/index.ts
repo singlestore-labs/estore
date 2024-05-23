@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 import { OPENAI_API_KEY } from "@repo/ai/constants";
-import { ChatCompletionCreateParamsStreaming } from "openai/resources/chat/completions.mjs";
+import { ChatCompletionCreateParamsStreaming } from "openai/src/resources/chat/completions.js";
 
 export const llm = new OpenAI({ apiKey: OPENAI_API_KEY });
 

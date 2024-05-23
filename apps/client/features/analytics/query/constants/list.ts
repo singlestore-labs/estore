@@ -33,6 +33,6 @@ export const ANALYTICS_QUERY_LIST = [
     slug: ANALYTICS_QUERY_SLUGS.product_sales,
     title: "Product sales",
     description: "Retrieves the sales history of a product",
-    getQuery: () => createGetProductSalesHistoryQuery({ id: 1 }, { daysInterval: 30 }),
+    getQuery: () => createGetProductSalesHistoryQuery({ id: 1 }),
   },
 ] satisfies AnalyticsQuery[];

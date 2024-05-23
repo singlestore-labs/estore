@@ -14,7 +14,6 @@ import { createOrder } from "@/order/actions/create";
 import { ProductPurchaseCardSuccess } from "@/product/components/purchase-card-success";
 import { ProductLikesAction } from "@/product/likes/components/action";
 import { ProductSalesChart } from "@/product/sales/components/chart";
-import { getProductSalesMessage } from "@/product/sales/lib/get-message";
 import { ProductSizeSelect } from "@/product/size/components/select";
 import { Product } from "@/product/types";
 
@@ -103,7 +102,7 @@ export function ProductDialog({
 
           {!!sales.length && (
             <div>
-              <h3 className="font-medium">{getProductSalesMessage(sales.length)}</h3>
+              <h3 className="font-medium">Last month sales</h3>
               <ProductSalesChart
                 className="mt-2"
                 sales={sales}

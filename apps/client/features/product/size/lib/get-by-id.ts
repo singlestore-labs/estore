@@ -13,6 +13,7 @@ export async function getProductSizesById(productId: Product["id"]): Promise<Pro
       FROM ${PRODUCT_SKU_TABLE_NAME} sku
       JOIN ${PRODUCT_SIZES_TABLE_NAME} sizes ON sizes.id = sku.product_size_id
       WHERE sku.product_id = ${productId}
+      ORDER BY sizes.value DESC
     `,
   });
 

@@ -1,4 +1,4 @@
-import { createLLMChatCompletion } from "@repo/ai";
+import { llm } from "@repo/ai";
 import { db } from "@repo/db";
 import { CHAT_MESSAGES_TABLE_NAME } from "@repo/db/constants";
 import zodToJsonSchema from "zod-to-json-schema";
@@ -70,8 +70,14 @@ export async function createChatLLM(name: Chat["name"] = "main") {
     if (!userId) throw new Error("userId is undefined");
 
     const [stream] = await Promise.all([
-      createLLMChatCompletion(content, {
+      llm.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        temperature: 0,
         stream: true,
+        messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          { role: "user", content },
+        ],
         tools: Object.values(tools).map(({ name, description, schema }) => ({
           type: "function",
           function: { name, description, parameters: zodToJsonSchema(schema) },

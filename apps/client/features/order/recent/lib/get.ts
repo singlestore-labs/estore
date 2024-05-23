@@ -18,7 +18,7 @@ export async function getOrdersRecent(filter: { daysInterval?: number; limit?: n
         JOIN (SELECT id, product_id FROM ${PRODUCT_SKU_TABLE_NAME}) AS sku ON sku.id = orders.product_sku_id
         JOIN (SELECT id, description, image, price FROM ${PRODUCTS_TABLE_NAME}) AS products ON products.id = sku.product_id
         WHERE orders.created_at >= (SELECT CURDATE() - INTERVAL ${daysInterval} DAY)
-        ORDER BY orders.created_at DESC
+        ORDER BY orders.created_at DESC, products.description ASC
         LIMIT ${limit}
       `,
     });
