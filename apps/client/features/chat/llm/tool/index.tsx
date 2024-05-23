@@ -1,4 +1,15 @@
 import { createLLMChatCompletion } from "@repo/ai";
+import { db } from "@repo/db";
+import {
+  ORDERS_TABLE_NAME,
+  PRODUCTS_TABLE_NAME,
+  PRODUCT_LIKES_TABLE_NAME,
+  PRODUCT_SIZES_TABLE_NAME,
+  PRODUCT_SKU_TABLE_NAME,
+  PRODUCT_TYPES_TABLE_NAME,
+  USERS_TABLE_NAME,
+} from "@repo/db/constants";
+import { getDatabaseSchema } from "@repo/db/lib/get-schema";
 import { z } from "zod";
 
 import { createChatLLMTool } from "@/chat/llm/tool/lib/create";
@@ -108,15 +119,72 @@ export const chatLLMTools: ChatLLMToolsMap = {
         const result = await getOrdersSummary({ interval, intervalUnit });
 
         const stream = await createLLMChatCompletion(
-          `
-            Write an e-commerce summary based on the following context:
-            ${JSON.stringify(result)}
-            Use markdown.
+          `The context:\n${JSON.stringify(result)}
           `,
-          { stream: true },
+          {
+            systemRole: `\
+              You are an e-commerce assistant.
+              You must write a summary based on the provided context.
+              Your response must contain markdown.
+            `,
+            stream: true,
+          },
         );
 
         return { name: "get_orders_summary", props: { stream } };
+      },
+    }),
+
+    query_db: createChatLLMTool({
+      name: "query_db",
+      description: `Useful when you need to answer a user's question about the following data: ${[
+        USERS_TABLE_NAME,
+        PRODUCTS_TABLE_NAME,
+        PRODUCT_SKU_TABLE_NAME,
+        PRODUCT_SIZES_TABLE_NAME,
+        PRODUCT_TYPES_TABLE_NAME,
+        PRODUCT_LIKES_TABLE_NAME,
+        ORDERS_TABLE_NAME,
+      ].join(", ")}.`,
+      schema: z.object({ prompt: z.string().describe("The user's prompt") }),
+      call: async ({ prompt }) => {
+        const schema = await getDatabaseSchema();
+        const queryNotAllowedKey = "Query not allowed";
+
+        const queryCompletion = await createLLMChatCompletion(
+          `${prompt}\nThe MySQL database schema:\n${JSON.stringify(schema)}
+          `,
+          {
+            systemRole: `\
+              You are a MySQL database expert.
+              You must write MySQL query to answer the user's prompt.
+              If the query selects column names that contain "_v" at the end, those columns must be removed from the query select.
+              If the user request relates to a CREATE or DELETE or UPDATE operation, your response must contain "${queryNotAllowedKey}".
+              Else your response must contain the MySQL query only without any formatting.
+            `,
+          },
+        );
+
+        if (typeof queryCompletion === "object" && queryCompletion && "choices" in queryCompletion) {
+          const query = queryCompletion.choices[0].message.content;
+          if (!query) throw new Error(`Query undefined`);
+          if (query.includes(queryNotAllowedKey)) throw new Error(queryNotAllowedKey);
+
+          const context = await db.controllers.query({ query });
+
+          const stream = await createLLMChatCompletion(`${prompt}\nThe context:\n${JSON.stringify(context)}`, {
+            systemRole: `\
+              You are an e-commerce assistant.
+              You must answer a user's question based on the provided context.
+              Your response must contain markdown.
+            `,
+            stream: true,
+          });
+
+          return { name: "query_db", props: { stream } };
+        }
+
+        throw new Error("Something went wrong :)");
       },
     }),
   },
