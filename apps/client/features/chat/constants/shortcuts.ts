@@ -27,7 +27,7 @@ export const CHAT_SHORTCUTS: Record<Chat["name"], ChatShortcut[]> = {
     {
       title: "Orders summary",
       description: "Provides a summary of orders",
-      prompt: "Give me a summary of orders for the last 30 days.",
+      prompt: "Give me a summary of orders for the last month.",
     },
   ],
 };

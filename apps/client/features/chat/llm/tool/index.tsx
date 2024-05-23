@@ -109,9 +109,9 @@ export const chatLLMTools: ChatLLMToolsMap = {
 
         const stream = await createLLMChatCompletion(
           `
-            Write an e-commerce markdown summary based on the following context:
-            For the last ${interval} ${intervalUnit}.
+            Write an e-commerce summary based on the following context:
             ${JSON.stringify(result)}
+            Use markdown.
           `,
           { stream: true },
         );
