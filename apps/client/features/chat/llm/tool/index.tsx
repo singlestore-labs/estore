@@ -1,14 +1,6 @@
 import { createLLMChatCompletion } from "@repo/ai/lib/create-chat-completion";
 import { db } from "@repo/db";
-import {
-  ORDERS_TABLE_NAME,
-  PRODUCTS_TABLE_NAME,
-  PRODUCT_LIKES_TABLE_NAME,
-  PRODUCT_SIZES_TABLE_NAME,
-  PRODUCT_SKU_TABLE_NAME,
-  PRODUCT_TYPES_TABLE_NAME,
-  USERS_TABLE_NAME,
-} from "@repo/db/constants";
+import { CHAT_MESSAGES_TABLE_NAME } from "@repo/db/constants";
 import { getDatabaseSchema } from "@repo/db/lib/get-schema";
 import { z } from "zod";
 
@@ -17,6 +9,7 @@ import { ChatMessageProductCard } from "@/chat/message/product/components/card";
 import { ChatMessageProductController } from "@/chat/message/product/components/controller";
 import { ChatMessageProdcutSalesChart } from "@/chat/message/product/components/sales-chart";
 import { Chat } from "@/chat/types";
+import { IS_DEV } from "@/constants/config";
 import { getOrdersSummary } from "@/order/lib/get-summary";
 import { findProducts } from "@/product/lib/find";
 import { getProducts } from "@/product/lib/get";
@@ -124,8 +117,7 @@ export const chatLLMTools: ChatLLMToolsMap = {
           {
             systemRole: `\
               You are an e-commerce assistant.
-              You must write a summary based on the provided context.
-              Your response must contain markdown.
+              You must write a summary in markdown style based on the provided context.
             `,
             stream: true,
           },
@@ -137,46 +129,50 @@ export const chatLLMTools: ChatLLMToolsMap = {
 
     query_db: createChatLLMTool({
       name: "query_db",
-      description: `Useful when you need to answer a user's question about the following data: ${[
-        USERS_TABLE_NAME,
-        PRODUCTS_TABLE_NAME,
-        PRODUCT_SKU_TABLE_NAME,
-        PRODUCT_SIZES_TABLE_NAME,
-        PRODUCT_TYPES_TABLE_NAME,
-        PRODUCT_LIKES_TABLE_NAME,
-        ORDERS_TABLE_NAME,
-      ].join(", ")}.`,
+      description: `Useful when you need to answer a user's question`,
       schema: z.object({ prompt: z.string().describe("The user's prompt") }),
       call: async ({ prompt }) => {
         const schema = await getDatabaseSchema();
         const queryNotAllowedKey = "Query not allowed";
 
-        const queryCompletion = await createLLMChatCompletion(
-          `${prompt}\nThe MySQL database schema:\n${JSON.stringify(schema)}
+        const queryCompletion = await createLLMChatCompletion(prompt, {
+          systemRole: `\
+            You are a MySQL database expert.
+            You must respond with a MySQL query based on the user prompt and the following database schema:\n${JSON.stringify(schema)}
+
+            A MySQL query must match the following rules:
+            - Only SELECT operation is allowed
+            - Columns ending in "_v" are not allowed and must be removed from the query
+            - The query must be unformatted.
+
+            If the user prompt is related to the ${CHAT_MESSAGES_TABLE_NAME} table, a MySQL query must match the following rules:
+            - The content column can only be used for text search
+            - The content column must not contain '"props":'
+            - The chat_id must be related to the 'main' chat name.
           `,
-          {
-            systemRole: `\
-              You are a MySQL database expert.
-              You must write MySQL query to answer the user's prompt.
-              If the user request relates to a CREATE or DELETE or UPDATE operation, your response must contain "${queryNotAllowedKey}".
-              Else your response must contain the MySQL query only without any formatting.
-              Columns ending in "_v" are forbidden and must be removed from the query.
-            `,
-          },
-        );
+        });
 
         if (typeof queryCompletion === "object" && queryCompletion && "choices" in queryCompletion) {
           const query = queryCompletion.choices[0].message.content;
           if (!query) throw new Error(`Query undefined`);
           if (query.includes(queryNotAllowedKey)) throw new Error(queryNotAllowedKey);
 
-          const context = await db.controllers.query({ query });
+          if (IS_DEV) console.log({ query });
 
-          const stream = await createLLMChatCompletion(`${prompt}\nThe context:\n${JSON.stringify(context)}`, {
+          let context = await db.controllers.query({ query });
+
+          if (Array.isArray(context) && JSON.stringify(context).length > 5000) {
+            context = context.slice(0, 10);
+          }
+
+          deleteContextVectors(context);
+
+          if (IS_DEV) console.log({ context });
+
+          const stream = await createLLMChatCompletion(prompt, {
             systemRole: `\
-              You are an e-commerce assistant.
-              You must answer a user's question based on the provided context.
-              Your response must contain markdown.
+              You are a helpful assistant.
+              You must answear the question in markdown style based on the following context:\n${JSON.stringify(context)}
             `,
             stream: true,
           });
@@ -189,3 +185,14 @@ export const chatLLMTools: ChatLLMToolsMap = {
     }),
   },
 };
+
+function deleteContextVectors(context: any) {
+  if (Array.isArray(context) && typeof context[0] === "object" && context[0]) {
+    const keys = Object.keys(context[0]).filter((i) => i.includes("_v"));
+    context.forEach((i) => {
+      keys.forEach((key) => {
+        delete i[key as keyof typeof i];
+      });
+    });
+  }
+}
