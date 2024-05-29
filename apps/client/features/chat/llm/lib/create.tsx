@@ -71,7 +71,7 @@ export async function createChatLLM(name: Chat["name"] = "main") {
 
     const [stream] = await Promise.all([
       llm.chat.completions.create({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o",
         temperature: 0,
         stream: true,
         messages: [

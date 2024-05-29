@@ -133,7 +133,6 @@ export const chatLLMTools: ChatLLMToolsMap = {
       schema: z.object({ prompt: z.string().describe("The user's prompt") }),
       call: async ({ prompt }) => {
         const schema = await getDatabaseSchema();
-        const queryNotAllowedKey = "Query not allowed";
 
         const queryCompletion = await createLLMChatCompletion(prompt, {
           systemRole: `\
@@ -143,19 +142,19 @@ export const chatLLMTools: ChatLLMToolsMap = {
             A MySQL query must match the following rules:
             - Only SELECT operation is allowed
             - Columns ending in "_v" are not allowed and must be removed from the query
-            - The query must be unformatted.
 
             If the user prompt is related to the ${CHAT_MESSAGES_TABLE_NAME} table, a MySQL query must match the following rules:
             - The content column can only be used for text search
             - The content column must not contain '"props":'
             - The chat_id must be related to the 'main' chat name.
+
+            You must answer only MySQL query without any formatting.
           `,
         });
 
         if (typeof queryCompletion === "object" && queryCompletion && "choices" in queryCompletion) {
           const query = queryCompletion.choices[0].message.content;
           if (!query) throw new Error(`Query undefined`);
-          if (query.includes(queryNotAllowedKey)) throw new Error(queryNotAllowedKey);
 
           if (IS_DEV) console.log({ query });
 
@@ -169,13 +168,17 @@ export const chatLLMTools: ChatLLMToolsMap = {
 
           if (IS_DEV) console.log({ context });
 
-          const stream = await createLLMChatCompletion(prompt, {
-            systemRole: `\
-              You are a helpful assistant.
-              You must answear the question in markdown style based on the following context:\n${JSON.stringify(context)}
-            `,
-            stream: true,
-          });
+          const stream = await createLLMChatCompletion(
+            `The user wrote: ${prompt}. The context is: ${JSON.stringify(context)}`,
+            {
+              systemRole: `\
+                You are a helpful assistant.
+                You must answear questions in markdown style.
+                Only answer the question from the context. Don't return an answer if it is not present in the context.
+              `,
+              stream: true,
+            },
+          );
 
           return { name: "query_db", props: { stream } };
         }

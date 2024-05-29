@@ -39,7 +39,10 @@ export async function submitChatMessage(chatName: Chat["name"], content: string)
               createChatMessage({
                 ...message,
                 isLoading,
-                error: error instanceof Error ? error.message : "UnknownError",
+                error:
+                  typeof error === "object" && error && "message" in error && typeof error.message === "string"
+                    ? error.message
+                    : "UnknownError",
               }).node,
             );
           },

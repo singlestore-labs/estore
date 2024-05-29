@@ -5,7 +5,7 @@ export function createLLMChatCompletion(
   { systemRole = "You are a helpful assistant.", ...options }: { systemRole?: string; stream?: boolean } = {},
 ) {
   return llm.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o",
     temperature: 0,
     stream: false,
     ...options,
