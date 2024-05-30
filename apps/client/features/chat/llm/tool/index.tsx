@@ -27,12 +27,11 @@ export const chatLLMTools: ChatLLMToolsMap = {
       name: "find_products",
       description: "Useful when you need to find products",
       schema: z.object({
-        prompt: z.string().describe("User's prompt"),
+        prompt: z.string().min(3).describe("User's prompt"),
         color: z.string().describe("Product color").optional(),
         price: z.number().describe("Product exact price").optional(),
         priceMax: z.number().describe("Product max price").optional(),
         priceMin: z.number().describe("Product min price").optional(),
-        gender: z.enum(["women", "unisex"]).describe("What gender the product is for").optional(),
         size: z
           .enum(["xxxs", "xxs", "xs", "s", "m", "l", "xl", "xxl", "oneSize"])
           .describe("Product size")
@@ -130,7 +129,7 @@ export const chatLLMTools: ChatLLMToolsMap = {
     query_db: createChatLLMTool({
       name: "query_db",
       description: `Useful when you need to answer a user's question`,
-      schema: z.object({ prompt: z.string().describe("The user's prompt") }),
+      schema: z.object({ prompt: z.string().min(3).describe("The user's prompt") }),
       call: async ({ prompt }) => {
         const schema = await getDatabaseSchema();
 

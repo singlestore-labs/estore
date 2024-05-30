@@ -7,12 +7,11 @@ export function createFindProductIdsQuery(
     price?: number;
     priceMin?: number;
     priceMax?: number;
-    gender?: (string & {}) | "women" | "unisex";
     size?: (string & {}) | "xxxs" | "xxs" | "xs" | "s" | "m" | "l" | "xl" | "xxl" | "oneSize";
     limit?: number;
   } = {},
 ) {
-  const { color, price, priceMin, priceMax, gender, size, limit = 5 } = filter;
+  const { color, price, priceMin, priceMax, size, limit = 5 } = filter;
   const promptEmbeddingJSON = promptEmbedding ? JSON.stringify(promptEmbedding) : "";
   const whereDefinitions: string[] = [];
   const joinDefinitions: string[] = [];
@@ -33,8 +32,6 @@ export function createFindProductIdsQuery(
       `${PRODUCT_SIZES_TABLE_NAME} size ON sku.product_size_id = size.id AND size.value = '${size}'`,
     );
   }
-
-  if (gender) whereDefinitions.push(`gender = '${gender}'`);
 
   const where = whereDefinitions.join(" AND ");
   const join = joinDefinitions.join(" JOIN ");
