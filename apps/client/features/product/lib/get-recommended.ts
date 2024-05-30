@@ -37,11 +37,5 @@ export async function getRecommendedProducts(userId: User["id"], filter: Paramet
     })
   )?.[0];
 
-  return product
-    ? findProducts(product.title, {
-        limit,
-        gender: product.gender,
-        size: product.size,
-      })
-    : [];
+  return product ? findProducts(product.title, { limit, size: product.size }) : [];
 }

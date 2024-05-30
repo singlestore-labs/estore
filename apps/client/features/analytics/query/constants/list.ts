@@ -15,7 +15,6 @@ export const ANALYTICS_QUERY_LIST = [
         color: "blue",
         priceMin: 100,
         priceMax: 1000,
-        gender: "women",
         size: "xs",
         limit: 5,
       });
