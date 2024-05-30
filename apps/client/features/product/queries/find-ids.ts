@@ -1,4 +1,4 @@
-import { PRODUCT_SKU_TABLE_NAME, PRODUCT_SIZES_TABLE_NAME, PRODUCTS_TABLE_NAME } from "@repo/db/constants";
+import { PRODUCTS_TABLE_NAME, PRODUCT_SIZES_TABLE_NAME, PRODUCT_SKU_TABLE_NAME } from "@repo/db/constants";
 
 export function createFindProductIdsQuery(
   promptEmbedding: number[] | "",
@@ -13,60 +13,32 @@ export function createFindProductIdsQuery(
 ) {
   const { color, price, priceMin, priceMax, size, limit = 5 } = filter;
   const promptEmbeddingJSON = promptEmbedding ? JSON.stringify(promptEmbedding) : "";
-  const whereDefinitions: string[] = [];
-  const joinDefinitions: string[] = [];
 
+  let priceDefinition = "";
   if (price) {
-    whereDefinitions.push(`price = ${price}`);
+    priceDefinition = `price = ${price}`;
   } else if (priceMin && priceMax) {
-    whereDefinitions.push(`price BETWEEN ${priceMin} AND ${priceMax}`);
+    priceDefinition = `price BETWEEN ${priceMin} AND ${priceMax}`;
   } else if (priceMin) {
-    whereDefinitions.push(`price >= ${priceMin}`);
+    priceDefinition = `price >= ${priceMin}`;
   } else if (priceMax) {
-    whereDefinitions.push(`price <= ${priceMax}`);
+    priceDefinition = `price <= ${priceMax}`;
   }
-
-  if (size) {
-    joinDefinitions.push(`${PRODUCT_SKU_TABLE_NAME} sku ON products.id = sku.product_id`);
-    joinDefinitions.push(
-      `${PRODUCT_SIZES_TABLE_NAME} size ON sku.product_size_id = size.id AND size.value = '${size}'`,
-    );
-  }
-
-  const where = whereDefinitions.join(" AND ");
-  const join = joinDefinitions.join(" JOIN ");
 
   return `\
-${promptEmbeddingJSON ? `SET @promptEmbedding = '${promptEmbeddingJSON}' :> vector(${promptEmbedding.length}) :> blob;` : ""}
+SET @promptEmbedding = '${promptEmbeddingJSON}' :> vector(${promptEmbedding.length}) :> blob;
 SELECT
-  ft_result.id,
-  ft_score_color,
-  v_score_title,
-  v_score_description,
-  0.5 * IFNULL(ft_score_color, 0) + 0.5 * IFNULL(v_score_title + v_score_description, 0) AS score
-FROM (
-  SELECT
-    products.id,
-    ${color ? `MATCH(products.description) AGAINST ('${color}')` : "1"} AS ft_score_color
-  FROM ${PRODUCTS_TABLE_NAME} products
-  ${join ? `JOIN ${join}` : ""}
-  WHERE ft_score_color
-  ${where ? `AND ${where}` : ""}
-) ft_result FULL OUTER JOIN (
-  SELECT
-    products.id,
-    ${promptEmbeddingJSON ? `products.title_v <*> @promptEmbedding` : "1"} AS v_score_title,
-    ${promptEmbeddingJSON ? `products.description_v <*> @promptEmbedding` : "1"} AS v_score_description
-  FROM ${PRODUCTS_TABLE_NAME} products
-  ${join ? `JOIN ${join}` : ""}
-  WHERE v_score_title >= 0.75 OR v_score_description >= 0.75
-  ${where ? `AND ${where}` : ""}
-  ORDER BY v_score_title + v_score_description DESC
-  LIMIT 100
-) v_result
-ON ft_result.id = v_result.id
-WHERE ft_score_color AND (v_score_title OR v_score_description)
+  ${PRODUCTS_TABLE_NAME}.id,
+  ${color ? `MATCH(description) AGAINST ('${color}')` : "1"} AS ft_score_color,
+  title_v <*> @promptEmbedding AS v_score_title,
+  description_v <*> @promptEmbedding AS v_score_description,
+  ft_score_color + v_score_title + v_score_description AS score
+FROM ${PRODUCTS_TABLE_NAME}
+JOIN ${PRODUCT_SKU_TABLE_NAME} ON ${PRODUCTS_TABLE_NAME}.id = ${PRODUCT_SKU_TABLE_NAME}.product_id
+${size ? `JOIN ${PRODUCT_SIZES_TABLE_NAME} ON ${PRODUCT_SKU_TABLE_NAME}.product_size_id = ${PRODUCT_SIZES_TABLE_NAME}.id AND ${PRODUCT_SIZES_TABLE_NAME}.value = '${size}'` : ""}
+WHERE ft_score_color AND (v_score_title >= 0.75 OR v_score_description >= 0.75) ${priceDefinition ? `AND ${priceDefinition}` : ""}
+GROUP BY ${PRODUCTS_TABLE_NAME}.id
 ORDER BY score DESC
-LIMIT ${limit};
+LIMIT ${limit}
 `;
 }
