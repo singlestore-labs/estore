@@ -28,7 +28,7 @@ export function ChatMessageList({
       {...props}
       className={cn("relative w-full max-w-full", className)}
     >
-      <div className="absolute left-0 top-0 flex h-full w-full max-w-full flex-col-reverse overflow-x-hidden overflow-y-scroll py-8">
+      <div className="absolute left-0 top-0 flex h-full w-full max-w-full flex-col-reverse overflow-y-auto overflow-x-hidden py-8">
         {messages.length ? (
           <ul
             {...listProps}

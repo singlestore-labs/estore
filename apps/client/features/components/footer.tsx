@@ -5,11 +5,13 @@ import { cn } from "@/ui/lib";
 
 export type FooterProps = ComponentProps<"footer">;
 
+export const footerHeight = "3.25rem";
+
 export function Footer({ className, ...props }: FooterProps) {
   return (
     <footer
       {...props}
-      className={cn("flex items-center justify-center p-4", className)}
+      className={cn(`flex items-center justify-center p-4 h-[${footerHeight}]`, className)}
     >
       <p className={cn("text-muted-foreground text-sm", className)}>
         Built with ❤️ on{" "}
