@@ -1,5 +1,4 @@
-import { ProductRow } from "@repo/db/types";
-
+import { getProductsByTypeId } from "@/product/actions/get-by-type-id";
 import { ProductType } from "@/product/type/type";
 
-export type ProductCatalogItem = [ProductType, Pick<ProductRow, "id" | "title" | "image" | "price">[]];
+export type ProductCatalogItem = [ProductType, Awaited<ReturnType<typeof getProductsByTypeId>>];

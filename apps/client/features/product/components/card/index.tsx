@@ -44,7 +44,7 @@ export function ProductCard({
         />
         <Link
           href={ROUTES.PRODUCT_BY_ID(id)}
-          className="absolute z-[1] h-full w-full"
+          className="absolute left-0 top-0 z-[1] h-full w-full"
         />
       </div>
 
