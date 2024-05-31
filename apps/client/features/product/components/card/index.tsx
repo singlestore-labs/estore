@@ -2,7 +2,7 @@ import { toCurrency, withCommas } from "@repo/helpers";
 import Image from "next/image";
 import Link from "next/link";
 
-import { ComponentProps } from "@/types";
+import { ComponentProps, Optional } from "@/types";
 import { Card, CardProps } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
 import { ProductLikesInfo } from "@/product/likes/components/info";
@@ -11,7 +11,10 @@ import { ProductSizesInfo } from "@/product/size/components/info";
 import { Product } from "@/product/types";
 import { cn } from "@/ui/lib";
 
-export type ProductCardProps = ComponentProps<CardProps, Product>;
+export type ProductCardProps = ComponentProps<
+  CardProps,
+  Optional<Product, "likes" | "sizes" | "sales" | "created_at" | "description" | "gender">
+>;
 
 export function ProductCard({
   className,
@@ -22,6 +25,7 @@ export function ProductCard({
   sizes,
   likes,
   sales,
+  gender,
   created_at,
   ...props
 }: ProductCardProps) {
@@ -30,7 +34,7 @@ export function ProductCard({
       {...props}
       className={cn("w-full max-w-64 overflow-hidden", className)}
     >
-      <div className="relative size-64 overflow-hidden border-b">
+      <div className="relative h-0 w-full overflow-hidden border-b pt-[100%]">
         <Image
           className="object-cover"
           src={image}
@@ -57,15 +61,19 @@ export function ProductCard({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <ProductSizesInfo sizes={sizes} />
-          <ProductSalesInfo
-            className="ml-auto"
-            value={sales}
-          />
-          <ProductLikesInfo
-            value={withCommas(likes)}
-            productId={id}
-          />
+          {sizes && <ProductSizesInfo sizes={sizes} />}
+          {!!sales && (
+            <ProductSalesInfo
+              className="ml-auto"
+              value={sales}
+            />
+          )}
+          {!!likes && (
+            <ProductLikesInfo
+              value={withCommas(likes)}
+              productId={id}
+            />
+          )}
         </div>
       </div>
     </Card>
