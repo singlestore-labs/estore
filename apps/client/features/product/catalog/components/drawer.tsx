@@ -1,14 +1,17 @@
 import { ComponentProps } from "@/types";
 import { Drawer, DrawerProps } from "@/components/drawer";
-import { Section } from "@/components/section";
-import { ProductCatalogList } from "@/product/catalog/components/list";
-import { getProductCatalog } from "@/product/catalog/lib/get";
+import { getProductCatalog } from "@/product/catalog/actions/get";
+import { ProductCatalogContainer } from "@/product/catalog/components/container";
+import { countProductTypes } from "@/product/type/lib/count";
 import { cn } from "@/ui/lib";
 
 export type ProductCatalogDrawerProps = ComponentProps<DrawerProps>;
 
 export async function ProductCatalogDrawer({ className, ...props }: ProductCatalogDrawerProps) {
-  const catalog = await getProductCatalog({ limit: 3 });
+  const [catalog, productTypesCount] = await Promise.all([
+    getProductCatalog({ limit: 4, products: { limit: 3 } }),
+    countProductTypes(),
+  ]);
 
   return (
     <Drawer
@@ -16,27 +19,10 @@ export async function ProductCatalogDrawer({ className, ...props }: ProductCatal
       className={cn("", className)}
       triggerChildren="Product catalog"
     >
-      <div className="h-full w-full overflow-hidden rounded-lg">
-        <div className="flex h-full w-full flex-col gap-8 overflow-y-auto overflow-x-hidden p-4">
-          {catalog.map((data) => (
-            <Section
-              key={data[0].id}
-              title={
-                <>
-                  {data[0].label}
-                  <sup className="ml-1">({data[0].products_count})</sup>
-                </>
-              }
-              variant="secondary"
-              spacing="none"
-              size="sm"
-              titleProps={{ className: "capitalize" }}
-            >
-              <ProductCatalogList data={data} />
-            </Section>
-          ))}
-        </div>
-      </div>
+      <ProductCatalogContainer
+        data={catalog}
+        count={productTypesCount}
+      />
     </Drawer>
   );
 }

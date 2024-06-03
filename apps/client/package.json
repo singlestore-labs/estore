@@ -27,6 +27,7 @@
     "ai": "^3.0.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "debounce": "^2.1.0",
     "embla-carousel-react": "^8.0.2",
     "human-number": "^2.0.4",
     "jotai": "^2.7.2",
