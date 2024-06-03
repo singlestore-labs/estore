@@ -35,7 +35,7 @@ export const chatInputFormTextareaVariants = cva(
   {
     variants: {
       size: {
-        default: "h-14 min-h-14 px-5 py-3.5 pr-16 text-xl max-md:text-lg",
+        default: "h-14 min-h-14 px-5 py-3.5 pr-16 text-xl max-md:text-base",
         sm: "h-12 min-h-12 px-5 py-3 pr-16 text-base",
       },
     },

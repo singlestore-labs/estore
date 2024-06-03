@@ -27,7 +27,7 @@ export function ProductCatalogList({ className, data, ...props }: ProductCatalog
       {...props}
       className={cn("group relative", className)}
     >
-      <ul className="grid-auto-fill-[12.5rem] grid gap-4">
+      <ul className="grid-auto-fill-[12rem] grid gap-4">
         {products.map((product) => (
           <li
             key={product.id}
