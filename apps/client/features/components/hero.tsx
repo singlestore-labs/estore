@@ -19,7 +19,7 @@ export function Hero({ className, chatName, ...props }: HeroProps) {
     <h1
       {...props}
       className={cn(
-        "max-w-5xl text-center text-5xl font-semibold leading-tight [&+*]:flex-[0_0_auto]",
+        "max-w-5xl px-6 text-center text-5xl font-semibold leading-tight max-lg:text-4xl max-md:text-3xl [&+*]:flex-[0_0_auto]",
         className,
       )}
     >
