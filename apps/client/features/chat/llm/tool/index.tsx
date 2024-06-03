@@ -72,14 +72,13 @@ export const chatLLMTools: ChatLLMToolsMap = {
 
     get_product_sales: createChatLLMTool({
       name: "get_product_sales",
-      description: "Useful when you to get a product sales history chart",
-      schema: z.object({ title: z.string().describe("Product title").optional() }),
+      description: "Useful when you need to get a random product sales history chart",
+      schema: z.object({}),
       node: ChatMessageProdcutSalesChart,
-      call: async ({ title }) => {
-        const filter = title ? { title } : { id: (await getRandomProductIds())[0] };
-        const [[key, value]] = Object.entries(filter);
+      call: async () => {
+        const productId = (await getRandomProductIds())[0];
         const result = await getProducts({
-          where: `LOWER(${key}) = '${value}'`,
+          where: `id = '${productId}'`,
           limit: 1,
           metaColumns: ["sales"],
         });

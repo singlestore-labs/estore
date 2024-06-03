@@ -23,7 +23,10 @@ export function ChatMessageProductCard({
       className="max-w-min gap-4 py-4"
     >
       {_children}
-      <ProductCard {...product} />
+      <ProductCard
+        {...product}
+        className="w-64"
+      />
     </ChatMessageCard>
   );
 }
