@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const chatName: Chat["name"] = "dashboard";
 
-export default function PageDashboard() {
+export default async function PageDashboard() {
   return (
     <div className="mt-6 flex flex-1 items-start justify-start">
       <div className="flex max-w-full flex-1 flex-col gap-4 px-4">

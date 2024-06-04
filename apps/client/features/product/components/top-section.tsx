@@ -15,11 +15,17 @@ import { cn } from "@/ui/lib";
 
 export type ProductTopSectionProps = ComponentProps<SectionProps>;
 
-export async function ProductTopSection({ className, contentProps, ...props }: ProductTopSectionProps) {
-  const products = await getTopProducts();
+async function getData() {
+  const products = await getTopProducts({ limit: 10 });
   const productSales = await Promise.all(
     products.map(({ id }) => Promise.all([countProductSales(id), countProductStock(id)])),
   );
+
+  return { products, productSales };
+}
+
+export async function ProductTopSection({ className, contentProps, ...props }: ProductTopSectionProps) {
+  const { products, productSales } = await getData();
 
   return (
     <Section
