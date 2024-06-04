@@ -19,7 +19,7 @@ const theme = getTheme();
 export function Drawer({
   children,
   className,
-  maxWidth = "",
+  maxWidth = "100%",
   offsetY,
   triggerChildren = "Expand",
 }: DrawerProps) {

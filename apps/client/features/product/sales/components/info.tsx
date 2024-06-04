@@ -1,3 +1,4 @@
+import humanNumber from "human-number";
 import { TrendingUp } from "lucide-react";
 
 import { ComponentProps } from "@/types";
@@ -8,6 +9,8 @@ import { cn } from "@/ui/lib";
 export type ProductSalesInfoProps = ComponentProps<ProductInfoItemProps, { value: Product["sales"] }>;
 
 export function ProductSalesInfo({ className, value = [], ...props }: ProductSalesInfoProps) {
+  const _value = value.reduce((a, b) => a + b.value, 0);
+
   return (
     <ProductInfoItem
       {...props}
@@ -15,7 +18,7 @@ export function ProductSalesInfo({ className, value = [], ...props }: ProductSal
       icon={TrendingUp}
       label="Last month sales"
     >
-      {value.reduce((a, b) => a + b.value, 0)}
+      {_value > 1000 ? humanNumber(_value, (i) => i.toFixed(0)) : _value}
     </ProductInfoItem>
   );
 }

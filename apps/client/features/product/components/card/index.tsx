@@ -1,4 +1,4 @@
-import { toCurrency, withCommas } from "@repo/helpers";
+import { toCurrency } from "@repo/helpers";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -70,8 +70,8 @@ export function ProductCard({
           )}
           {!!likes && (
             <ProductLikesInfo
-              value={withCommas(likes)}
               productId={id}
+              value={likes}
             />
           )}
         </div>

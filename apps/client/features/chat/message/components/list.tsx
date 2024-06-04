@@ -4,14 +4,14 @@ import { useAtomValue } from "jotai";
 import { ReactNode } from "react";
 
 import { ComponentProps } from "@/types";
-import { Fade } from "@/components/fade";
+import { Fade, FadeProps } from "@/components/fade";
 import { useChatMessagesAtomValue } from "@/chat/message/atoms/messages";
 import { Chat } from "@/chat/types";
 import { cn } from "@/ui/lib";
 
 export type ChatMessageListProps = ComponentProps<
   "div",
-  { chatName: Chat["name"]; emptyChildren?: ReactNode; listProps?: ComponentProps<"ul"> }
+  { chatName: Chat["name"]; emptyChildren?: ReactNode; listProps?: ComponentProps<"ul">; fadeProps?: FadeProps }
 >;
 
 export function ChatMessageList({
@@ -19,6 +19,7 @@ export function ChatMessageList({
   chatName,
   emptyChildren,
   listProps,
+  fadeProps,
   ...props
 }: ChatMessageListProps) {
   const messages = useAtomValue(useChatMessagesAtomValue(chatName));
@@ -58,12 +59,14 @@ export function ChatMessageList({
       {!!messages.length && (
         <>
           <Fade
-            className="left-0 top-0 z-[2] h-8 w-full"
+            {...fadeProps}
+            className={cn("left-0 top-0 z-[2] h-8 w-full", fadeProps?.className)}
             direction="b"
           />
 
           <Fade
-            className="bottom-0 left-0 z-[2] h-8 w-full"
+            {...fadeProps}
+            className={cn("bottom-0 left-0 z-[2] h-8 w-full", fadeProps?.className)}
             direction="t"
           />
         </>

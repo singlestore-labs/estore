@@ -10,6 +10,7 @@ export type ChatContainerProps = ComponentProps<
     name: Chat["name"];
     emptyChildren?: ChatMessageListProps["emptyChildren"];
     listProps?: ChatMessageListProps["listProps"];
+    fadeProps?: ChatMessageListProps["fadeProps"];
     inputProps?: Omit<ChatInputCardProps, "formProps" | "chatName">;
     formProps?: ChatInputCardProps["formProps"];
   }
@@ -20,6 +21,7 @@ export function ChatContainer({
   name,
   emptyChildren,
   listProps,
+  fadeProps,
   inputProps,
   formProps,
   ...props
@@ -37,6 +39,7 @@ export function ChatContainer({
           ...listProps,
           className: cn("max-w-5xl px-4", listProps?.className),
         }}
+        fadeProps={fadeProps}
       />
       <ChatInputCard
         chatName={name}

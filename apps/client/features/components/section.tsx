@@ -89,7 +89,7 @@ export const sectionTitleVariants = cva("font-medium", {
   },
 });
 
-export const sectionContentVariants = cva("h-full", {
+export const sectionContentVariants = cva("", {
   variants: {
     variant: {
       default: "",

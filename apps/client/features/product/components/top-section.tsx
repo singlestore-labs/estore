@@ -30,16 +30,16 @@ export async function ProductTopSection({ className, contentProps, ...props }: P
   return (
     <Section
       {...props}
-      className={cn("overflow-hidden", className)}
+      className={cn("flex flex-col overflow-hidden", className)}
       title="Top products"
       description="Best selling and most liked products"
       size="sm"
       contentProps={{
         ...contentProps,
-        className: cn("p-0 overflow-auto", contentProps?.className),
+        className: cn("flex-1 relative", contentProps?.className),
       }}
     >
-      <ul className="flex flex-col text-sm">
+      <ul className="absolute left-0 top-0 h-full w-full overflow-auto text-sm">
         {products.map((product, i) => {
           const totalSales = product.price * productSales[i][0];
 

@@ -14,6 +14,7 @@ export default function Home() {
         <ChatContainer
           name={chatName}
           formProps={{ placeholder: "Describe the product you wish to buy" }}
+          fadeProps={{ className: "bg-background" }}
         />
       </div>
 

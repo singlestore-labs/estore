@@ -1,5 +1,6 @@
 "use client";
 
+import humanNumber from "human-number";
 import { useAtomValue } from "jotai/react";
 import { Heart } from "lucide-react";
 
@@ -11,7 +12,7 @@ import { userProdcutLikesAtom } from "@/user/product/atoms/likes";
 
 export type ProductLikesInfoProps = ComponentProps<
   ProductInfoItemProps,
-  { value: Product["likes"] | string; productId: Product["id"] }
+  { value: Product["likes"]; productId: Product["id"] }
 >;
 
 export function ProductLikesInfo({ className, value, productId, ...props }: ProductLikesInfoProps) {
@@ -25,7 +26,7 @@ export function ProductLikesInfo({ className, value, productId, ...props }: Prod
       icon={Heart}
       label="Likes"
     >
-      {value}
+      {value > 1000 ? humanNumber(value, (i) => i.toFixed(0)) : value}
     </ProductInfoItem>
   );
 }

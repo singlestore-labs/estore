@@ -20,25 +20,22 @@ const chatName: Chat["name"] = "dashboard";
 export default async function PageDashboard() {
   return (
     <div className="mt-6 flex flex-1 items-start justify-start">
-      <div className="flex max-w-full flex-1 flex-col gap-4 px-4">
+      <div className="flex h-full max-w-full flex-1 flex-col gap-4 px-4">
         <div className="flex flex-wrap gap-4">
-          <Suspense fallback={<Skeleton className="h-40 flex-1 basis-80" />}>
+          <Suspense fallback={<Skeleton className="h-44 flex-1 basis-80" />}>
             <OrdersRevenueTrendInfoCard className="flex-1 basis-80" />
           </Suspense>
-          <Suspense fallback={<Skeleton className="h-40 flex-1 basis-80" />}>
+          <Suspense fallback={<Skeleton className="h-44 flex-1 basis-80" />}>
             <OrdersTrendInfoCard className="flex-1 basis-80" />
           </Suspense>
-          <Suspense fallback={<Skeleton className="h-40 flex-1 basis-80" />}>
+          <Suspense fallback={<Skeleton className="h-44 flex-1 basis-80" />}>
             <ProductTypesRevenueSplitInfoCard className="flex-1 basis-80" />
           </Suspense>
         </div>
 
-        <div className="flex flex-wrap items-start gap-4">
-          <Suspense fallback={<Skeleton className="flex-grow-full h-[35.3125rem] basis-96" />}>
-            <ProductTopSection
-              className="flex-grow-full basis-96"
-              contentProps={{ className: "max-h-[35.3125rem]" }}
-            />
+        <div className="flex flex-1 flex-wrap items-start gap-4">
+          <Suspense fallback={<Skeleton className="flex-grow-full h-full basis-96" />}>
+            <ProductTopSection className="flex-grow-full h-full basis-96" />
           </Suspense>
 
           <Suspense fallback={<Skeleton className="h-[35.625rem] flex-grow basis-96" />}>
@@ -50,10 +47,7 @@ export default async function PageDashboard() {
         </div>
       </div>
 
-      <Drawer
-        triggerChildren="Talk to the data"
-        maxWidth="100%"
-      >
+      <Drawer triggerChildren="Talk to the data">
         <ChatContainer
           name={chatName}
           className="h-full justify-end overflow-hidden rounded-lg pb-6"
