@@ -2,8 +2,13 @@ import { toChunks } from "@repo/helpers";
 import { writeFile } from "fs/promises";
 import path from "path";
 
-export async function writeDataset<T extends any[]>(name: string, data: T, length: number = 100_000) {
-  let i = 0;
+export async function writeDataset<T extends any[]>(
+  name: string,
+  data: T,
+  options: { index?: number; length?: number } = {},
+) {
+  const { index = 0, length = 100_000 } = options;
+  let i = index;
 
   const write = async (data: T) => {
     await writeFile(

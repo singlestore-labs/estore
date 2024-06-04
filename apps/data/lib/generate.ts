@@ -28,9 +28,9 @@ import { serializeDate } from "@repo/db/lib/serialize-date";
 import { vectorizeImages } from "@repo/ai/lib/vectorize-images";
 import { createProductType } from "@/lib/create-product-type";
 
-const USERS_NUMBER = 5_000_000;
-const PRODUCT_LIKES_NUMBER = 5_000_000;
-const UNIQUE_ORDERS_NUMBER = 5_000_000;
+const USERS_NUMBER = 10_000_000;
+const PRODUCT_LIKES_NUMBER = 25_000_000;
+const UNIQUE_ORDERS_NUMBER = 65_000_000;
 
 const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-dataset.json");
 
@@ -94,7 +94,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
       return { ...i, type_id: productTypeRows.find(({ label }) => label === type)?.id };
     });
 
-    await writeDataset(PRODUCTS_TABLE_NAME, productRows, 2500);
+    await writeDataset(PRODUCTS_TABLE_NAME, productRows, { length: 2500 });
   }
 
   console.log(`Generating ${PRODUCT_SIZES_TABLE_NAME}`);
@@ -123,22 +123,40 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
   await writeDataset(PRODUCT_SKU_TABLE_NAME, prodcutSKURows);
 
   console.log(`Generating ${PRODUCT_LIKES_TABLE_NAME}`);
-  const productLikeRows: ProductLikeRow[] = Array.from({ length: PRODUCT_LIKES_NUMBER }).map((_, i) => ({
-    id: i + 1,
-    created_at,
-    user_id: getRandomArrayItem(userRows).id,
-    product_id: getRandomArrayItem(productRows).id,
-  }));
-  await writeDataset(PRODUCT_LIKES_TABLE_NAME, productLikeRows);
+  let productLikeRows: ProductLikeRow[] = [];
+  let productLikeFileIndex = 0;
+  for await (const i of [...Array(PRODUCT_LIKES_NUMBER).keys()]) {
+    productLikeRows.push({
+      id: i + 1,
+      created_at,
+      user_id: getRandomArrayItem(userRows).id,
+      product_id: getRandomArrayItem(productRows).id,
+    });
+
+    if (productLikeRows.length === 100_000) {
+      await writeDataset(ORDERS_TABLE_NAME, productLikeRows, { index: productLikeFileIndex });
+      productLikeRows = [];
+      productLikeFileIndex++;
+    }
+  }
 
   console.log(`Generating ${ORDERS_TABLE_NAME}`);
-  const orderRows: OrderRow[] = Array.from({ length: UNIQUE_ORDERS_NUMBER }).map((_, i) => ({
-    id: i + 1,
-    created_at: serializeDate(getRandomDate(new Date(2023, 0, 1))),
-    user_id: getRandomArrayItem(userRows).id,
-    product_sku_id: getRandomArrayItem(prodcutSKURows).id,
-  }));
-  await writeDataset(ORDERS_TABLE_NAME, orderRows);
+  let orderRows: OrderRow[] = [];
+  let orderFileIndex = 0;
+  for await (const i of [...Array(UNIQUE_ORDERS_NUMBER).keys()]) {
+    orderRows.push({
+      id: i + 1,
+      created_at: serializeDate(getRandomDate(new Date(2023, 0, 1))),
+      user_id: getRandomArrayItem(userRows).id,
+      product_sku_id: getRandomArrayItem(prodcutSKURows).id,
+    });
+
+    if (orderRows.length === 100_000) {
+      await writeDataset(ORDERS_TABLE_NAME, orderRows, { index: orderFileIndex });
+      orderRows = [];
+      orderFileIndex++;
+    }
+  }
 
   console.log("Generated");
 })();

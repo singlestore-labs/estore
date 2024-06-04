@@ -107,21 +107,26 @@ function createTables() {
 
 async function insertValues() {
   const exportPath = path.join(process.cwd(), "export");
-  const files = (await readdir(exportPath)).filter((i) => i.includes(".json"));
+  const fileNames = (await readdir(exportPath)).filter((i) => i.includes(".json"));
 
-  for await (const fileName of files) {
-    const [tableName] = fileName.split(".")[0].split("-");
-    const fileContent = await readFile(path.join(exportPath, fileName), "utf-8");
-    const values = JSON.parse(fileContent);
-    const limit = tableName === PRODUCTS_TABLE_NAME ? 1000 : 10000;
+  for await (const fileNamesChunk of toChunks(fileNames, 5)) {
+    await Promise.all(
+      fileNamesChunk.map(async (fileName) => {
+        console.log(`Inserting ${fileName}`);
+        const [tableName] = fileName.split(".")[0].split("-");
+        const fileContent = await readFile(path.join(exportPath, fileName), "utf-8");
+        const values = JSON.parse(fileContent);
+        const limit = tableName === PRODUCTS_TABLE_NAME ? 1000 : 10000;
 
-    if (values.length > limit) {
-      for await (const chunk of toChunks(values, limit)) {
-        await db.controllers.insertMany({ collection: tableName, values: chunk });
-      }
-    } else {
-      await db.controllers.insertMany({ collection: tableName, values });
-    }
+        if (values.length > limit) {
+          for await (const chunk of toChunks(values, limit)) {
+            await db.controllers.insertMany({ collection: tableName, values: chunk });
+          }
+        } else {
+          await db.controllers.insertMany({ collection: tableName, values });
+        }
+      }),
+    );
   }
 }
 
