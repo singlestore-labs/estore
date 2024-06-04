@@ -1,6 +1,8 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 import { Drawer } from "@/components/drawer";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ChatContainer } from "@/chat/components/container";
 import { Chat } from "@/chat/types";
 import { OrdersTrendInfoCard } from "@/order/components/trend-info/card";
@@ -20,20 +22,31 @@ export default async function PageDashboard() {
     <div className="mt-6 flex flex-1 items-start justify-start">
       <div className="flex max-w-full flex-1 flex-col gap-4 px-4">
         <div className="flex flex-wrap gap-4">
-          <OrdersRevenueTrendInfoCard className="flex-1 basis-80" />
-          <OrdersTrendInfoCard className="flex-1 basis-80" />
-          <ProductTypesRevenueSplitInfoCard className="flex-1 basis-80" />
+          <Suspense fallback={<Skeleton className="h-40 flex-1 basis-80" />}>
+            <OrdersRevenueTrendInfoCard className="flex-1 basis-80" />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-40 flex-1 basis-80" />}>
+            <OrdersTrendInfoCard className="flex-1 basis-80" />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-40 flex-1 basis-80" />}>
+            <ProductTypesRevenueSplitInfoCard className="flex-1 basis-80" />
+          </Suspense>
         </div>
 
         <div className="flex flex-wrap items-start gap-4">
-          <ProductTopSection
-            className="flex-grow-full basis-96"
-            contentProps={{ className: "max-h-[35.3125rem]" }}
-          />
-          <OrderRecentSection
-            className="flex-grow basis-96"
-            contentProps={{ className: "max-h-[35.625rem]" }}
-          />
+          <Suspense fallback={<Skeleton className="flex-grow-full h-[35.3125rem] basis-96" />}>
+            <ProductTopSection
+              className="flex-grow-full basis-96"
+              contentProps={{ className: "max-h-[35.3125rem]" }}
+            />
+          </Suspense>
+
+          <Suspense fallback={<Skeleton className="h-[35.625rem] flex-grow basis-96" />}>
+            <OrderRecentSection
+              className="flex-grow basis-96"
+              contentProps={{ className: "max-h-[35.625rem]" }}
+            />
+          </Suspense>
         </div>
       </div>
 
