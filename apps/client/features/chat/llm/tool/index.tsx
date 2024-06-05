@@ -115,7 +115,7 @@ export const chatLLMTools: ChatLLMToolsMap = {
           {
             systemRole: `\
               You are an e-commerce assistant.
-              You must write a summary in markdown style based on the provided context.
+              You must write a summary in markdown style based on the provided context. Don't use markdown tables.
             `,
             stream: true,
           },
