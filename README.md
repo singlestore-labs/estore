@@ -19,7 +19,7 @@
 1. Run `npm run dev`
 2. Open [http://localhost:3000](http://localhost:3000)
 
-## Build the prod environment
+## Build and run the prod environment
 
 1. Run `npm run build`
 2. Run `npm run start`
