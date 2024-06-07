@@ -23,7 +23,7 @@ export function Hero({ className, chatName, ...props }: HeroProps) {
         className,
       )}
     >
-      Try the ultimate e-commerce experience powered by <span className="text-primary">SingleStore and AI</span>
+      Try the clothing shopping experience with <span className="text-primary">SingleStore and AI</span>
       <Dots />
     </h1>
   );

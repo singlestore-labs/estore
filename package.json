@@ -1,5 +1,5 @@
 {
-  "name": "genai-estore",
+  "name": "intelligent-estore",
   "private": true,
   "scripts": {
     "build": "dotenv -- turbo build --filter='./apps/client'",
