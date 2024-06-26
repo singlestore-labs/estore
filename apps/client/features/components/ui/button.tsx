@@ -33,7 +33,7 @@ const buttonVariants = cva(
   },
 );
 
-const loaderVariants = cva("w-[75%]", {
+const loaderVariants = cva("w-[1em]", {
   variants: {
     variant: {
       "default": "",

@@ -20,7 +20,7 @@ const chatName: Chat["name"] = "dashboard";
 export default async function PageDashboard() {
   return (
     <div className="mt-6 flex flex-1 items-start justify-start">
-      <div className="flex h-full max-w-full flex-1 flex-col gap-4 px-4">
+      <div className="flex max-w-full flex-1 flex-col gap-4 px-4 md:h-full">
         <div className="flex flex-wrap gap-4">
           <Suspense fallback={<Skeleton className="h-44 flex-1 basis-80" />}>
             <OrdersRevenueTrendInfoCard className="flex-1 basis-80" />
@@ -34,14 +34,14 @@ export default async function PageDashboard() {
         </div>
 
         <div className="flex flex-1 flex-wrap items-start gap-4">
-          <Suspense fallback={<Skeleton className="flex-grow-full h-full basis-96" />}>
-            <ProductTopSection className="flex-grow-full h-full basis-96" />
+          <Suspense fallback={<Skeleton className="flex-grow-full h-[40rem] basis-96 md:h-full" />}>
+            <ProductTopSection className="flex-grow-full h-[40rem] basis-96 md:h-full" />
           </Suspense>
 
           <Suspense fallback={<Skeleton className="h-[35.625rem] flex-grow basis-96" />}>
             <OrderRecentSection
               className="flex-grow basis-96"
-              contentProps={{ className: "max-h-[35.625rem]" }}
+              contentProps={{ className: "h-[35.625rem]" }}
             />
           </Suspense>
         </div>
