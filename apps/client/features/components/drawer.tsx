@@ -57,7 +57,7 @@ export function Drawer({
     <Card
       ref={rootRef}
       className={cn(
-        `sticky top-4 z-[3] h-screen max-w-[var(--drawer-max-width)] flex-1 transition-[margin-right] duration-700 max-lg:fixed max-lg:right-0 max-lg:top-1/2 max-lg:w-[calc(100%_-_theme(spacing.12))] max-lg:-translate-y-1/2 max-lg:transition-all max-lg:duration-700`,
+        `sticky top-4 z-[3] h-screen max-w-[var(--drawer-max-width)] flex-1 transition-[margin-right] duration-700 max-lg:fixed max-lg:right-0 max-lg:top-1/2 max-lg:h-[calc(100%_-_theme(spacing.4))] max-lg:w-[calc(100%_-_theme(spacing.12))] max-lg:-translate-y-1/2 max-lg:transition-all max-lg:duration-700`,
         isOpen
           ? "lg:mr-4"
           : `max-lg:translate-x-full lg:-mr-[calc(var(--drawer-max-width)_+_theme(spacing.4))]`,
