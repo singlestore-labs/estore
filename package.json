@@ -1,5 +1,5 @@
 {
-  "name": "intelligent-estore",
+  "name": "estore",
   "private": true,
   "scripts": {
     "build": "dotenv -- turbo build --filter='./apps/client'",
