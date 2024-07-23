@@ -1,6 +1,15 @@
 import { OPENAI_API_KEY } from "@repo/ai/constants";
-import { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } from "@repo/db/constants";
+import { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } from "@repo/db/constants";
 import { createEleganceServerClient } from "@singlestore/elegance-sdk/server";
+
+let cert;
+
+fetch("https://portal.singlestore.com/static/ca/singlestore_bundle.pem")
+  .then(function (response) {
+    response.text().then(function (text) {
+      cert = text;
+    });
+  })
 
 export const db = createEleganceServerClient("mysql", {
   connection: {
@@ -8,7 +17,11 @@ export const db = createEleganceServerClient("mysql", {
     user: DB_USER,
     password: DB_PASSWORD,
     database: DB_NAME,
+    port: Number(DB_PORT),
     multipleStatements: true,
+    ssl: {
+      cert
+    }
   },
   ai: {
     openai: {

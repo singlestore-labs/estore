@@ -28,9 +28,9 @@ import { serializeDate } from "@repo/db/lib/serialize-date";
 import { vectorizeImages } from "@repo/ai/lib/vectorize-images";
 import { createProductType } from "@/lib/create-product-type";
 
-const USERS_NUMBER = 10_000_000;
+const USERS_NUMBER = 5_000_000;
 const PRODUCT_LIKES_NUMBER = 25_000_000;
-const UNIQUE_ORDERS_NUMBER = 65_000_000;
+const UNIQUE_ORDERS_NUMBER = 15_000_000;
 
 const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-dataset.json");
 
