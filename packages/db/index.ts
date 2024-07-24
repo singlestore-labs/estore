@@ -1,5 +1,5 @@
 import { OPENAI_API_KEY } from "@repo/ai/constants";
-import { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } from "@repo/db/constants";
+import { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, TIER } from "@repo/db/constants";
 import { createEleganceServerClient } from "@singlestore/elegance-sdk/server";
 
 let cert;
@@ -11,6 +11,14 @@ fetch("https://portal.singlestore.com/static/ca/singlestore_bundle.pem")
     });
   })
 
+let extraSettings;
+if (TIER === "shared") {
+  extraSettings = {
+    ssl: {
+      cert
+    }
+  }
+}
 export const db = createEleganceServerClient("mysql", {
   connection: {
     host: DB_HOST,
@@ -19,9 +27,7 @@ export const db = createEleganceServerClient("mysql", {
     database: DB_NAME,
     port: Number(DB_PORT),
     multipleStatements: true,
-    ssl: {
-      cert
-    }
+    ...extraSettings
   },
   ai: {
     openai: {
