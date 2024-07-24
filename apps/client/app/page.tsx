@@ -1,6 +1,6 @@
 import { footerHeight } from "@/components/footer";
 import { Hero } from "@/components/hero";
-import { ChatContainer } from "@/chat/components/container";π
+import { ChatContainer } from "@/chat/components/container";
 import { Chat } from "@/chat/types";
 import { ProductCatalogDrawer } from "@/product/catalog/components/drawer";
 
