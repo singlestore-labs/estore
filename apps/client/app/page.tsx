@@ -16,6 +16,8 @@ export default function Home() {
           formProps={{ placeholder: "Describe the product you wish to buy" }}
           fadeProps={{ className: "bg-background" }}
         />
+        {!process.env.OPENAI_API_KEY && <p>
+          For the full experience, please add an <span className="text-primary">Open AI API key</span> to your <span style={{ fontFamily: "monospace" }}> .env </span> file.</p>}
       </div>
 
       <ProductCatalogDrawer
