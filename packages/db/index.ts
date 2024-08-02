@@ -2,17 +2,16 @@ import { OPENAI_API_KEY } from "@repo/ai/constants";
 import { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, TIER } from "@repo/db/constants";
 import { createEleganceServerClient } from "@singlestore/elegance-sdk/server";
 
-let cert;
-
-fetch("https://portal.singlestore.com/static/ca/singlestore_bundle.pem")
-  .then(function (response) {
-    response.text().then(function (text) {
-      cert = text;
-    });
-  })
-
 let extraSettings;
+
 if (TIER === "shared") {
+  let cert;
+  fetch("https://portal.singlestore.com/static/ca/singlestore_bundle.pem")
+    .then(function (response) {
+      response.text().then(function (text) {
+        cert = text;
+      });
+    })
   extraSettings = {
     ssl: {
       cert
