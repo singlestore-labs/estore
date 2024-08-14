@@ -14,7 +14,7 @@ export async function OrdersTrendInfoCard({ ...props }: OrdersTrendInfoCardProps
   return (
     <InfoCard
       {...props}
-      title="Last three months sales"
+      title="Last 3 months sales"
       value={withCommas(data.total)}
       headerProps={{
         className: "flex items-start justify-between",

@@ -102,7 +102,7 @@ export function ProductDialog({
 
           {!!sales.length && (
             <div>
-              <h3 className="font-medium">Last month sales</h3>
+              <h3 className="font-medium">Last 3 months sales</h3>
               <ProductSalesChart
                 className="mt-2"
                 sales={sales}

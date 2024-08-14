@@ -106,7 +106,7 @@ export const chatLLMTools: ChatLLMToolsMap = {
         interval: z.number().describe("Interval").optional(),
         intervalUnit: z.enum(["DAY", "WEEK", "MONTH"]).describe("Interval unit").optional(),
       }),
-      call: async ({ interval = 1, intervalUnit = "MONTH" }) => {
+      call: async ({ interval = 6, intervalUnit = "MONTH" }) => {
         const result = await getOrdersSummary({ interval, intervalUnit });
 
         const stream = await createLLMChatCompletion(

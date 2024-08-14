@@ -16,7 +16,7 @@ export function ProductSalesInfo({ className, value = [], ...props }: ProductSal
       {...props}
       className={cn("", className)}
       icon={TrendingUp}
-      label="Last month sales"
+      label="Last 3 months sales"
     >
       {_value > 1000 ? humanNumber(_value, (i) => i.toFixed(0)) : _value}
     </ProductInfoItem>

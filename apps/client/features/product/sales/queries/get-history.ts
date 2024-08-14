@@ -4,7 +4,7 @@ import { Product } from "@/product/types";
 
 export function createGetProductSalesHistoryQuery(
   where: Pick<Product, "id"> | Pick<Product, "title">,
-  { interval = 1, intervalUnit = "MONTH" }: { interval?: number; intervalUnit?: "DAY" | "WEEK" | "MONTH" } = {},
+  { interval = 6, intervalUnit = "MONTH" }: { interval?: number; intervalUnit?: "DAY" | "WEEK" | "MONTH" } = {},
 ) {
   const [[key, value]] = Object.entries(where).map(([key, value]) => [
     key.toLowerCase(),

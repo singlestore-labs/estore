@@ -6,7 +6,7 @@ import {
 } from "@repo/db/constants";
 
 export function createGetOrdersSummaryQuery({
-  interval = 1,
+  interval = 6,
   intervalUnit = "MONTH",
 }: { interval?: number; intervalUnit?: "DAY" | "WEEK" | "MONTH" } = {}) {
   const intervalDef = `INTERVAL ${interval} ${intervalUnit}`;
