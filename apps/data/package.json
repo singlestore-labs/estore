@@ -5,7 +5,7 @@
   "scripts": {
     "normalize": "tsx ./lib/normalize.ts",
     "generate": "tsx ./lib/generate.ts",
-    "start": "npm run generate && tsx ./index.ts",
+    "start": "dotenv -- tsx ./index.ts",
     "dev": "tsx ./dev.ts"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/lodash.groupby": "^4.6.9",
     "@types/node": "^20",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
