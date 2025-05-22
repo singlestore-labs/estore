@@ -134,7 +134,7 @@ const normalizedDatasetPath = path.join(process.cwd(), "source/normalized-datase
     });
 
     if (productLikeRows.length === 100_000) {
-      await writeDataset(ORDERS_TABLE_NAME, productLikeRows, { index: productLikeFileIndex });
+      await writeDataset(PRODUCT_LIKES_TABLE_NAME, productLikeRows, { index: productLikeFileIndex });
       productLikeRows = [];
       productLikeFileIndex++;
     }
