@@ -1,13 +1,3 @@
-import {
-  ORDERS_TABLE_NAME,
-  PRODUCTS_TABLE_NAME,
-  PRODUCT_LIKES_TABLE_NAME,
-  PRODUCT_SIZES_TABLE_NAME,
-  PRODUCT_SKU_TABLE_NAME,
-  PRODUCT_TYPES_TABLE_NAME,
-  USERS_TABLE_NAME,
-} from "@repo/db/constants";
-import { countTableRows } from "@repo/db/lib/count-table-rows";
 import humanNumber from "human-number";
 
 import { ComponentProps } from "@/types";
@@ -17,7 +7,7 @@ import { Section, SectionProps } from "@/components/section";
 import { getTheme } from "@/ui/get-theme";
 import { cn } from "@/ui/lib";
 
-export type DbInfoSectionProps = ComponentProps<SectionProps>;
+export type DbInfoSectionProps = ComponentProps<SectionProps, { data: { tableName: string; value: number }[] }>;
 
 const theme = getTheme();
 
@@ -25,23 +15,8 @@ const colors = Object.values(theme.colors.purple)
   .reverse()
   .filter((_, i) => i % 2 === 0);
 
-export async function DbInfoSection({ className, ...props }: DbInfoSectionProps) {
-  const data = await Promise.all(
-    [
-      USERS_TABLE_NAME,
-      ORDERS_TABLE_NAME,
-      PRODUCT_LIKES_TABLE_NAME,
-      PRODUCT_SKU_TABLE_NAME,
-      PRODUCTS_TABLE_NAME,
-      PRODUCT_TYPES_TABLE_NAME,
-      PRODUCT_SIZES_TABLE_NAME,
-    ].map(async (tableName, i) => ({
-      tableName,
-      value: await countTableRows(tableName),
-      color: colors[i],
-    })),
-  );
-
+export async function DbInfoSection({ className, data: initialData = [], ...props }: DbInfoSectionProps) {
+  const data = initialData.map((data, i) => ({ ...data, color: colors[i] }));
   const totalRows = data.reduce((acc, { value }) => acc + value, 0);
 
   return (
