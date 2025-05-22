@@ -9,11 +9,14 @@ const PRODUCT_BY_ID = (id: Product["id"]) => `${PRODUCT}/${id}`;
 const DASHBOARD = withRoot("dashboard");
 const ANALYTICS = withRoot("analytics");
 
+const ANALYTICS_CLOUD_FUNCTIONS = withRoot("analytics-cloud-functions");
+
 export const ROUTES = {
   ROOT,
   PRODUCT,
   PRODUCT_BY_ID,
   DASHBOARD,
   ANALYTICS,
+  ANALYTICS_CLOUD_FUNCTIONS,
   withRoot,
 } as const;

@@ -22,6 +22,7 @@ export function Navigation({ className, ...props }: NavigationProps) {
         ["Chat", ROUTES.ROOT],
         ["Dashboard", ROUTES.DASHBOARD],
         ["Analytics", ROUTES.ANALYTICS],
+        ["Analytics (Cloud Functions)", ROUTES.ANALYTICS_CLOUD_FUNCTIONS],
       ].map(([label, href]) => (
         <Button
           key={label}
