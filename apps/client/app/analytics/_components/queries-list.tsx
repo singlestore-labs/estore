@@ -13,7 +13,9 @@ import {
 import { AnalyticsQueryResultTableProps } from "@/analytics/query/components/result-table";
 import { ANALYTICS_QUERY_LIST } from "@/analytics/query/constants/list";
 
-export type AnalyticsQueriesListProps = ComponentProps<Omit<_AnalyticsQueriesListProps, "queries">>;
+export type AnalyticsQueriesListProps = ComponentProps<
+  Omit<_AnalyticsQueriesListProps, "queries" | "onRunQueryClick">
+>;
 
 export function AnalyticsQueriesList({ ...props }: AnalyticsQueriesListProps) {
   const [, startTransition] = useTransition();

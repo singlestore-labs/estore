@@ -5,6 +5,7 @@ import { ComponentProps, Defined } from "@/types";
 import { Section, SectionProps } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { AnalyticsQueryParamsForm } from "@/analytics/query/components/params-form";
 import {
   AnalyticsQueryResultTable,
   AnalyticsQueryResultTableProps,
@@ -29,18 +30,19 @@ export function AnalyticsQueryContainer({
   slug,
   text,
   paramsSchema,
+  paramsDefaultValues,
   onRunClick,
   ...props
 }: AnalyticsQueryContainerProps) {
   const [result, setResult] = useState<AnalyticsQueryResultTableProps["data"]>([]);
   const [isPending, setIsPending] = useState(false);
-  const [params, setParams] = useState();
+  const [paramsFormValues, setParamsFormValues] = useState(paramsDefaultValues);
   const hasResult = !!result?.length;
 
   const handleRunClick = useCallback(async () => {
     try {
       setIsPending(true);
-      const result = await onRunClick?.(slug, params);
+      const result = await onRunClick?.(slug, paramsFormValues);
       setResult(result ?? []);
     } catch (error) {
       console.error(error);
@@ -48,7 +50,7 @@ export function AnalyticsQueryContainer({
     } finally {
       setIsPending(false);
     }
-  }, [slug, params, onRunClick]);
+  }, [slug, paramsFormValues, onRunClick]);
 
   const renderRow = useCallback<Defined<AnalyticsQueryResultTableProps["renderRow"]>>(
     (result, rowNode) => (
@@ -96,7 +98,11 @@ export function AnalyticsQueryContainer({
             titleProps={{ as: "h3" }}
             contentProps={{ className: "h-80 p-0 overflow-hidden" }}
           >
-            {/* TODO: Render form */}
+            <AnalyticsQueryParamsForm
+              schema={paramsSchema}
+              defaultValues={paramsFormValues}
+              onChange={setParamsFormValues}
+            />
           </Section>
         )}
 

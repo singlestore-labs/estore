@@ -8,7 +8,7 @@ export type AnalyticsQueriesListProps = ComponentProps<
   SectionProps,
   {
     queries: AnalyticsQuery[];
-    onRunQueryClick: AnalyticsQueryContainerProps["onRunClick"];
+    onRunQueryClick?: AnalyticsQueryContainerProps["onRunClick"];
   }
 >;
 

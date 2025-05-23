@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-import { ANALYTICS_QUERY_SLUGS } from "@/analytics/query/constants/slugs";
-
-export type AnalyticsQuerySlugs = (typeof ANALYTICS_QUERY_SLUGS)[keyof typeof ANALYTICS_QUERY_SLUGS];
+export type AnalyticsQuerySlugs = string;
 
 export type AnalyticsQuery = {
   slug: AnalyticsQuerySlugs;
@@ -10,4 +8,5 @@ export type AnalyticsQuery = {
   description: string;
   text?: string;
   paramsSchema?: z.AnyZodObject;
+  paramsDefaultValues?: z.infer<z.AnyZodObject>;
 };
