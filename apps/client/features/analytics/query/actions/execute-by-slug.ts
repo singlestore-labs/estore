@@ -10,7 +10,7 @@ export async function executeAnalyticsQueryBySlug(slug: string) {
   try {
     const query = ANALYTICS_QUERY_LIST.find((i) => i.slug === slug);
     if (!query) throw new Error("Unknown query");
-    const result = await db.controllers.query({ query: query.getQuery() });
+    const result = await db.controllers.query({ query: query.text });
     return parseQueryResult(result);
   } catch (error) {
     return forwardActionError(error);

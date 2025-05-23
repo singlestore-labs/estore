@@ -1,3 +1,7 @@
+"use client";
+
+import { useCallback } from "react";
+
 import { ComponentProps } from "@/types";
 import {
   AnalyticsQueriesList as _AnalyticsQueriesList,

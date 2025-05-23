@@ -1,16 +1,23 @@
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
-import { AnalyticsQueryContainer } from "@/analytics/query/components/container";
+import { AnalyticsQueryContainer, AnalyticsQueryContainerProps } from "@/analytics/query/components/container";
 import { AnalyticsQuery } from "@/analytics/query/type";
 import { cn } from "@/ui/lib";
 
-export type AnalyticsQueriesListProps = ComponentProps<SectionProps, { queries: AnalyticsQuery[] }>;
+export type AnalyticsQueriesListProps = ComponentProps<
+  SectionProps,
+  {
+    queries: AnalyticsQuery[];
+    onRunQueryClick: AnalyticsQueryContainerProps["onRunClick"];
+  }
+>;
 
 export function AnalyticsQueriesList({
   className,
   contentProps,
   headerProps,
   queries = [],
+  onRunQueryClick,
   ...props
 }: AnalyticsQueriesListProps) {
   return (
@@ -24,11 +31,11 @@ export function AnalyticsQueriesList({
       contentProps={{ ...contentProps, className: cn("flex flex-col gap-8", contentProps?.className) }}
       headerProps={{ ...headerProps, className: cn("px-5", headerProps?.className) }}
     >
-      {queries.map(({ getQuery, ...query }) => (
+      {queries.map((query) => (
         <AnalyticsQueryContainer
           key={query.title}
           {...query}
-          query={getQuery()}
+          onRunClick={onRunQueryClick}
         />
       ))}
     </Section>

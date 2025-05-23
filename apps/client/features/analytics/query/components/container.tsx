@@ -1,41 +1,49 @@
 "use client";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { ComponentProps, Defined } from "@/types";
 import { Section, SectionProps } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useAction } from "@/action/hooks/use-action";
-import { executeAnalyticsQueryBySlug } from "@/analytics/query/actions/execute-by-slug";
 import {
   AnalyticsQueryResultTable,
   AnalyticsQueryResultTableProps,
 } from "@/analytics/query/components/result-table";
 import { AnalyticsQueryResultTableRow } from "@/analytics/query/components/result-table-row";
 import { AnalyticsQueryStopwatch } from "@/analytics/query/components/stopwatch";
-import { formatAnalyticsQueryForUI } from "@/analytics/query/lib/format-for-ui";
 import { AnalyticsQuery } from "@/analytics/query/type";
 import { cn } from "@/ui/lib";
 
 export type AnalyticsQueryContainerProps = ComponentProps<
   SectionProps,
-  Omit<AnalyticsQuery, "getQuery"> & { query: string }
+  AnalyticsQuery & {
+    onRunClick?: (querySlug: AnalyticsQuery["slug"]) => Promise<AnalyticsQueryResultTableProps["data"]>;
+  }
 >;
 
-export function AnalyticsQueryContainer({ className, slug, query, ...props }: AnalyticsQueryContainerProps) {
+export function AnalyticsQueryContainer({
+  className,
+  slug,
+  text,
+  onRunClick,
+  ...props
+}: AnalyticsQueryContainerProps) {
   const [result, setResult] = useState<AnalyticsQueryResultTableProps["data"]>([]);
-  const { execute, isPending } = useAction();
+  const [isPending, setIsPending] = useState(false);
   const hasResult = !!result?.length;
 
   const handleRunClick = useCallback(async () => {
     try {
-      setResult(await execute(() => executeAnalyticsQueryBySlug(slug)));
+      setIsPending(true);
+      const result = await onRunClick?.(slug);
+      setResult(result ?? []);
     } catch (error) {
+      console.error(error);
       setResult([]);
+    } finally {
+      setIsPending(false);
     }
-  }, [slug, execute]);
-
-  const formattedQuery = useMemo(() => formatAnalyticsQueryForUI(query), [query]);
+  }, [slug, onRunClick]);
 
   const renderRow = useCallback<Defined<AnalyticsQueryResultTableProps["renderRow"]>>(
     (result, rowNode) => (
@@ -66,7 +74,7 @@ export function AnalyticsQueryContainer({ className, slug, query, ...props }: An
           contentProps={{ className: "h-80 p-0 overflow-hidden" }}
         >
           <Textarea
-            value={formattedQuery}
+            value={text}
             className="disabled:bg-accent h-full w-full resize-none font-mono disabled:opacity-100"
             disabled
           />
