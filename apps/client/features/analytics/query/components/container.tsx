@@ -17,7 +17,10 @@ import { cn } from "@/ui/lib";
 export type AnalyticsQueryContainerProps = ComponentProps<
   SectionProps,
   AnalyticsQuery & {
-    onRunClick?: (querySlug: AnalyticsQuery["slug"]) => Promise<AnalyticsQueryResultTableProps["data"]>;
+    onRunClick?: (
+      querySlug: AnalyticsQuery["slug"],
+      params?: Record<string, any>,
+    ) => Promise<AnalyticsQueryResultTableProps["data"]>;
   }
 >;
 
@@ -25,17 +28,19 @@ export function AnalyticsQueryContainer({
   className,
   slug,
   text,
+  paramsSchema,
   onRunClick,
   ...props
 }: AnalyticsQueryContainerProps) {
   const [result, setResult] = useState<AnalyticsQueryResultTableProps["data"]>([]);
   const [isPending, setIsPending] = useState(false);
+  const [params, setParams] = useState();
   const hasResult = !!result?.length;
 
   const handleRunClick = useCallback(async () => {
     try {
       setIsPending(true);
-      const result = await onRunClick?.(slug);
+      const result = await onRunClick?.(slug, params);
       setResult(result ?? []);
     } catch (error) {
       console.error(error);
@@ -43,7 +48,7 @@ export function AnalyticsQueryContainer({
     } finally {
       setIsPending(false);
     }
-  }, [slug, onRunClick]);
+  }, [slug, params, onRunClick]);
 
   const renderRow = useCallback<Defined<AnalyticsQueryResultTableProps["renderRow"]>>(
     (result, rowNode) => (
@@ -65,20 +70,36 @@ export function AnalyticsQueryContainer({
       contentProps={{ className: cn("flex flex-col flex-1 gap-4", props.contentProps?.className) }}
     >
       <div className="grid-auto-fit-[calc(50%-theme(spacing.4))] max-md:grid-auto-fit-[100%] grid flex-1 gap-4">
-        <Section
-          variant="tertiary"
-          size="xs"
-          spacing="none"
-          title="Query"
-          titleProps={{ as: "h3" }}
-          contentProps={{ className: "h-80 p-0 overflow-hidden" }}
-        >
-          <Textarea
-            value={text}
-            className="disabled:bg-accent h-full w-full resize-none font-mono disabled:opacity-100"
-            disabled
-          />
-        </Section>
+        {text && (
+          <Section
+            variant="tertiary"
+            size="xs"
+            spacing="none"
+            title="Query"
+            titleProps={{ as: "h3" }}
+            contentProps={{ className: "h-80 p-0 overflow-hidden" }}
+          >
+            <Textarea
+              value={text}
+              className="disabled:bg-accent h-full w-full resize-none font-mono disabled:opacity-100"
+              disabled
+            />
+          </Section>
+        )}
+
+        {paramsSchema && (
+          <Section
+            variant="tertiary"
+            size="xs"
+            spacing="none"
+            title="Parameters"
+            titleProps={{ as: "h3" }}
+            contentProps={{ className: "h-80 p-0 overflow-hidden" }}
+          >
+            {/* TODO: Render form */}
+          </Section>
+        )}
+
         <Section
           variant="tertiary"
           size="xs"
