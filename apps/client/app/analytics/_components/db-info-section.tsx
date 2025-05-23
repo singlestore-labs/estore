@@ -15,7 +15,7 @@ import { DbInfoSection as _DbInfoSection } from "@/db/info/components/section";
 
 export type DbInfoSectionProps = ComponentProps<SectionProps>;
 
-export async function DbInfoSection({ className, ...props }: DbInfoSectionProps) {
+export async function DbInfoSection({ ...props }: DbInfoSectionProps) {
   const data = await Promise.all(
     [
       USERS_TABLE_NAME,
@@ -31,5 +31,10 @@ export async function DbInfoSection({ className, ...props }: DbInfoSectionProps)
     })),
   );
 
-  return <_DbInfoSection data={data} />;
+  return (
+    <_DbInfoSection
+      {...props}
+      data={data}
+    />
+  );
 }

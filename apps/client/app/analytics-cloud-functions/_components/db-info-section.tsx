@@ -7,15 +7,16 @@ import {
   PRODUCT_TYPES_TABLE_NAME,
   USERS_TABLE_NAME,
 } from "@repo/db/constants";
-import { countTableRows } from "@repo/db/lib/count-table-rows";
 
 import { ComponentProps } from "@/types";
-import { SectionProps } from "@/components/section";
-import { DbInfoSection as _DbInfoSection } from "@/db/info/components/section";
+import {
+  DbInfoSection as _DbInfoSection,
+  type DbInfoSectionProps as _DbInfoSectionProps,
+} from "@/db/info/components/section";
 
-export type DbInfoSectionProps = ComponentProps<SectionProps>;
+export type DbInfoSectionProps = ComponentProps<Omit<_DbInfoSectionProps, "data">>;
 
-export async function DbInfoSection({ className, ...props }: DbInfoSectionProps) {
+export async function DbInfoSection({ ...props }: DbInfoSectionProps) {
   const data = await Promise.all(
     [
       USERS_TABLE_NAME,
@@ -32,5 +33,10 @@ export async function DbInfoSection({ className, ...props }: DbInfoSectionProps)
     }),
   );
 
-  return <_DbInfoSection data={data} />;
+  return (
+    <_DbInfoSection
+      {...props}
+      data={data}
+    />
+  );
 }

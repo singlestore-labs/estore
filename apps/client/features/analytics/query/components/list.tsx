@@ -1,15 +1,16 @@
 import { ComponentProps } from "@/types";
 import { Section, SectionProps } from "@/components/section";
 import { AnalyticsQueryContainer } from "@/analytics/query/components/container";
-import { ANALYTICS_QUERY_LIST } from "@/analytics/query/constants/list";
+import { AnalyticsQuery } from "@/analytics/query/type";
 import { cn } from "@/ui/lib";
 
-export type AnalyticsQueriesListProps = ComponentProps<SectionProps>;
+export type AnalyticsQueriesListProps = ComponentProps<SectionProps, { queries: AnalyticsQuery[] }>;
 
 export function AnalyticsQueriesList({
   className,
   contentProps,
   headerProps,
+  queries = [],
   ...props
 }: AnalyticsQueriesListProps) {
   return (
@@ -23,7 +24,7 @@ export function AnalyticsQueriesList({
       contentProps={{ ...contentProps, className: cn("flex flex-col gap-8", contentProps?.className) }}
       headerProps={{ ...headerProps, className: cn("px-5", headerProps?.className) }}
     >
-      {ANALYTICS_QUERY_LIST.map(({ getQuery, ...query }) => (
+      {queries.map(({ getQuery, ...query }) => (
         <AnalyticsQueryContainer
           key={query.title}
           {...query}

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
-import { AnalyticsQueriesList } from "@/analytics/query/components/list";
 import { DbInfoSection } from "@/analytics-cloud-functions/_components/db-info-section";
+import { AnalyticsQueriesList } from "@/analytics-cloud-functions/_components/queries-list";
 
 export const metadata: Metadata = {
   title: `Analytics - Cloud Functions`,
