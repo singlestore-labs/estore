@@ -18,7 +18,50 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
     slug: "find_products",
     title: "Find products",
     description: "Finds product ids based on filters using hybrid search",
-    paramsSchema: z.object({ color: z.string() }),
+    params: {
+      schema: z.object({
+        query: z.string(),
+        color: z.string(),
+        minPrice: z.number().min(0),
+        maxPrice: z.number().min(0),
+        size: z.enum(["xxxs", "xxs", "xs", "s", "m", "l", "xl", "xxl", "oneSize"]),
+        limit: z.number().int().min(0),
+      }),
+      defaultValues: {
+        query: "",
+        color: "",
+        minPrice: "",
+        maxPrice: "",
+        size: "",
+        limit: 10,
+      },
+      fields: {
+        query: {
+          label: "Search query",
+          placeholder: "e.g. Jeans",
+        },
+        color: {
+          label: "Color",
+          placeholder: "e.g. Blue",
+        },
+        minPrice: {
+          label: "Min price ($)",
+          placeholder: "e.g. 125",
+        },
+        maxPrice: {
+          label: "Max price ($)",
+          placeholder: "e.g. 2500",
+        },
+        size: {
+          label: "Size",
+          placeholder: "e.g. xl",
+        },
+        limit: {
+          label: "Limit",
+          placeholder: "e.g. 10",
+        },
+      },
+    },
     execute: async (params) => {
       console.log(params);
     },

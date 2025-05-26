@@ -1,12 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { z, ZodString } from "zod";
+import { z, ZodEnum, ZodNumber, ZodString } from "zod";
 
 import { ComponentProps } from "@/types";
-import { Form } from "@/components/ui/form";
+import { Select } from "@/components/select";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/ui/lib";
 
 export type AnalyticsQueryParamsFormProps<T extends z.AnyZodObject = z.AnyZodObject> = ComponentProps<
@@ -14,6 +16,13 @@ export type AnalyticsQueryParamsFormProps<T extends z.AnyZodObject = z.AnyZodObj
   {
     schema: T;
     defaultValues?: z.infer<T>;
+    fields?: Record<
+      string,
+      {
+        label: ReactNode;
+        placeholder: string;
+      }
+    >;
     onChange?: (values: z.infer<T>) => void;
   }
 >;
@@ -22,6 +31,7 @@ export function AnalyticsQueryParamsForm<T extends z.AnyZodObject = z.AnyZodObje
   className,
   schema,
   defaultValues,
+  fields = {},
   onChange,
   ...props
 }: AnalyticsQueryParamsFormProps<T>) {
@@ -41,12 +51,63 @@ export function AnalyticsQueryParamsForm<T extends z.AnyZodObject = z.AnyZodObje
     <Form {...form}>
       <form
         {...props}
-        className={cn("", className)}
+        className={cn("grid-auto-fill-[20rem] grid gap-4", className)}
       >
         {Object.entries(schema.shape).map(([name, zodType]) => {
-          if (zodType instanceof ZodString) {
-            return name;
-          }
+          const { label, placeholder } = fields[name];
+
+          return (
+            <FormField
+              key={name}
+              control={form.control}
+              name={name}
+              render={({ field }) => {
+                let control = null;
+
+                if (zodType instanceof ZodString) {
+                  control = (
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder={placeholder}
+                    />
+                  );
+                }
+
+                if (zodType instanceof ZodNumber) {
+                  control = (
+                    <Input
+                      {...field}
+                      type="number"
+                      placeholder={placeholder}
+                      min={zodType.minValue ?? undefined}
+                      max={zodType.maxValue ?? undefined}
+                      value={field.value.toString()}
+                      onChange={(event) => field.onChange(+event.target.value)}
+                    />
+                  );
+                }
+
+                if (zodType instanceof ZodEnum) {
+                  control = (
+                    <Select
+                      value={field.value}
+                      options={Object.values(zodType.Values).map((value) => ({ label: value, value }))}
+                      onChange={field.onChange}
+                    />
+                  );
+                }
+
+                return (
+                  <FormItem>
+                    <FormLabel>{label ?? name}</FormLabel>
+                    <FormControl>{control}</FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          );
         })}
       </form>
     </Form>

@@ -46,7 +46,7 @@
     --card: 0 0% 11%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 0 0% 8%;
     --popover-foreground: 0 0% 98%;
 
     --secondary: 240 3.7% 15.9%;
@@ -79,4 +79,9 @@
   strong {
     @apply font-medium;
   }
+}
+
+html body[data-scroll-locked] {
+  overflow-y: auto !important;
+  margin-right: 0px !important;
 }

@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { z } from "zod";
 
 export type AnalyticsQuerySlugs = string;
@@ -7,6 +8,15 @@ export type AnalyticsQuery = {
   title: string;
   description: string;
   text?: string;
-  paramsSchema?: z.AnyZodObject;
-  paramsDefaultValues?: z.infer<z.AnyZodObject>;
+  params?: {
+    schema: z.AnyZodObject;
+    defaultValues: z.infer<z.AnyZodObject>;
+    fields: Record<
+      string,
+      {
+        label: ReactNode;
+        placeholder: string;
+      }
+    >;
+  };
 };

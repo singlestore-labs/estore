@@ -29,14 +29,13 @@ export function AnalyticsQueryContainer({
   className,
   slug,
   text,
-  paramsSchema,
-  paramsDefaultValues,
+  params,
   onRunClick,
   ...props
 }: AnalyticsQueryContainerProps) {
   const [result, setResult] = useState<AnalyticsQueryResultTableProps["data"]>([]);
   const [isPending, setIsPending] = useState(false);
-  const [paramsFormValues, setParamsFormValues] = useState(paramsDefaultValues);
+  const [paramsFormValues, setParamsFormValues] = useState(params?.defaultValues);
   const hasResult = !!result?.length;
 
   const handleRunClick = useCallback(async () => {
@@ -89,18 +88,18 @@ export function AnalyticsQueryContainer({
           </Section>
         )}
 
-        {paramsSchema && (
+        {params && (
           <Section
-            variant="tertiary"
+            variant="secondary"
             size="xs"
             spacing="none"
             title="Parameters"
             titleProps={{ as: "h3" }}
-            contentProps={{ className: "h-80 p-0 overflow-hidden" }}
           >
             <AnalyticsQueryParamsForm
-              schema={paramsSchema}
+              schema={params.schema}
               defaultValues={paramsFormValues}
+              fields={params.fields}
               onChange={setParamsFormValues}
             />
           </Section>
