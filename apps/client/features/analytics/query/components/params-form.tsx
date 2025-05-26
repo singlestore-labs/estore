@@ -1,14 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { sentenceCase } from "change-case";
 import { ReactNode, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z, ZodEnum, ZodNumber, ZodString } from "zod";
 
-import { ComponentProps } from "@/types";
+import { ComponentProps, Defined } from "@/types";
 import { Select } from "@/components/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AnalyticsQuery } from "@/analytics/query/type";
 import { cn } from "@/ui/lib";
 
 export type AnalyticsQueryParamsFormProps<T extends z.AnyZodObject = z.AnyZodObject> = ComponentProps<
@@ -16,13 +18,7 @@ export type AnalyticsQueryParamsFormProps<T extends z.AnyZodObject = z.AnyZodObj
   {
     schema: T;
     defaultValues?: z.infer<T>;
-    fields?: Record<
-      string,
-      {
-        label: ReactNode;
-        placeholder: string;
-      }
-    >;
+    fields?: Defined<AnalyticsQuery["params"]>["fields"];
     onChange?: (values: z.infer<T>) => void;
   }
 >;
@@ -54,7 +50,7 @@ export function AnalyticsQueryParamsForm<T extends z.AnyZodObject = z.AnyZodObje
         className={cn("grid-auto-fill-[20rem] grid gap-4", className)}
       >
         {Object.entries(schema.shape).map(([name, zodType]) => {
-          const { label, placeholder } = fields[name];
+          const { label, placeholder, optionCase } = fields[name];
 
           return (
             <FormField
@@ -92,7 +88,10 @@ export function AnalyticsQueryParamsForm<T extends z.AnyZodObject = z.AnyZodObje
                   control = (
                     <Select
                       value={field.value}
-                      options={Object.values(zodType.Values).map((value) => ({ label: value, value }))}
+                      options={Object.values(zodType.Values).map((value) => ({
+                        label: optionCase === "upper" ? value.toUpperCase() : sentenceCase(value),
+                        value,
+                      }))}
                       onChange={field.onChange}
                     />
                   );

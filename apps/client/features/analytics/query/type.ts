@@ -16,6 +16,7 @@ export type AnalyticsQuery = {
       {
         label: ReactNode;
         placeholder: string;
+        optionCase?: "upper" | "sentence";
       }
     >;
   };
