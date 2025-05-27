@@ -19,10 +19,9 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
   find_products: {
     slug: "find_products",
     title: "Find products",
-    description: "Finds product ids based on filters using hybrid search",
+    description: "Finds product ids based on filters",
     params: {
       schema: z.object({
-        query: z.string(),
         color: z.string(),
         min_price: z.number().min(0),
         max_price: z.number().min(0),
@@ -30,7 +29,6 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
         limit: z.number().int().min(0),
       }),
       defaultValues: {
-        query: "",
         color: "",
         min_price: "",
         max_price: "",
@@ -38,7 +36,6 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
         limit: 10,
       },
       fields: {
-        query: { label: "Search query", placeholder: "e.g. Jeans" },
         color: { label: "Color", placeholder: "e.g. Blue" },
         min_price: { label: "Min price ($)", placeholder: "e.g. 125" },
         max_price: { label: "Max price ($)", placeholder: "e.g. 2500" },
@@ -47,7 +44,13 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
       },
     },
     execute: async (params) => {
-      const urlSearchParams = new URLSearchParams(params);
+      const filteredParams: Record<string, any> = Object.fromEntries(
+        Object.entries(params).filter(([, i]) => {
+          return i !== undefined && i !== null && i !== "";
+        }),
+      );
+
+      const urlSearchParams = new URLSearchParams(filteredParams);
       const response = await apiRequest(`/products?${urlSearchParams}`);
       const data = await response.json();
       return data;
