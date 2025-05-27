@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 import { DbInfoSection } from "@/analytics-cloud-functions/_components/db-info-section";
-import { AnalyticsQueriesList } from "@/analytics-cloud-functions/_components/queries-list";
+// import { AnalyticsQueriesList } from "@/analytics-cloud-functions/_components/queries-list";
 
 export const metadata: Metadata = {
   title: `Analytics - Cloud Functions`,
@@ -11,7 +11,7 @@ export default function PageAnalytics() {
   return (
     <div className="relative mt-6 flex flex-1 flex-col gap-12 px-4">
       <DbInfoSection />
-      <AnalyticsQueriesList className="flex-1" />
+      {/* <AnalyticsQueriesList className="flex-1" /> */}
     </div>
   );
 }

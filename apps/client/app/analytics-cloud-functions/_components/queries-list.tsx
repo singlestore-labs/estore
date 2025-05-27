@@ -9,6 +9,8 @@ import {
 } from "@/analytics/query/components/list";
 import { AnalyticsQuery } from "@/analytics/query/type";
 
+import { apiRequest } from "../../../api";
+
 export type AnalyticsQueriesListProps = ComponentProps<
   Omit<_AnalyticsQueriesListProps, "queries" | "onRunQueryClick">
 >;
@@ -45,7 +47,9 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
       },
     },
     execute: async (params) => {
-      console.log(params);
+      const urlSearchParams = new URLSearchParams(params);
+      const response = await apiRequest(`/products?${urlSearchParams}`);
+      return response.json();
     },
   },
 
@@ -65,7 +69,9 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
       },
     },
     execute: async (params) => {
-      console.log(params);
+      const urlSearchParams = new URLSearchParams(params);
+      const response = await apiRequest(`/products/top?${urlSearchParams}`);
+      return response.json();
     },
   },
 
@@ -90,8 +96,10 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
         intervalUnit: { label: "Interval Unit", placeholder: "e.g. Month", optionCase: "sentence" },
       },
     },
-    execute: async (params) => {
-      console.log(params);
+    execute: async ({ id, ...params }) => {
+      const urlSearchParams = new URLSearchParams(params);
+      const response = await apiRequest(`/products/${id}/sales?${urlSearchParams}`);
+      return response.json();
     },
   },
 };

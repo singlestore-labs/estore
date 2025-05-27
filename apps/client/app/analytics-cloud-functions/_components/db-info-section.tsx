@@ -14,6 +14,8 @@ import {
   type DbInfoSectionProps as _DbInfoSectionProps,
 } from "@/db/info/components/section";
 
+import { apiRequest } from "../../../api";
+
 export type DbInfoSectionProps = ComponentProps<Omit<_DbInfoSectionProps, "data">>;
 
 export async function DbInfoSection({ ...props }: DbInfoSectionProps) {
@@ -27,8 +29,8 @@ export async function DbInfoSection({ ...props }: DbInfoSectionProps) {
       PRODUCT_TYPES_TABLE_NAME,
       PRODUCT_SIZES_TABLE_NAME,
     ].map(async (tableName) => {
-      const value = 0;
-      // TODO: Count table rows using a cloud function
+      const response = await apiRequest(`/tables/${tableName}/count`);
+      const value = await response.json();
       return { tableName, value };
     }),
   );
