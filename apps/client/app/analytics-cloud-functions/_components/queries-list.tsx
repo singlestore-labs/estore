@@ -24,24 +24,24 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
       schema: z.object({
         query: z.string(),
         color: z.string(),
-        minPrice: z.number().min(0),
-        maxPrice: z.number().min(0),
+        min_price: z.number().min(0),
+        max_price: z.number().min(0),
         size: z.enum(["xxxs", "xxs", "xs", "s", "m", "l", "xl", "xxl"]),
         limit: z.number().int().min(0),
       }),
       defaultValues: {
         query: "",
         color: "",
-        minPrice: "",
-        maxPrice: "",
+        min_price: "",
+        max_price: "",
         size: "",
         limit: 10,
       },
       fields: {
         query: { label: "Search query", placeholder: "e.g. Jeans" },
         color: { label: "Color", placeholder: "e.g. Blue" },
-        minPrice: { label: "Min price ($)", placeholder: "e.g. 125" },
-        maxPrice: { label: "Max price ($)", placeholder: "e.g. 2500" },
+        min_price: { label: "Min price ($)", placeholder: "e.g. 125" },
+        max_price: { label: "Max price ($)", placeholder: "e.g. 2500" },
         size: { label: "Size", placeholder: "e.g. xl", optionCase: "upper" },
         limit: { label: "Limit", placeholder: "e.g. 10" },
       },
@@ -49,7 +49,8 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
     execute: async (params) => {
       const urlSearchParams = new URLSearchParams(params);
       const response = await apiRequest(`/products?${urlSearchParams}`);
-      return response.json();
+      const data = await response.json();
+      return data;
     },
   },
 
@@ -71,7 +72,8 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
     execute: async (params) => {
       const urlSearchParams = new URLSearchParams(params);
       const response = await apiRequest(`/products/top?${urlSearchParams}`);
-      return response.json();
+      const data = await response.json();
+      return data;
     },
   },
 
@@ -83,23 +85,24 @@ const QUERY_CONFIGS: Record<string, AnalyticsQuery & { execute: (...args: any[])
       schema: z.object({
         id: z.string(),
         interval: z.number().int().min(0),
-        intervalUnit: z.enum(["DAY", "WEEK", "MONTH"]),
+        interval_unit: z.enum(["DAY", "WEEK", "MONTH"]),
       }),
       defaultValues: {
         id: "1",
         interval: 6,
-        intervalUnit: "MONTH",
+        interval_unit: "MONTH",
       },
       fields: {
         id: { label: "Product ID", placeholder: "e.g. 123" },
         interval: { label: "Interval", placeholder: "e.g. 6" },
-        intervalUnit: { label: "Interval Unit", placeholder: "e.g. Month", optionCase: "sentence" },
+        interval_unit: { label: "Interval Unit", placeholder: "e.g. Month", optionCase: "sentence" },
       },
     },
     execute: async ({ id, ...params }) => {
       const urlSearchParams = new URLSearchParams(params);
       const response = await apiRequest(`/products/${id}/sales?${urlSearchParams}`);
-      return response.json();
+      const data = await response.json();
+      return data;
     },
   },
 };

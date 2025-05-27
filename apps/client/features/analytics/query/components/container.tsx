@@ -90,11 +90,12 @@ export function AnalyticsQueryContainer({
 
         {params && (
           <Section
-            variant="secondary"
+            variant="tertiary"
             size="xs"
             spacing="none"
             title="Parameters"
             titleProps={{ as: "h3" }}
+            contentProps={{ className: cn("h-80 overflow-auto") }}
           >
             <AnalyticsQueryParamsForm
               schema={params.schema}
