@@ -8,12 +8,22 @@ import { useAction } from "@/action/hooks/use-action";
 import { createProductLike } from "@/product/likes/actions/create";
 import { deleteProductLike } from "@/product/likes/actions/delete";
 import { Product } from "@/product/types";
+import { analytics } from "@/segment";
 import { cn } from "@/ui/lib";
 import { userProdcutLikesAtom } from "@/user/product/atoms/likes";
 
-export type ProductLikesActionProps = ComponentProps<ButtonProps, { productId: Product["id"] }>;
+export type ProductLikesActionProps = ComponentProps<
+  ButtonProps,
+  { productId: Product["id"]; productName: Product["title"]; productPrice: Product["price"] }
+>;
 
-export function ProductLikesAction({ className, productId, ...props }: ProductLikesActionProps) {
+export function ProductLikesAction({
+  className,
+  productId,
+  productName,
+  productPrice,
+  ...props
+}: ProductLikesActionProps) {
   const [likes, setLikes] = useAtom(userProdcutLikesAtom);
   const isLiked = likes.find((i) => i.product_id === productId);
   const { execute, isPending } = useAction();
@@ -23,9 +33,11 @@ export function ProductLikesAction({ className, productId, ...props }: ProductLi
       if (isLiked) {
         await execute(() => deleteProductLike(productId));
         setLikes((i) => i.filter((i) => i.product_id !== productId));
+        analytics.track("Dislike Product", { productId, productName, productPrice });
       } else {
         const like = await execute(() => createProductLike(productId));
         setLikes((i) => [...i, like]);
+        analytics.track("Like Product", { productId, productName, productPrice });
       }
     } catch (error) {}
   };

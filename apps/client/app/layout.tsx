@@ -1,5 +1,6 @@
 import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 
 import type { Metadata } from "next";
 
@@ -8,6 +9,7 @@ import { Header } from "@/components/header";
 import { ScrollbarWidthController } from "@/components/scrollbar-width-controller";
 import { Toaster } from "@/components/ui/sonner";
 import { APP_NAME } from "@/constants/config";
+import SegmentAnalytics from "@/segment/components/analytics";
 import { Store } from "@/store/components/store";
 import { ThemeProvider } from "@/theme/components/provider";
 import { cn } from "@/ui/lib";
@@ -60,6 +62,9 @@ export default function RootLayout({
         </Store>
         <Analytics />
       </body>
+      <Suspense>
+        <SegmentAnalytics />
+      </Suspense>
     </html>
   );
 }

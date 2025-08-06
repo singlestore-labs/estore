@@ -16,6 +16,7 @@ import { ProductLikesAction } from "@/product/likes/components/action";
 import { ProductSalesChart } from "@/product/sales/components/chart";
 import { ProductSizeSelect } from "@/product/size/components/select";
 import { Product } from "@/product/types";
+import { analytics } from "@/segment";
 
 export type ProductDialogProps = ComponentProps<DialogProps, Product>;
 
@@ -49,6 +50,11 @@ export function ProductDialog({
   const handleBuyClick: ButtonProps["onClick"] = async () => {
     await execute(() => createOrder(id, sizes.find((i) => i[1] === sizeValue)![0]));
     setIsPurchased(true);
+    analytics.track("Buy Product", {
+      productId: id,
+      productName: title,
+      productPrice: price,
+    });
   };
 
   useEffect(
@@ -97,6 +103,8 @@ export function ProductDialog({
             <ProductLikesAction
               className="ml-auto"
               productId={id}
+              productName={title}
+              productPrice={price}
             />
           </div>
 
