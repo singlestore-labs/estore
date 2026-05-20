@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  ResponsiveContainerProps,
-  PieProps,
-  Cell,
-  Tooltip,
-} from "recharts";
+import { Pie, PieChart, PieProps, Cell, Tooltip } from "recharts";
+
+import type { ResponsiveContainerProps } from "recharts";
 
 import { ComponentProps } from "@/types";
+import { ChartResponsiveContainer } from "@/components/chart/responsive-container";
 import { ChartTooltip, ChartTooltipProps } from "@/components/chart/tooltip";
 import { cn } from "@/ui/lib";
 
@@ -39,12 +34,18 @@ export function ChartPie({
   ...props
 }: ChartPieProps) {
   return (
-    <ResponsiveContainer {...props}>
+    <ChartResponsiveContainer {...props}>
       <PieChart
         {...chartProps}
         margin={{ top: 0, left: 0, bottom: 0, right: 0, ...chartProps?.margin }}
       >
         <Pie
+          cx="50%"
+          cy="50%"
+          startAngle={0}
+          endAngle={360}
+          paddingAngle={0}
+          minAngle={0}
           outerRadius="100%"
           {...pieProps}
           data={data}
@@ -69,6 +70,6 @@ export function ChartPie({
           />
         )}
       </PieChart>
-    </ResponsiveContainer>
+    </ChartResponsiveContainer>
   );
 }

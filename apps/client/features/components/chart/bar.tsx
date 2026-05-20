@@ -1,10 +1,13 @@
 "use client";
 
 import { useId } from "react";
-import { Bar, BarChart, ResponsiveContainer, Tooltip, BarProps, ResponsiveContainerProps } from "recharts";
+import { Bar, BarChart, Tooltip, BarProps } from "recharts";
+
+import type { ResponsiveContainerProps } from "recharts";
 
 import { ComponentProps } from "@/types";
 import { ChartGradient } from "@/components/chart/gradient";
+import { ChartResponsiveContainer } from "@/components/chart/responsive-container";
 import { ChartTooltip, ChartTooltipProps } from "@/components/chart/tooltip";
 
 type BarChartProps = ConstructorParameters<typeof BarChart>[0];
@@ -32,7 +35,7 @@ export function ChartBar({
   const gradientId = useId();
 
   return (
-    <ResponsiveContainer {...props}>
+    <ChartResponsiveContainer {...props}>
       <BarChart
         {...chartProps}
         data={data}
@@ -60,6 +63,6 @@ export function ChartBar({
           />
         )}
       </BarChart>
-    </ResponsiveContainer>
+    </ChartResponsiveContainer>
   );
 }

@@ -1,10 +1,13 @@
 "use client";
 
 import { useId } from "react";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, AreaProps, ResponsiveContainerProps } from "recharts";
+import { Area, AreaChart, Tooltip, AreaProps } from "recharts";
+
+import type { ResponsiveContainerProps } from "recharts";
 
 import { ComponentProps } from "@/types";
 import { ChartGradient } from "@/components/chart/gradient";
+import { ChartResponsiveContainer } from "@/components/chart/responsive-container";
 import { ChartTooltip, ChartTooltipProps } from "@/components/chart/tooltip";
 
 type AreaChartProps = ConstructorParameters<typeof AreaChart>[0];
@@ -32,7 +35,7 @@ export function ChartArea({
   const gradientId = useId();
 
   return (
-    <ResponsiveContainer {...props}>
+    <ChartResponsiveContainer {...props}>
       <AreaChart
         {...chartProps}
         data={data}
@@ -63,6 +66,6 @@ export function ChartArea({
           />
         )}
       </AreaChart>
-    </ResponsiveContainer>
+    </ChartResponsiveContainer>
   );
 }
